@@ -1,0 +1,5 @@
+# Generated datasets can be recreated from the pipeline.
+data/processed/images/
+data/processed/*.csv
+data/processed/*.json
+data/processed/*.txt

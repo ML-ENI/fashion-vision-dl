@@ -126,6 +126,16 @@ Relevant experiments should record:
 - training history,
 - evaluation metrics.
 
+Place the H&M images under `data/raw/images/` (nested folders are supported),
+then generate the labelled and stratified image manifest with:
+
+```bash
+python src/data/process_data.py
+```
+
+The default target is `garment_group_name`; use `--target` to select another
+column from `articles.csv`. The same seed always produces the same split.
+
 ## Reports
 
 The same project is documented from two complementary perspectives:
