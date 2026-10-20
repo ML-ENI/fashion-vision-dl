@@ -146,3 +146,51 @@ The same project is documented from two complementary perspectives:
 ## License
 
 This repository contains project code and documentation only. The H&M dataset and images remain subject to their original terms of use.
+
+
+## Preparación validada de datos (versión 2)
+
+El comando `python src/data/process_data.py` valida entradas y publica una ejecución
+en `data/processed/runs/`. **Lee `data/processed/CURRENT.json` para localizar la
+ejecución vigente**. Los CSV antiguos de la raíz se conservan como archivos heredados;
+no contienen las correcciones de la versión 2. Nunca uses el resultado de PREVIEW
+para un experimento completo.
+
+Cada ejecución incluye `summary.json`, `provenance.json`, `schema.json` y
+`checksums.json`. Se registran parámetros, versiones, hashes de entradas y código.
+El cambio de CURRENT es atómico: un fallo no publica una ejecución a medias.
+
+La copia canónica de `articles.csv`, cuando ambos repos están juntos, es
+`../fashion-demand-ml/data/raw/articles.csv`. Se puede indicar otra ubicación con
+`--articles-path`. En un clon independiente se usa `data/raw/articles.csv`.
+No se borran copias locales; el hash y la ruta efectiva quedan registrados.
+`src/data/data_contract.py` es el mismo contrato versionado en ambos repos;
+si se modifica, hay que actualizar y comprobar ambas copias.
+
+Para añadir Parquet, instala `python -m pip install -r requirements-parquet.txt`
+y ejecuta el procesador con `--parquet`. Se conserva CSV comprimido como exportación.
+Sin esa opción no se requiere pyarrow. Las lecturas CSV deben conservar los IDs como texto.
+
+Pruebas: `python -m unittest discover -s tests -v`.
+Consulta `docs/data-preparation-audit.md` para decisiones y limitaciones.
+
+
+Se comprueban nombres repetidos, decodificación completa, dimensiones, modos de
+color y hashes de archivo y píxeles. Los nombres duplicados provocan un error;
+las imágenes ausentes o corruptas permanecen en el manifiesto con `split=excluded`
+y un motivo. Nunca se asigna split a una imagen ausente. Sin imágenes utilizables
+el proceso falla sin sustituir CURRENT.
+
+`--include-class` (repetible) y `--min-class-images` controlan la selección.
+Las particiones se estratifican por clase sobre grupos conectados por `product_code`
+o hash de píxeles. Un grupo no cruza particiones. Las proporciones se aplican a
+grupos y son aproximadas en imágenes: se publica la distribución real. Se exige
+al menos un grupo por clase en cada partición con el redondeo configurado.
+Grupos con etiquetas contradictorias provocan un error que debe revisarse.
+
+El balance se propone mediante `training_weight` y `training_class_weights.json`,
+calculados solo con entrenamiento. El futuro entrenador debe aplicar esos pesos;
+generarlos no equilibra por sí solo un entrenamiento. El manifiesto usa rutas
+relativas a `image_path_base` del resumen. Las métricas distinguen clases de
+metadatos, clases con imágenes válidas y clases seleccionadas para modelado.
+No se deducen campañas ni fechas a partir de las imágenes.
