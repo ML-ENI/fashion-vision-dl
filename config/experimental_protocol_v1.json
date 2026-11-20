@@ -1,5 +1,5 @@
 {
-  "version": "1.0.0",
+  "version": "1.1.0",
   "date": "2026-11-20",
   "status": "preregistered_design_neural_experiments_not_run",
   "dataset_policy": "Keep balanced visual v1; exploratory class selection; no catalog-wide performance claim",
@@ -115,5 +115,71 @@
     "checkpoint": "best validation macro_F1 among epochs reached before stopping",
     "pretraining_contrast": "same fixed LR grid [0.001,0.0001] allowed for both initializations; report total search cost",
     "changes": "amend protocol before fitting neural models if hardware cannot support budget"
+  },
+  "teaching_requirements": {
+    "source": "Teacher email supplied by student on 2026-11-20; sent date not provided",
+    "report_opening_summary_max_pages": 3,
+    "summary_contents": [
+      "scope",
+      "core_methodology",
+      "main_findings",
+      "key_conclusions"
+    ],
+    "draft_deadline_contextual_date": "2026-12-01",
+    "deadline_year_inferred_from_course_context": true,
+    "mandatory_areas": {
+      "core_architectures": [
+        "CNN",
+        "LSTM",
+        "GRU",
+        "RNN_with_attention",
+        "self_attention",
+        "Transformer"
+      ],
+      "learning_strategies": [
+        "self_supervised_pretrained_representations",
+        "transfer_learning",
+        "fine_tuning",
+        "zero_shot_connection"
+      ],
+      "basic_generative_ai": [
+        "autoregressive_sequence_generator_RNN_or_causal_Transformer"
+      ]
+    },
+    "priority": "small local experiments and analytical clarity; no requirement for massive architectures",
+    "coverage_status": "neural blocks planned, not yet implemented",
+    "optional_extensions": [
+      "pretrained_ViT",
+      "CNN_RNN_hybrid",
+      "autoencoder_VAE"
+    ]
+  },
+  "generative_minimum": {
+    "status": "planned_not_run",
+    "notebook": "12_generative_models.ipynb",
+    "model": "character_GRU_next_token",
+    "embedding_dim": 32,
+    "hidden_dim": 64,
+    "max_sequence_length": 128,
+    "batch_size": 32,
+    "seed": 42,
+    "max_epochs": 10,
+    "early_stopping_patience": 3,
+    "training_product_cap": 2000,
+    "selection": "validation_next_character_NLL",
+    "metrics": [
+      "NLL_per_character",
+      "perplexity_same_tokenization",
+      "parameters",
+      "train_seconds",
+      "peak_memory_bytes"
+    ],
+    "split_policy": "inherit product splits; audit exact text duplicates; separate textual manifest if exclusions required; no visual split changes",
+    "baseline": "training_character_unigram",
+    "sampling_temperatures": [
+      0.7,
+      1.0
+    ],
+    "budget_scope": "separate didactic generation experiment; does not replace three-seed visual protocol"
   }
 }

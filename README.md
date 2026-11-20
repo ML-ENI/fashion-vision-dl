@@ -60,6 +60,21 @@ Su objetivo por defecto es `garment_group_name`; el nuevo flujo local usa
 
 Deep Learning project for classifying H&M fashion articles from product images and comparing Dense, CNN, LSTM and Transformer-based architectures.
 
+## Requisitos actualizados del informe DL
+
+El correo del profesor compartido el 20/11/2026 exige un **resumen inicial de máximo
+tres páginas** (alcance, metodología, hallazgos y conclusiones) y tres bloques:
+arquitecturas fundamentales; estrategias con preentrenamiento autosupervisado,
+transferencia, fine-tuning y zero-shot; y **generación autorregresiva básica**.
+El borrador se planifica para el **1 de diciembre de 2026**, con año inferido del
+contexto del curso. La matriz de cobertura y la estructura propuesta están en
+[el enunciado actualizado](ENUNCIADO_TRABAJO_DL_MODA.md).
+
+Los notebooks 06–08 y 12 concretan el mínimo con experimentos pequeños en local.
+RNN + atención, autosupervisión y generación autorregresiva forman parte del núcleo.
+El VAE es opcional. Estos cambios actualizan el diseño; no añaden resultados
+experimentales a los notebooks 04–12.
+
 ## Protocolo previo al entrenamiento
 
 `config/experimental_protocol_v1.json` fija métricas, presupuestos, pérdida inicial
