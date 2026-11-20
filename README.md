@@ -28,6 +28,10 @@ planes de redes y extensiones, todavía sin entrenamiento ejecutado.
    preparadas. El adaptador PyTorch es opcional y se valida al instalar ese
    framework; los notebooks comprueban los lotes NumPy sin instalarlo.
 
+Si el código del preparador cambia desde la auditoría registrada, ejecutar
+`python src/data/audit_images.py --refresh` para publicar una auditoría nueva antes
+de reconstruir los datos; las publicaciones y salidas anteriores conservan su procedencia.
+
 Equivalentes por consola, desde este directorio:
 
 ```bash

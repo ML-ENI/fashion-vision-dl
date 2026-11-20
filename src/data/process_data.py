@@ -147,7 +147,7 @@ def prepare_manifest(articles, images_dir, target, seed, val_size, test_size,
             "original_mode": "", "file_sha256": "", "pixel_sha256": ""})
         rows.append(row)
         if number % 5000 == 0:
-            print(f"Revisados {number:,} artículos", flush=True)
+            print(f"Revisados {number:,} artículos".replace(",", "."), flush=True)
     manifest = pd.DataFrame(rows)
     # Los filtros actúan sobre imágenes realmente utilizables.
     usable_mask = manifest["image_valid"].copy()
