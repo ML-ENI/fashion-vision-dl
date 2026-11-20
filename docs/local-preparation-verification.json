@@ -1,0 +1,22 @@
+{
+  "prepared_run": "data/processed/runs/20261119T140252-527f781b",
+  "image_files": 18000,
+  "image_bytes": 139260989,
+  "classes": 12,
+  "split_counts": {
+    "train": 12486,
+    "validation": 2898,
+    "test": 2616
+  },
+  "unit_tests_passed": 16,
+  "unreferenced_jpeg_files_removed": 10,
+  "unreferenced_jpeg_bytes_removed": 92458,
+  "notebooks_executed_without_errors": [
+    "01_data_understanding.ipynb",
+    "02_data_preparation.ipynb",
+    "03_eda_images.ipynb"
+  ],
+  "raw_offloaded": false,
+  "raw_retained_locally": true,
+  "torch_adapter_validated_with_torch": false
+}

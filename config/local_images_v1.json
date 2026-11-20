@@ -1,0 +1,37 @@
+{
+  "preparation_version": "1.0.0",
+  "target": "product_type_name",
+  "include_classes": [
+    "Trousers",
+    "Dress",
+    "Sweater",
+    "T-shirt",
+    "Cardigan",
+    "Blouse",
+    "Jacket",
+    "Shorts",
+    "Shirt",
+    "Vest top",
+    "Skirt",
+    "Hoodie"
+  ],
+  "min_side": 64,
+  "max_images_per_class": 1500,
+  "min_class_images": 500,
+  "image_size": 224,
+  "jpeg_quality": 90,
+  "padding_rgb": [
+    255,
+    255,
+    255
+  ],
+  "seed": 42,
+  "val_size": 0.15,
+  "test_size": 0.15,
+  "visual_audit_groups_per_class": 2,
+  "augmentation": {
+    "horizontal_flip_probability": 0.5,
+    "brightness": 0.1,
+    "colour": 0.1
+  }
+}

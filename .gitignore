@@ -1,5 +1,8 @@
 # Generated datasets can be recreated from the pipeline.
 data/processed/
+data/audit/
+tmp/
+results/metrics/**/features_*.npz
 
 __pycache__/
 *.py[cod]
@@ -7,4 +10,5 @@ __pycache__/
 .venv/
 *.antes_revision_*.ipynb
 data/raw/images/
+data/raw/images.zip
 graphify-out/

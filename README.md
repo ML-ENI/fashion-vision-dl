@@ -1,7 +1,66 @@
 
 # Fashion Vision DL
 
+## Estado de ejecución y flujo local (notebooks 01–03)
+
+Las figuras usan el mismo módulo de estilo que ML, copiado en
+`src/visualization/style.py`: Latin Modern, fondo blanco, texto grande y colores
+azul/naranja ETSIT-UPM. La rúbrica está en `docs/visualization-rubric.md`.
+Para modificar solo su presentación y guardar las figuras y outputs actualizados:
+`python scripts/render_data_figures.py` (requiere los notebooks ya ejecutados).
+
+Los notebooks `01_data_understanding.ipynb` y `02_data_preparation.ipynb` contienen
+la auditoría y preparación del conjunto local. Los notebooks 01–03 están ejecutados y guardan sus salidas: auditoría, preparación,
+EDA visual y baselines clásicos medidos en validation. Los notebooks 04–12 son
+planes de redes y extensiones, todavía sin entrenamiento ejecutado.
+
+1. Ejecutar el notebook 01 para revisar el origen, la taxonomía, incidencias y
+   selección. La auditoría inicial decodifica todas las imágenes y guarda
+   checkpoints; las ejecuciones posteriores verifican y reutilizan la publicación.
+2. Ejecutar el notebook 02 para preparar imágenes RGB de 224×224 y publicar
+   manifiestos, splits, estadísticas de train y procedencia. La configuración
+   está en `config/local_images_v1.json`: doce tipos de prenda y hasta 1.500
+   imágenes por clase, conservando grupos completos de producto.
+3. Leer siempre `data/processed/CURRENT.json`. Cada versión guarda sus tablas e
+   informes en `data/processed/runs/`; los JPEG se comparten por hash en
+   `data/processed/images/` y las rutas del manifiesto son relativas a processed.
+4. Los loaders de `src/data/local_dataset.py` leen exclusivamente imágenes
+   preparadas. El adaptador PyTorch es opcional y se valida al instalar ese
+   framework; los notebooks comprueban los lotes NumPy sin instalarlo.
+
+Equivalentes por consola, desde este directorio:
+
+```bash
+python src/data/audit_images.py --workers 6
+python src/data/prepare_local.py --config config/local_images_v1.json
+python -m unittest discover -s tests -v
+```
+
+La auditoría se publica en `data/audit/runs/` con su propio `CURRENT.json`.
+Las miniaturas reservadas para inspección visual (24 de las clases elegidas y
+dos ejemplos de la categoría Top descartada), excluidas del modelado,
+permiten consultar el notebook 01 sin el RAW una vez completada la primera ejecución.
+Los duplicados exactos se reducen a un representante. Los grupos con etiquetas
+contradictorias se excluyen; las variantes del mismo producto y los píxeles
+idénticos, antes y después de preparar, nunca cruzan particiones.
+
+**El RAW sigue preservado localmente.** Antes de liberarlo hay que elegir un
+destino externo, copiarlo y verificar su hash. No se borran automáticamente ni
+originales ni versiones anteriores. Para recrear imágenes a más de 224×224
+será necesario recuperar el RAW. No se necesita para leer la versión preparada.
+
+El resto del README documenta el diseño general y el preparador original
+`process_data.py`, que sigue disponible para manifiestos sobre imágenes RAW.
+Su objetivo por defecto es `garment_group_name`; el nuevo flujo local usa
+`product_type_name`, justificado en el notebook 01.
+
 Deep Learning project for classifying H&M fashion articles from product images and comparing Dense, CNN, LSTM and Transformer-based architectures.
+
+## Protocolo previo al entrenamiento
+
+`config/experimental_protocol_v1.json` fija métricas, presupuestos, pérdida inicial
+sin pesos y ablaciones previstas. El dataset equilibrado es exploratorio y no
+representa por sí solo la prevalencia del catálogo. El test sigue reservado.
 
 ## Overview
 
@@ -41,19 +100,19 @@ The original H&M dataset is not redistributed in this repository.
 
 ```text
 Article images + metadata
-          ↓
+          â†“
 Image / label matching
-          ↓
+          â†“
 Class selection
-          ↓
+          â†“
 Train / validation / test split
-          ↓
+          â†“
 Resize and normalization
-          ↓
+          â†“
 Optional data augmentation
-          ↓
+          â†“
 Dense / CNN / LSTM / Transformer
-          ↓
+          â†“
 Evaluation and ablation studies
 ```
 
@@ -61,23 +120,23 @@ Evaluation and ablation studies
 
 ```text
 fashion-vision-dl/
-├── data/
-│   ├── raw/
-│   └── processed/
-├── notebooks/
-│   ├── eda/
-│   └── experiments/
-├── src/
-│   ├── data/
-│   ├── models/
-│   ├── training/
-│   └── evaluation/
-├── results/
-│   ├── figures/
-│   ├── metrics/
-│   └── models/
-├── README.md
-└── requirements.txt
+â”œâ”€â”€ data/
+â”‚   â”œâ”€â”€ raw/
+â”‚   â””â”€â”€ processed/
+â”œâ”€â”€ notebooks/
+â”‚   â”œâ”€â”€ eda/
+â”‚   â””â”€â”€ experiments/
+â”œâ”€â”€ src/
+â”‚   â”œâ”€â”€ data/
+â”‚   â”œâ”€â”€ models/
+â”‚   â”œâ”€â”€ training/
+â”‚   â””â”€â”€ evaluation/
+â”œâ”€â”€ results/
+â”‚   â”œâ”€â”€ figures/
+â”‚   â”œâ”€â”€ metrics/
+â”‚   â””â”€â”€ models/
+â”œâ”€â”€ README.md
+â””â”€â”€ requirements.txt
 ```
 
 ## Experimental Design

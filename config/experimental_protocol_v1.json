@@ -1,0 +1,119 @@
+{
+  "version": "1.0.0",
+  "date": "2026-11-20",
+  "status": "preregistered_design_neural_experiments_not_run",
+  "dataset_policy": "Keep balanced visual v1; exploratory class selection; no catalog-wide performance claim",
+  "primary_metric": "macro_f1",
+  "secondary_metrics": [
+    "accuracy",
+    "per_class_precision_recall_f1_support",
+    "confusion_counts",
+    "confusion_row_normalized",
+    "train_seconds",
+    "inference_ms_per_image",
+    "trainable_parameters",
+    "peak_memory_bytes"
+  ],
+  "seeds": [
+    42,
+    123,
+    2026
+  ],
+  "default_loss": {
+    "name": "cross_entropy",
+    "class_weights": false
+  },
+  "default_augmentation": false,
+  "resolution_policy": {
+    "controlled_comparison": 64,
+    "dense_default": 64,
+    "rnn_default": 64,
+    "cnn_application": 128,
+    "pretrained_application": 224,
+    "storage": 224
+  },
+  "rnn_input": {
+    "default": "columns_rgb",
+    "image_size": 64,
+    "steps": 64,
+    "features_per_step": 192,
+    "ablations": [
+      "rows_rgb",
+      "8x8_patches_on_64x64"
+    ],
+    "patches_note": "8x8 patches on RGB64 give the same 64x192 shape as columns/rows, with different neighbourhoods; other patch sizes change length and feature dimension."
+  },
+  "selection": {
+    "criterion": "validation macro_f1",
+    "early_stopping": "validation loss",
+    "test": "single final pass after freezing all choices"
+  },
+  "hypotheses": [
+    {
+      "id": "H1",
+      "question": "Does spatial weight sharing help?",
+      "contrast": "Dense vs CNN, both RGB64, same train IDs, no augmentation/weights, trainable params within 10%",
+      "outcome": "paired macro-F1 difference, per-class F1, cost; at least 3 seeds",
+      "limitation": "parameter matching does not equate FLOPs; report both"
+    },
+    {
+      "id": "H2",
+      "question": "Do normalization and augmentation help?",
+      "contrast": "fixed CNN: normalization on/off and augmentation on/off, one factor at a time",
+      "outcome": "macro-F1 difference, train/validation gap and variability"
+    },
+    {
+      "id": "H3",
+      "question": "What does pretraining add?",
+      "contrast": "identical backbone/input/preprocessing, random vs pretrained weights; frozen/head and fine-tuning reported separately",
+      "outcome": "macro-F1, convergence epochs, train seconds; prior training cost disclosed"
+    },
+    {
+      "id": "H4",
+      "question": "Are near-unit class weights useful?",
+      "contrast": "same CNN, unweighted vs train-derived inverse-frequency loss weights",
+      "outcome": "macro-F1/per-class recall difference across seeds"
+    },
+    {
+      "id": "H5",
+      "question": "How does training balance affect learning?",
+      "contrast": "grouped balanced vs frequency-proportional training subsets, equal image budget approx 3600; same fixed validation/test",
+      "outcome": "macro-F1 and minority recall; actual group/image budget differences reported",
+      "limitation": "evaluates training balance under balanced evaluation, not natural catalog accuracy"
+    },
+    {
+      "id": "H6",
+      "question": "Does sequence representation disadvantage recurrence?",
+      "contrast": "same 64x64 RGB image IDs: columns vs rows; patches secondary due changed sequence/feature dimensions",
+      "outcome": "macro-F1, length, input dimension, parameters, time and memory"
+    }
+  ],
+  "population_sensitivity": {
+    "status": "planned",
+    "design": "Report balanced metrics and a separate fixed-prior weighted sensitivity analysis from the same predictions; derive priors from the eligible source pool before cap, not performance on test",
+    "assumption": "label shift: unchanged within-class conditional distribution; cannot prove actual catalog generalization",
+    "full_replication": "A future version must split all eligible groups globally BEFORE any training cap, retain uncapped natural-prevalence validation/test, and remain separate from v1"
+  },
+  "class_review": {
+    "current_decision": "exploratory, not a priori",
+    "next_version_criteria": [
+      "visual garment task scope",
+      "minimum independent product groups and split feasibility",
+      "explicit definition per class",
+      "systematic review of overlap/label noise, not only sample count"
+    ],
+    "training_review_products_per_class": 8,
+    "top_review": "pending broader reserved review; two examples are not a prevalence estimate"
+  },
+  "controlled_training_budget": {
+    "max_epochs": 30,
+    "early_stopping_patience": 5,
+    "batch_size": 32,
+    "optimizer": "Adam",
+    "learning_rate": 0.001,
+    "weight_decay": 0,
+    "checkpoint": "best validation macro_F1 among epochs reached before stopping",
+    "pretraining_contrast": "same fixed LR grid [0.001,0.0001] allowed for both initializations; report total search cost",
+    "changes": "amend protocol before fitting neural models if hardware cannot support budget"
+  }
+}

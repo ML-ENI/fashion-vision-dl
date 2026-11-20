@@ -1,0 +1,13 @@
+{
+  "schema_version": "1.0.0",
+  "dataset": "H&M Personalized Fashion Recommendations - images",
+  "storage_state": "local_pending_external_copy",
+  "archive_relative_to_this_file": "images.zip",
+  "archive_bytes": 30036309564,
+  "archive_sha256": "2f70a9886bb2ca21da5e8abd4522d13c4deb8d303dcfd4f065cef0581168484b",
+  "image_directory_relative_to_this_file": "images",
+  "audit_run": "data/audit/runs/20261119T135142-10425e86",
+  "external_location": null,
+  "external_copy_verified": false,
+  "local_raw_can_be_removed": false
+}

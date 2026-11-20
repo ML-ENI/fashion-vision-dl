@@ -1,5 +1,10 @@
 # Revisión de preparación de datos — 20 de octubre de 2026
 
+> Nota del 19 de noviembre de 2026: este documento conserva la revisión histórica.
+> Las imágenes reales ya se han incorporado y auditado. Los notebooks 01 y 02
+> están ejecutados y han publicado el conjunto local de 18.000 imágenes.
+> Consulta `local-image-dataset.md` para el flujo actual y sus resultados.
+
 ## Alcance y decisiones
 
 Esta revisión corresponde a las copias locales de `fashion-demand-ml` y

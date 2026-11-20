@@ -1,0 +1,74 @@
+{
+  "01_data_understanding.ipynb": {
+    "verified_date": "2026-11-20",
+    "status": "executed",
+    "code_cells": 10,
+    "errors": 0
+  },
+  "02_data_preparation.ipynb": {
+    "verified_date": "2026-11-20",
+    "status": "executed",
+    "code_cells": 11,
+    "errors": 0
+  },
+  "03_eda_images.ipynb": {
+    "verified_date": "2026-11-20",
+    "status": "executed",
+    "code_cells": 7,
+    "errors": 0
+  },
+  "04_dense_mlp.ipynb": {
+    "verified_date": "2026-11-20",
+    "status": "planned",
+    "code_cells": 0,
+    "errors": 0
+  },
+  "05_cnn.ipynb": {
+    "verified_date": "2026-11-20",
+    "status": "planned",
+    "code_cells": 0,
+    "errors": 0
+  },
+  "06_rnn_lstm.ipynb": {
+    "verified_date": "2026-11-20",
+    "status": "planned",
+    "code_cells": 0,
+    "errors": 0
+  },
+  "07_transfer_learning.ipynb": {
+    "verified_date": "2026-11-20",
+    "status": "planned",
+    "code_cells": 0,
+    "errors": 0
+  },
+  "08_vision_transformer.ipynb": {
+    "verified_date": "2026-11-20",
+    "status": "planned",
+    "code_cells": 0,
+    "errors": 0
+  },
+  "09_ablation_studies.ipynb": {
+    "verified_date": "2026-11-20",
+    "status": "planned",
+    "code_cells": 0,
+    "errors": 0
+  },
+  "10_final_evaluation.ipynb": {
+    "verified_date": "2026-11-20",
+    "status": "planned",
+    "code_cells": 0,
+    "errors": 0
+  },
+  "11_clip_zero_shot.ipynb": {
+    "verified_date": "2026-11-20",
+    "status": "planned",
+    "code_cells": 0,
+    "errors": 0
+  },
+  "12_generative_models.ipynb": {
+    "verified_date": "2026-11-20",
+    "status": "planned",
+    "code_cells": 0,
+    "errors": 0
+  }
+}
