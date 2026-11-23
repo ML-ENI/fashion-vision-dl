@@ -1,7 +1,7 @@
 {
   "verified_date": "2026-11-23",
   "notebook": "notebooks/04_dense_mlp.ipynb",
-  "notebook_sha256": "32ef981991553c990a66abb6168921630d85e6ac96973d2eb25493bbbf78314b",
+  "notebook_sha256": "28cffef115ab867e52c672ee8fd3caffa46b66a9dd0a9294c76156e716a4a7a3",
   "code_cells": 17,
   "code_cells_executed": 17,
   "errors": 0,
@@ -62,5 +62,6 @@
     "results/models/04_dense",
     ".venv"
   ],
-  "visual_review": "All 8 figures inspected; class legend avoids data, epoch ticks are integers and activation label is wrapped."
+  "visual_review": "All 8 figures inspected; class legend avoids data, epoch ticks are integers and activation label is wrapped.",
+  "table_presentation_review": "2026-11-23: shared ETSIT blue/orange table style; Dense performance, epochs and cost split into smaller tables"
 }

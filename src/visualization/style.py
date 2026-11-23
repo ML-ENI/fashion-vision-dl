@@ -156,25 +156,11 @@ def es(value):
 
 
 def display_es(value):
-    """Display pandas objects with localized numbers, including numeric indexes."""
+    """Mostrar tablas con el formato común legible y números en español."""
     from IPython.display import display
-    from pandas.api.types import is_numeric_dtype
-
-    if hasattr(value, "data") and value.__class__.__name__ == "Styler":
-        numeric_columns = {
-            position for position, dtype in enumerate(value.data.dtypes)
-            if is_numeric_dtype(dtype)
-        }
-        for key, formatter in value._display_funcs.items():
-            if key[1] in numeric_columns:
-                value._display_funcs[key] = (
-                    lambda item, formatter=formatter:
-                    _localize_numeric_text(formatter(item))
-                )
-    elif hasattr(value, "style"):
-        value = value.style.format(format_number).format_index(format_number, axis=0)
-        if getattr(value.data.index, "nlevels", 1) > 1:
-            value = value.format_index(format_number, axis=0, level=None)
+    from src.visualization.tables import report_table
+    if hasattr(value, 'style') or value.__class__.__name__ in {'Styler', 'Series'}:
+        value = report_table(value)
     display(value)
 
 

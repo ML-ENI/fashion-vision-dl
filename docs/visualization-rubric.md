@@ -155,3 +155,18 @@ Antes de dar una figura por terminada:
 6. Exportar en SVG para informes y PNG a 240–300 dpi para presentaciones.
 
 El notebook local `notebooks/eda/visualizacion_graficos.ipynb` contiene ejemplos ejecutables, pero esta rúbrica Markdown es la especificación canónica.
+
+
+## Actualización de presentación — 23/11/2026
+
+La base visual usa azul ETSIT `#00458A` y naranja `#F18D01` como primeros colores
+para distinguir categorías, según la preferencia de la estudiante. Se reservan
+otros colores para más grupos y se mantienen las correspondencias de particiones.
+En 01: azul para clases propuestas y naranja para otras clases; en 04: azul para
+Dense y naranja para la referencia de color.
+
+Las tablas usan `src/visualization/tables.py`: cabecera azul con línea naranja,
+fondo claro, filas espaciadas, rótulos comprensibles y números alineados. Recuentos
+enteros, métricas con precisión suficiente y columnas anchas divididas cuando
+mezclan rendimiento, entrenamiento y coste. El formato cambia la presentación,
+no los datos ni las métricas guardadas. `styled()` y `display_es()` comparten esta capa.

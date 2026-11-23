@@ -9,7 +9,7 @@ import pandas as pd
 from PIL import Image
 import torch
 
-from src.visualization.style import BLUE, TEAL, SPLIT_COLORS, add_source, apply_style, format_number, format_percent
+from src.visualization.style import BLUE, ORANGE, SPLIT_COLORS, add_source, apply_style, format_number, format_percent
 
 
 def save(fig, root, name, note):
@@ -93,7 +93,7 @@ def per_class_figure(context, dense_report, colour_report):
     colour = colour_report.loc[names, 'f1-score'].to_numpy()
     fig, ax = plt.subplots(figsize=(13, 10))
     y = np.arange(len(names))
-    ax.barh(y-.18, colour, height=.34, color='#8C929A', label='Logística de color (03)')
+    ax.barh(y-.18, colour, height=.34, color=ORANGE, label='Logística de color (03)')
     ax.barh(y+.18, dense, height=.34, color=BLUE, label='Dense (semilla 42)')
     ax.set_yticks(y, names)
     ax.invert_yaxis()

@@ -51,8 +51,8 @@ def save_figure(fig, root, name, source):
 
 
 def styled(frame, digits=0):
-    numeric = frame.select_dtypes(include="number").columns
-    return frame.style.format({c: lambda x: es(x, digits) for c in numeric}, na_rep="—")
+    from src.visualization.tables import report_table
+    return report_table(frame, digits=digits)
 
 
 def visual_thumbnail(row, raw_base, root):
