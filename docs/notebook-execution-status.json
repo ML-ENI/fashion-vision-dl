@@ -18,10 +18,10 @@
     "errors": 0
   },
   "04_dense_mlp.ipynb": {
-    "verified_date": "2026-11-20",
-    "status": "planned",
-    "code_cells": 0,
-    "errors": 0
+    "code_cells": 17,
+    "errors": 0,
+    "status": "executed",
+    "verified_date": "2026-11-23"
   },
   "05_cnn.ipynb": {
     "verified_date": "2026-11-20",

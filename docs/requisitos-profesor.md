@@ -1,4 +1,4 @@
-# Revisión de DL — actualizada el 20 de noviembre de 2026
+# Revisión de DL — actualizada el 23 de noviembre de 2026
 
 ## Material consultado
 
@@ -39,11 +39,11 @@ La matriz de cobertura y la estructura propuesta están en
 
 ## Estado del proyecto
 
-Los notebooks 01–03 están desarrollados y ejecutados: auditoría, preparación versionada y EDA con baselines clásicos sobre validation. Los notebooks 04–12 siguen siendo planes sin redes entrenadas. Se han actualizado 06–08 y 12 para cubrir atención, autosupervisión y generación autorregresiva; 11 aborda zero-shot con CLIP. El VAE es opcional.
+Los notebooks 01–03 están desarrollados y ejecutados: auditoría, preparación versionada y EDA con baselines clásicos sobre validation. El notebook 04 está ejecutado con Dense y ablación de dropout (tres semillas por variante); 05–12 siguen siendo planes sin redes entrenadas. Se han actualizado 06–08 y 12 para cubrir atención, autosupervisión y generación autorregresiva; 11 aborda zero-shot con CLIP. El VAE es opcional.
 
 El preparador original `process_data.py` agrupa duplicados sin retirarlos. El nuevo flujo `audit_images.py` + `prepare_local.py`, usado por los notebooks 01 y 02, conserva todas las incidencias en el manifiesto y retiene un único representante de los píxeles idénticos para modelar. Los grupos con etiquetas contradictorias se excluyen. Las variantes relacionadas nunca cruzan particiones.
 
-La auditoría real ha validado 105.100 imágenes. La publicación preparada contiene 18.000 imágenes de doce tipos de prenda en 139,3 MB, con particiones y controles ejecutados. El EDA y los baselines clásicos están ejecutados en 03. Faltan los experimentos de redes de 04–12; todavía no hay modelos neuronales entrenados. Consulta `local-image-dataset.md` y `local-preparation-verification.json` para resultados y comprobaciones.
+La auditoría real ha validado 105.100 imágenes. La publicación preparada contiene 18.000 imágenes de doce tipos de prenda en 139,3 MB, con particiones y controles ejecutados. El EDA y los baselines clásicos están ejecutados en 03. La Dense de 04 y su ablación de dropout están entrenadas; faltan las arquitecturas y estrategias de 05–12. Consulta `local-image-dataset.md` y `local-preparation-verification.json` para resultados y comprobaciones.
 
 ## Ubicación de las imágenes
 
@@ -54,3 +54,10 @@ La auditoría real ha validado 105.100 imágenes. La publicación preparada cont
 - Se conserva el ZIP original. Tanto el ZIP como la carpeta de imágenes están excluidos de Git.
 - La extracción comprueba el CRC de las entradas; esa comprobación de integridad no equivale a validar visualmente o decodificar todas las imágenes con el preparador.
 - Extracción y comprobación terminadas: 105.100 archivos verificados, sin errores pendientes. Se reextrajeron 4.176 archivos durante la recuperación de una incidencia de lectura concurrente; todos superaron la comprobación CRC. Registro: `docs/image-extraction-verification.json`.
+
+## Avance del 23/11/2026: baseline Dense
+
+El notebook 04 está ejecutado y explica el modelo, pérdida, parada y selección,
+variabilidad entre semillas, errores, coste y limitaciones. Diseño previo:
+`config/dense_baseline_v1.json`. Evidencia y controles:
+`dense-baseline-verification.json`. La comparación H1 con CNN sigue pendiente.

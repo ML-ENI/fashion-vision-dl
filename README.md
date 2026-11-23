@@ -1,7 +1,7 @@
 
 # Fashion Vision DL
 
-## Estado de ejecución y flujo local (notebooks 01–03)
+## Estado de ejecución y flujo local
 
 Las figuras usan el mismo módulo de estilo que ML, copiado en
 `src/visualization/style.py`: Latin Modern, fondo blanco, texto grande y colores
@@ -11,8 +11,8 @@ Para modificar solo su presentación y guardar las figuras y outputs actualizado
 
 Los notebooks `01_data_understanding.ipynb` y `02_data_preparation.ipynb` contienen
 la auditoría y preparación del conjunto local. Los notebooks 01–03 están ejecutados y guardan sus salidas: auditoría, preparación,
-EDA visual y baselines clásicos medidos en validation. Los notebooks 04–12 son
-planes de redes y extensiones, todavía sin entrenamiento ejecutado.
+EDA visual y baselines clásicos medidos en validation. El notebook 04 también está ejecutado: baseline Dense y ablación de dropout, tres semillas por variante.
+Los notebooks 05–12 siguen como planes sin entrenamiento ejecutado.
 
 1. Ejecutar el notebook 01 para revisar el origen, la taxonomía, incidencias y
    selección. La auditoría inicial decodifica todas las imágenes y guarda
@@ -60,6 +60,38 @@ Su objetivo por defecto es `garment_group_name`; el nuevo flujo local usa
 
 Deep Learning project for classifying H&M fashion articles from product images and comparing Dense, CNN, LSTM and Transformer-based architectures.
 
+## Notebook 04: Dense / MLP en local
+
+El notebook `04_dense_mlp.ipynb` desarrolla el baseline neuronal y una sola ablación:
+RGB64 → Flatten → Dense(80) → ReLU → Dense(32) → ReLU → doce logits,
+con 986.108 parámetros. El diseño previo está en `config/dense_baseline_v1.json`:
+Adam, pérdida sin pesos, sin aumentos, tres semillas y dropout 0 frente a 0,30.
+Se recalcula la normalización solo con train a RGB64. Test permanece reservado.
+El notebook explica cada paso, compara con 03, muestra errores y declara los
+límites de validation, del muestreo equilibrado y de la variabilidad entre semillas.
+
+Entorno usado para la ejecución, sin modificar el Python global:
+
+```powershell
+python -m venv --system-site-packages .venv
+.\.venv\Scripts\python.exe -m pip --use-feature=truststore install torch==2.7.1 --index-url https://download.pytorch.org/whl/cpu
+.\.venv\Scripts\python.exe -m pip install -r requirements-dl.txt
+.\.venv\Scripts\python.exe -m ipykernel install --prefix .venv --name fashion-vision-dl --display-name "Python (Fashion Vision DL local)"
+.\.venv\Scripts\python.exe scripts/execute_data_notebooks.py 04_dense_mlp.ipynb
+```
+
+Seleccionar el kernel local al abrir 04. PyTorch CPU se descarga desde su índice
+oficial; truststore conserva la verificación HTTPS y usa los certificados del sistema.
+`requirements-dl.txt` registra las dependencias del experimento. Las versiones
+realmente utilizadas quedan además en el `summary.json` de la ejecución.
+
+Para ejecutar solo el entrenamiento: `.venv/Scripts/python scripts/run_dense_baseline.py`.
+Las cachés RGB64 viven en `tmp/`; los checkpoints `.pt`, en `results/models/04_dense/`.
+Ambos quedan en local y se excluyen de Git. Las métricas versionadas se publican
+bajo `results/metrics/04_dense/runs/` con un `CURRENT.json`; una firma de datos,
+código, configuración y versiones permite reutilizar resultados verificados.
+Las figuras PNG/SVG están en `results/figures/04_dense/`.
+
 ## Requisitos actualizados del informe DL
 
 El correo del profesor compartido el 20/11/2026 exige un **resumen inicial de máximo
@@ -73,7 +105,7 @@ contexto del curso. La matriz de cobertura y la estructura propuesta están en
 Los notebooks 06–08 y 12 concretan el mínimo con experimentos pequeños en local.
 RNN + atención, autosupervisión y generación autorregresiva forman parte del núcleo.
 El VAE es opcional. Estos cambios actualizan el diseño; no añaden resultados
-experimentales a los notebooks 04–12.
+experimentales a los notebooks 05–12. El baseline neuronal de 04 ya tiene resultados reales.
 
 ## Protocolo previo al entrenamiento
 
@@ -267,8 +299,8 @@ al menos un grupo por clase en cada partición con el redondeo configurado.
 Grupos con etiquetas contradictorias provocan un error que debe revisarse.
 
 El balance se propone mediante `training_weight` y `training_class_weights.json`,
-calculados solo con entrenamiento. El futuro entrenador debe aplicar esos pesos;
-generarlos no equilibra por sí solo un entrenamiento. El manifiesto usa rutas
+calculados solo con entrenamiento. Son opcionales: el baseline Dense usa pérdida sin pesos y su posible efecto se
+medirá en una ablación específica; generarlos no los aplica automáticamente. El manifiesto usa rutas
 relativas a `image_path_base` del resumen. Las métricas distinguen clases de
 metadatos, clases con imágenes válidas y clases seleccionadas para modelado.
 No se deducen campañas ni fechas a partir de las imágenes.

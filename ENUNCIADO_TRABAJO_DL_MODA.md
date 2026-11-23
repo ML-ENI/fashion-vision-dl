@@ -56,11 +56,11 @@ en las sesiones de diciembre. No se especifica hora ni plataforma de entrega.
 
 Esta estructura es nuestra propuesta para cubrir el correo; el profesor exige el
 resumen y los tres bloques, no estos títulos concretos. El borrador del 1 de diciembre
-mostrará el estado real de cada bloque. Actualmente solo 01–03 tienen salidas ejecutadas.
+mostrará el estado real de cada bloque. Actualmente 01–04 tienen salidas ejecutadas; 04 incluye la Dense y su ablación de dropout.
 
 | Requisito | Evidencia prevista | Estado actual |
 |---|---|---|
-| CNN y baseline Dense | 04–05: curvas, contraste controlado y errores | Pendiente |
+| CNN y baseline Dense | 04–05: curvas, contraste controlado y errores | Dense ejecutada; CNN pendiente |
 | LSTM, GRU y RNN + atención | 06: mismo encoder recurrente con pooling frente a atención | Pendiente |
 | Self-attention y Transformer | 08: ejemplo Q/K/V y mini-ViT; máscara causal en 12 si se amplía | Pendiente |
 | Preentrenamiento autosupervisado | 07: encoder congelado y adaptación pequeña, con objetivo documentado | Pendiente |
@@ -95,8 +95,8 @@ por clase, matriz de confusión) y curvas de aprendizaje.
 
 Los notebooks están en `notebooks/` con numeración fija. Los notebooks 01–03 están
 ejecutados y guardan sus salidas: auditoría, preparación y EDA con baselines clásicos
-sobre validation. Los notebooks 04–12 conservan planes y todavía no presentan
-resultados de entrenamiento de redes. El código reutilizable vive en `src/`.
+sobre validation. El notebook 04 añade seis entrenamientos reales (Dense y dropout, tres semillas).
+Los notebooks 05–12 conservan planes sin redes entrenadas. El código reutilizable vive en `src/`.
 El protocolo previo al entrenamiento está en `config/experimental_protocol_v1.json`: macro-F1 primaria, pérdida inicial sin pesos, comparación controlada RGB64 y ablaciones previstas. La muestra equilibrada no representa por sí sola la prevalencia original del catálogo.
 
 ## Recordatorios de la guía

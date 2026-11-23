@@ -1,0 +1,64 @@
+{
+  "version": "1.0.0",
+  "frozen_before_training": "2026-11-23",
+  "purpose": "Notebook 04: Dense baseline and single-factor dropout ablation; H1 CNN comparison still pending",
+  "architecture": {
+    "image_size": 64,
+    "channels": 3,
+    "hidden_dims": [
+      80,
+      32
+    ],
+    "activation": "ReLU",
+    "classes": 12
+  },
+  "training": {
+    "seeds": [
+      42,
+      123,
+      2026
+    ],
+    "max_epochs": 30,
+    "patience": 5,
+    "batch_size": 32,
+    "optimizer": "Adam",
+    "learning_rate": 0.001,
+    "weight_decay": 0.0,
+    "class_weights": false,
+    "augmentation": false,
+    "threads": 4,
+    "device": "cpu",
+    "deterministic": true
+  },
+  "variants": [
+    {
+      "name": "baseline",
+      "dropout": 0.0
+    },
+    {
+      "name": "dropout_030",
+      "dropout": 0.3
+    }
+  ],
+  "normalization": "per-channel population moments computed from train only AFTER Lanczos resize to RGB64; reused for validation",
+  "checkpoint": "maximum validation macro-F1; first epoch wins ties",
+  "early_stopping": "stop after 5 successive epochs without validation loss decreasing by more than 0.0; different from checkpoint selection",
+  "primary_analysis": "all three seeds; mean and sample standard deviation; no selection of best seed",
+  "illustration_seed": 42,
+  "bootstrap": {
+    "unit": "group_id",
+    "draws": 300,
+    "seed": 42
+  },
+  "test_policy": "do not load or evaluate test images in this notebook",
+  "scope_limits": [
+    "no optimizer, width or depth search; those are future registered ablations",
+    "validation is used for stopping and selection, so this is not a final unbiased estimate",
+    "no CNN trained yet: do not conclude architecture superiority",
+    "no natural catalog prevalence claim"
+  ],
+  "sources": [
+    "https://docs.pytorch.org/docs/2.7/generated/torch.nn.CrossEntropyLoss.html",
+    "https://docs.pytorch.org/docs/2.7/notes/randomness.html"
+  ]
+}

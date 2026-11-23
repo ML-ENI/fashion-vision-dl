@@ -12,3 +12,6 @@ __pycache__/
 data/raw/images/
 data/raw/images.zip
 graphify-out/
+
+# Local neural weights are reproducible; metrics and figures are versioned.
+results/models/04_dense/
