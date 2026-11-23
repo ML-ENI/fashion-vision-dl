@@ -22,10 +22,10 @@ DEFAULT_CONFIG = {
     "target": "product_type_name",
     "include_classes": ["Trousers", "Dress", "Sweater", "T-shirt", "Cardigan", "Blouse",
                         "Jacket", "Shorts", "Shirt", "Vest top", "Skirt", "Hoodie"],
-    "min_side": 64, "max_images_per_class": 1500, "min_class_images": 500,
+    "min_side": 64, "min_class_images": 3,
     "image_size": 224, "jpeg_quality": 90, "padding_rgb": [255, 255, 255],
     "seed": 42, "val_size": 0.15, "test_size": 0.15,
-    "visual_audit_groups_per_class": 2,
+    "split_exposure_path": None,
     "augmentation": {"horizontal_flip_probability": 0.5, "brightness": 0.1, "colour": 0.1},
 }
 
@@ -52,7 +52,28 @@ def connect_groups(frame, hashes):
     return pd.Series([find(str(a)) for a in frame.article_id], index=frame.index)
 
 
-def select_candidates(audit, config):
+def read_exposure(config, root=ROOT):
+    path = config.get("split_exposure_path")
+    if not path:
+        return pd.DataFrame(columns=["article_id", "split"])
+    result = pd.read_csv(root / path, dtype={"article_id": "string"})
+    if result.article_id.duplicated().any() or not result.split.isin(["train", "validation", "test"]).all():
+        raise ValueError("Registro de exposición inválido")
+    return result
+
+
+def exposure_by_group(frame, column="history_split"):
+    priority = {"": 0, "test": 1, "validation": 2, "train": 3}
+    rank = frame[column].map(priority)
+    if rank.isna().any():
+        raise ValueError("Partición de exposición desconocida")
+    maxima = rank.groupby(frame.group_id).transform("max")
+    return maxima.map({v: k for k, v in priority.items()})
+
+
+def select_candidates(audit, config, root=ROOT):
+    if "max_images_per_class" in config or "visual_audit_groups_per_class" in config:
+        raise ValueError("La selección ya no admite cupos ni reservas por clase")
     frame = audit.copy()
     target = config["target"]
     frame["label"] = frame[target].astype(str)
@@ -67,6 +88,9 @@ def select_candidates(audit, config):
     candidate = frame.loc[ok].copy()
     candidate["group_id"] = connect_groups(candidate, ["pixel_sha256"])
     candidate["raw_group_id"] = candidate["group_id"]
+    anchors = read_exposure(config, root).set_index("article_id").split
+    candidate["history_split"] = candidate.article_id.map(anchors).fillna("")
+    candidate["history_split"] = exposure_by_group(candidate)
     conflicts = candidate.groupby("group_id").label.nunique()
     bad = candidate.group_id.isin(conflicts[conflicts.gt(1)].index)
     frame.loc[candidate.index[bad], "exclusion_reason"] = "conflicting_group_labels"
@@ -74,33 +98,39 @@ def select_candidates(audit, config):
     duplicate = candidate.pixel_sha256.duplicated(keep="first")
     frame.loc[candidate.index[duplicate], "exclusion_reason"] = "exact_pixel_duplicate"
     candidate = candidate.loc[~duplicate]
-    # La galería del notebook 01 usa productos reservados y excluidos del
-    # modelado; no se inspeccionan imágenes que luego pertenecerán al test.
-    visual = []
-    for label, part in candidate.groupby("label", sort=True):
-        groups = sorted(part.group_id.unique(), key=lambda g: hashlib.sha256(f'visual:{config["seed"]}:{label}:{g}'.encode()).hexdigest())
-        visual.extend(part.index[part.group_id.isin(groups[:config["visual_audit_groups_per_class"]])])
-    frame.loc[visual, "exclusion_reason"] = "visual_audit_group"
-    candidate = candidate.drop(index=visual)
-    keep = []
-    # Se muestrean grupos completos antes de dividir datos. Orden independiente
-    # de las rutas y del número de hilos; nunca se rompe un producto por el cupo.
-    for label, part in candidate.groupby("label", sort=True):
-        sizes = part.groupby("group_id").size()
-        ordered = sorted(sizes.index, key=lambda g: hashlib.sha256(f'{config["seed"]}:{label}:{g}'.encode()).hexdigest())
-        chosen, remaining = [], config["max_images_per_class"]
-        for group in ordered:
-            if sizes[group] <= remaining:
-                chosen.append(group)
-                remaining -= int(sizes[group])
-        indexes = part.index[part.group_id.isin(chosen)]
-        if len(indexes) < config["min_class_images"]:
-            raise ValueError(f"{label}: solo {len(indexes)} imágenes seleccionadas")
-        keep.extend(indexes)
-    capped = candidate.loc[keep].copy()
-    frame.loc[candidate.index.difference(capped.index), "exclusion_reason"] = "class_budget"
-    frame.loc[capped.index, "exclusion_reason"] = ""
-    return frame, capped
+    frame.loc[candidate.index, "exclusion_reason"] = ""
+    return frame, candidate
+
+
+def assign_splits(candidate, config):
+    """Dividir toda la cohorte por grupos, respetando exposiciones anteriores.
+
+    Los grupos nuevos completan 70/15/15 por clase aproximadamente. Un producto
+    ya utilizado en train no puede reaparecer como validación ni test.
+    """
+    val, test = config['val_size'], config['test_size']
+    if not (0 < val < 1 and 0 < test < 1 and val+test < 1):
+        raise ValueError('Proporciones positivas con suma menor que uno')
+    result = candidate.copy()
+    result["history_split"] = exposure_by_group(result)
+    result["split"] = ""
+    for label, part in result.groupby("label", sort=True):
+        groups = part.groupby("group_id").history_split.first()
+        ordered = sorted(groups.index, key=lambda g: hashlib.sha256(f'split:{config["seed"]}:{label}:{g}'.encode()).hexdigest())
+        if len(ordered) < 3:
+            raise ValueError(f"{label}: se necesitan al menos tres grupos independientes")
+        assignment = {g: groups[g] for g in ordered if groups[g]}
+        free = [g for g in ordered if not groups[g]]
+        for split, fraction in [("test", config["test_size"]), ("validation", config["val_size"])]:
+            target = max(1, int(np.ceil(len(ordered)*fraction)))
+            missing = max(0, target-sum(v == split for v in assignment.values()))
+            take, free = free[:missing], free[missing:]
+            assignment.update({g: split for g in take})
+        assignment.update({g: "train" for g in free})
+        result.loc[part.index, "split"] = part.group_id.map(assignment)
+        if set(assignment.values()) != {"train", "validation", "test"}:
+            raise ValueError(f"{label}: la exposición previa impide crear tres particiones; revisar grupos")
+    return result
 
 
 def materialize(record, raw_base, output, config):
@@ -166,6 +196,10 @@ def validate_manifest(manifest, output, verify_assets=True):
             raise ValueError(f"Fuga entre particiones: {key}")
     if usable.prepared_pixel_sha256.duplicated().any():
         raise ValueError("Duplicados exactos en el conjunto preparado")
+    if 'history_split' in usable:
+        seen = usable.loc[usable.history_split.ne('')]
+        if not seen.history_split.eq(seen.split).all():
+            raise ValueError('La partición contradice la exposición previa del producto')
     if verify_assets:
         for row in usable.itertuples():
             path = output / row.image_path
@@ -182,6 +216,8 @@ def prepare(config=None, root=ROOT, workers=4):
     signature = {"config": config, "audit_checksums": sha256(audit_run / "checksums.json"),
                  "code_sha256": {p.name: sha256(p) for p in sources},
                  "packages": {name: importlib.metadata.version(name) for name in ["Pillow", "numpy", "pandas"]}}
+    if config.get("split_exposure_path"):
+        signature["split_exposure_sha256"] = sha256(root / config["split_exposure_path"])
     if (output / "CURRENT.json").exists():
         pointer = json.loads((output / "CURRENT.json").read_text())
         current = output / pointer["run_dir"]
@@ -189,7 +225,7 @@ def prepare(config=None, root=ROOT, workers=4):
             verify_run(current, root)
             print(f"Versión vigente verificada: {current}", flush=True)
             return current
-    frame, candidate = select_candidates(audit, config)
+    frame, candidate = select_candidates(audit, config, root)
     raw_base = Path(audit_summary["raw_image_base"])
     if not raw_base.is_dir():
         raise FileNotFoundError("Reconecta el RAW para generar una versión nueva")
@@ -206,6 +242,7 @@ def prepare(config=None, root=ROOT, workers=4):
     # Mantener también las conexiones transitivas anteriores a eliminar copias:
     # quitar un representante no debe separar un componente del origen.
     candidate["group_id"] = connect_groups(candidate, ["raw_group_id", "pixel_sha256", "prepared_pixel_sha256"])
+    candidate["history_split"] = exposure_by_group(candidate)
     conflicts = candidate.groupby("group_id").label.nunique()
     bad = candidate.group_id.isin(conflicts[conflicts.gt(1)].index)
     frame.loc[candidate.index[bad], "exclusion_reason"] = "prepared_conflicting_group_labels"
@@ -215,17 +252,17 @@ def prepare(config=None, root=ROOT, workers=4):
     candidate = candidate.loc[~duplicate].copy()
     if set(candidate.label) != set(config["include_classes"]) or candidate.groupby("label").size().min() < config["min_class_images"]:
         raise ValueError("La limpieza final no permite el conjunto de clases configurado")
-    candidate = grouped_splits(candidate, config["seed"], config["val_size"], config["test_size"])
+    candidate = assign_splits(candidate, config)
     labels = {name: i for i, name in enumerate(sorted(candidate.label.unique()))}
     counts = candidate.loc[candidate.split.eq("train"), "label"].value_counts()
     weights = (counts.sum() / (len(counts) * counts)).to_dict()
     frame["split"] = "excluded"
     frame["label_id"] = frame.label.map(labels).astype("Int64")
     frame["training_weight"] = 0.0
-    for column in ["image_path", "prepared_sha256", "prepared_pixel_sha256", "group_id", "raw_group_id"]:
+    for column in ["image_path", "prepared_sha256", "prepared_pixel_sha256", "group_id", "raw_group_id", "history_split"]:
         frame[column] = ""
     frame["prepared_bytes"] = 0
-    for column in ["split", "image_path", "prepared_sha256", "prepared_pixel_sha256", "group_id", "raw_group_id", "prepared_bytes"]:
+    for column in ["split", "image_path", "prepared_sha256", "prepared_pixel_sha256", "group_id", "raw_group_id", "prepared_bytes", "history_split"]:
         frame.loc[candidate.index, column] = candidate[column]
     train = frame.split.eq("train")
     frame.loc[train, "training_weight"] = frame.loc[train, "label"].map(weights)
@@ -239,7 +276,8 @@ def prepare(config=None, root=ROOT, workers=4):
                "prepared_bytes": int(selected.prepared_bytes.sum()), "raw_bytes": audit_summary["raw_bytes"],
                "image_path_base": "data/processed (relative to project root)", "image_size": config["image_size"],
                "split_unit": "connected product_code, RAW pixel hash and prepared pixel hash",
-               "balance_policy": "whole-product cap before split; inverse-frequency weights from train only",
+               "balance_policy": "No class caps or balancing; keep all eligible images. Optional loss weights derived from train only.",
+               "split_exposure_policy": "Preserve prior development exposure; conflicts inherit train > validation > test; new groups complete approximate class-stratified fractions",
                "raw_required_for_training": False, "raw_archive_moved_externally": False,
                "audit_run": audit_run.relative_to(root).as_posix()}
     provenance = metadata(config, {"audit_checksums": audit_run / "checksums.json"}, sources)

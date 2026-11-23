@@ -37,6 +37,8 @@ def execute(name, kernel=None):
     notebook.metadata['execution_status'] = {
         'verified_date': date.today().isoformat(), 'status': 'executed',
         'code_cells': sum(c.cell_type == 'code' for c in notebook.cells), 'errors': 0}
+    if len(notebook.cells) > 1 and notebook.cells[1].cell_type == 'markdown':
+        notebook.cells[1].source = '> **Ejecución verificada · ' + date.today().strftime('%d/%m/%Y') + '.** Todas las celdas de código están ejecutadas sin errores sobre la cohorte completa vigente. El test predictivo permanece reservado.'
     temporary = path.with_suffix(".pending.ipynb")
     nbformat.write(notebook, temporary)
     temporary.replace(path)

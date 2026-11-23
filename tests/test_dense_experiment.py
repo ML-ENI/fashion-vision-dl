@@ -49,6 +49,26 @@ class DenseExperimentTests(unittest.TestCase):
         self.assertEqual(after['accuracy'], 1.0)
         self.assertTrue(torch.equal(logits1, logits2))
 
+    def test_normalized_arrays_are_disk_backed_and_match_training_statistics(self):
+        import tempfile
+        from pathlib import Path
+        from src.training.dense_experiment import normalized_tensors
+        with tempfile.TemporaryDirectory() as directory:
+            raw = {}
+            original = np.arange(2*3*4*4, dtype=np.uint8).reshape(2,3,4,4)
+            for split in ['train','validation']:
+                path = Path(directory)/(split+'.npy')
+                np.save(path, original)
+                raw[split] = np.load(path, mmap_mode='r')
+            stats = {'mean':[.1,.2,.3], 'std':[.5,.4,.3]}
+            tensors = normalized_tensors(raw, stats)
+            expected = (original.astype(np.float32)/255-np.array(stats['mean'],dtype=np.float32)[None,:,None,None])/np.array(stats['std'],dtype=np.float32)[None,:,None,None]
+            np.testing.assert_allclose(tensors['train'].numpy(), expected)
+            self.assertTrue((Path(directory)/'train_normalized.npy').exists())
+            np.testing.assert_array_equal(raw['train'],original)
+            # Liberar las vistas antes de cerrar archivos respaldados por disco en Windows.
+            del tensors,raw
+
     def test_paired_group_bootstrap_identical_predictions_is_zero(self):
         y = np.array([0, 0, 1, 1, 0, 1])
         pred = np.array([0, 1, 1, 1, 0, 0])

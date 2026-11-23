@@ -77,6 +77,6 @@ def visual_thumbnail(row, raw_base, root):
         thumb.thumbnail((320, 320))
         thumb.save(path, quality=90)
     write_json(info, {"source_sha256": row.file_sha256, "prepared_sha256": sha256(path),
-                      "purpose": "visual audit only; excluded from all modelling splits"})
+                      "purpose": "visual explanation: training-side or excluded task category; never test"})
     with Image.open(path) as image:
         return image.convert("RGB")

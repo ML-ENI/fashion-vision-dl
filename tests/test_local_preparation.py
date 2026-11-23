@@ -36,8 +36,7 @@ class LocalPreparationTests(unittest.TestCase):
         publish(self.root / "data/audit", {"image_audit": self.audit},
                 {"summary": {"raw_image_base": str(self.raw), "raw_bytes": int(self.audit.file_bytes.sum())}})
         self.config = {**DEFAULT_CONFIG, "include_classes": ["A", "B"], "min_side": 4,
-                       "max_images_per_class": 8, "min_class_images": 3, "image_size": 16,
-                       "visual_audit_groups_per_class": 1}
+                       "min_class_images": 3, "image_size": 16}
 
     def tearDown(self):
         self.temp.cleanup()
@@ -64,15 +63,31 @@ class LocalPreparationTests(unittest.TestCase):
         path.write_bytes(b"not an image")
         self.assertFalse(inspect_record(({"raw_path": path.name}, str(self.raw)))["image_valid"])
 
-    def test_selection_reserves_visual_groups_and_respects_products(self):
-        full, selected = select_candidates(self.audit, self.config)
-        visual = full.loc[full.exclusion_reason.eq("visual_audit_group")]
-        self.assertTrue(set(visual.product_code).isdisjoint(selected.product_code))
-        self.assertTrue(selected.groupby("label").size().le(8).all())
+    def test_selection_keeps_all_eligible_products_without_equalizing_classes(self):
+        audit = self.audit.iloc[:32].copy()
+        full, selected = select_candidates(audit, self.config)
+        self.assertEqual(selected.groupby('label').size().to_dict(), {'A': 20, 'B': 12})
+        self.assertFalse(full.exclusion_reason.isin(['class_budget', 'visual_audit_group']).any())
         for product in selected.product_code.unique():
-            self.assertEqual(sum(selected.product_code.eq(product)), sum(self.audit.product_code.eq(product)))
-        again = select_candidates(self.audit.sample(frac=1, random_state=3), self.config)[1]
+            self.assertEqual(sum(selected.product_code.eq(product)), sum(audit.product_code.eq(product)))
+        again = select_candidates(audit.sample(frac=1, random_state=3), self.config)[1]
         self.assertEqual(set(selected.article_id), set(again.article_id))
+
+    def test_exposure_anchors_keep_development_products_out_of_test(self):
+        anchors = self.audit.loc[[0, 2, 4, 20, 22, 24], ['article_id']].copy()
+        anchors['split'] = ['train', 'validation', 'test'] * 2
+        anchors.to_csv(self.root/'exposure.csv', index=False)
+        cfg = {**self.config, 'split_exposure_path': 'exposure.csv'}
+        run = prepare(cfg, self.root, workers=2)
+        frame = verify_run(run, self.root).set_index('article_id')
+        for row in anchors.itertuples():
+            self.assertEqual(frame.loc[row.article_id, 'split'], row.split)
+
+    def test_merged_exposure_components_use_most_exposed_partition(self):
+        from prepare_local import exposure_by_group
+        frame = pd.DataFrame({'group_id': ['a','a','b','b'],
+                              'history_split': ['test','train','test','validation']})
+        self.assertEqual(exposure_by_group(frame).tolist(), ['train','train','validation','validation'])
 
     def test_conflicting_labels_exclude_whole_group(self):
         audit = self.audit.copy()
@@ -84,7 +99,7 @@ class LocalPreparationTests(unittest.TestCase):
     def test_deduplication_preserves_transitive_origin_component(self):
         audit = self.audit.copy()
         audit.loc[2, "pixel_sha256"] = audit.loc[0, "pixel_sha256"]
-        cfg = {**self.config, "max_images_per_class": 100, "visual_audit_groups_per_class": 0}
+        cfg = self.config
         full, selected = select_candidates(audit, cfg)
         self.assertEqual(full.loc[2, "exclusion_reason"], "exact_pixel_duplicate")
         self.assertEqual(selected.loc[0, "raw_group_id"], selected.loc[3, "raw_group_id"])
@@ -96,7 +111,7 @@ class LocalPreparationTests(unittest.TestCase):
         run = prepare(self.config, self.root, workers=2)
         manifest = verify_run(run, self.root)
         usable = manifest.loc[manifest.split.ne("excluded")]
-        self.assertEqual(len(usable), 16)
+        self.assertEqual(len(usable), 40)
         self.raw.rename(self.raw.with_name("images.offline"))
         self.assertEqual(prepare(self.config, self.root, workers=2), run)
         dataset = LocalImageDataset("train", self.root)
@@ -125,7 +140,7 @@ class LocalPreparationTests(unittest.TestCase):
         with self.assertRaisesRegex(ValueError, "RAW modificado"):
             prepare(changed, self.root, workers=2)
         self.assertEqual(before, pointer.read_bytes())
-        self.assertEqual(verify_run(run, self.root).split.ne("excluded").sum(), 16)
+        self.assertEqual(verify_run(run, self.root).split.ne("excluded").sum(), 40)
 
 
 if __name__ == "__main__":

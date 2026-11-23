@@ -1,8 +1,8 @@
 {
-  "version": "1.1.0",
-  "date": "2026-11-20",
-  "status": "preregistered_design_neural_experiments_not_run",
-  "dataset_policy": "Keep balanced visual v1; exploratory class selection; no catalog-wide performance claim",
+  "version": "1.2.0",
+  "date": "2026-11-23",
+  "status": "active_design_full_eligible_cohort",
+  "dataset_policy": "Define garment classes; apply identical quality controls; keep every eligible photograph without class caps; split full groups before any justified computational sampling. Current design uses the full cohort.",
   "primary_metric": "macro_f1",
   "secondary_metrics": [
     "accuracy",
@@ -70,16 +70,16 @@
     },
     {
       "id": "H4",
-      "question": "Are near-unit class weights useful?",
-      "contrast": "same CNN, unweighted vs train-derived inverse-frequency loss weights",
+      "question": "How do inverse-frequency loss weights affect minority classes?",
+      "contrast": "same CNN and all natural-prevalence train products, unweighted vs train-derived class weights",
       "outcome": "macro-F1/per-class recall difference across seeds"
     },
     {
       "id": "H5",
-      "question": "How does training balance affect learning?",
-      "contrast": "grouped balanced vs frequency-proportional training subsets, equal image budget approx 3600; same fixed validation/test",
+      "question": "What does balancing the training sampler change?",
+      "contrast": "natural train shuffle vs balanced class sampler, same eligible products, same optimizer update budget; unchanged natural validation/test",
       "outcome": "macro-F1 and minority recall; actual group/image budget differences reported",
-      "limitation": "evaluates training balance under balanced evaluation, not natural catalog accuracy"
+      "limitation": "Optional training strategy ablation, not a new filtering rule or a balanced evaluation dataset"
     },
     {
       "id": "H6",
@@ -89,21 +89,20 @@
     }
   ],
   "population_sensitivity": {
-    "status": "planned",
-    "design": "Report balanced metrics and a separate fixed-prior weighted sensitivity analysis from the same predictions; derive priors from the eligible source pool before cap, not performance on test",
-    "assumption": "label shift: unchanged within-class conditional distribution; cannot prove actual catalog generalization",
-    "full_replication": "A future version must split all eligible groups globally BEFORE any training cap, retain uncapped natural-prevalence validation/test, and remain separate from v1"
+    "status": "natural_prevalence_evaluation_design",
+    "design": "Evaluate on the observed distribution of the selected garment types after quality controls. Publish class counts by split, macro-F1 and accuracy; do not reweight balanced predictions to claim a natural test.",
+    "limitations": "Group-wise proportions are approximate in images; category selection and historical exposure constrain inference to this cohort, not the entire catalog."
   },
   "class_review": {
-    "current_decision": "exploratory, not a priori",
-    "next_version_criteria": [
+    "current_decision": "Exploratory garment-task scope, explicit definitions and exclusions; no claim that two Top examples establish heterogeneity prevalence.",
+    "training_review_products_per_class": 8,
+    "top_review": "Outside the explicitly defined repertoire because Top is not specific enough as a task label; two images are illustrative only, not proof of a population property.",
+    "scope_review_criteria": [
       "visual garment task scope",
       "minimum independent product groups and split feasibility",
       "explicit definition per class",
       "systematic review of overlap/label noise, not only sample count"
-    ],
-    "training_review_products_per_class": 8,
-    "top_review": "pending broader reserved review; two examples are not a prevalence estimate"
+    ]
   },
   "controlled_training_budget": {
     "max_epochs": 30,
@@ -147,7 +146,7 @@
       ]
     },
     "priority": "small local experiments and analytical clarity; no requirement for massive architectures",
-    "coverage_status": "neural blocks planned, not yet implemented",
+    "coverage_status": "01-04 revised for one full-eligibility cohort; execution left to the student; remaining neural areas planned",
     "optional_extensions": [
       "pretrained_ViT",
       "CNN_RNN_hybrid",
@@ -165,7 +164,7 @@
     "seed": 42,
     "max_epochs": 10,
     "early_stopping_patience": 3,
-    "training_product_cap": 2000,
+    "training_product_cap": null,
     "selection": "validation_next_character_NLL",
     "metrics": [
       "NLL_per_character",

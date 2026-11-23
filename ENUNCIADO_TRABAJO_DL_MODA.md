@@ -56,11 +56,13 @@ en las sesiones de diciembre. No se especifica hora ni plataforma de entrega.
 
 Esta estructura es nuestra propuesta para cubrir el correo; el profesor exige el
 resumen y los tres bloques, no estos títulos concretos. El borrador del 1 de diciembre
-mostrará el estado real de cada bloque. Actualmente 01–04 tienen salidas ejecutadas; 04 incluye la Dense y su ablación de dropout.
+mostrará el estado real de cada bloque. 01–04 están adaptados a la cohorte completa,
+sin cupos por clase, y pendientes de reejecución por la estudiante. Se han retirado
+las salidas del planteamiento anterior; no se presentan dos propuestas paralelas.
 
 | Requisito | Evidencia prevista | Estado actual |
 |---|---|---|
-| CNN y baseline Dense | 04–05: curvas, contraste controlado y errores | Dense ejecutada; CNN pendiente |
+| CNN y baseline Dense | 04–05: curvas, contraste controlado y errores | Dense pendiente de reejecución; CNN pendiente |
 | LSTM, GRU y RNN + atención | 06: mismo encoder recurrente con pooling frente a atención | Pendiente |
 | Self-attention y Transformer | 08: ejemplo Q/K/V y mini-ViT; máscara causal en 12 si se amplía | Pendiente |
 | Preentrenamiento autosupervisado | 07: encoder congelado y adaptación pequeña, con objetivo documentado | Pendiente |
@@ -93,11 +95,12 @@ por clase, matriz de confusión) y curvas de aprendizaje.
 | Estrategias de aprendizaje | `11_clip_zero_shot.ipynb` | CLIP zero-shot, linear probe y relación entre estrategias |
 | Modelos generativos | `12_generative_models.ipynb` | Generador autorregresivo pequeño; autoencoder/VAE opcionales |
 
-Los notebooks están en `notebooks/` con numeración fija. Los notebooks 01–03 están
-ejecutados y guardan sus salidas: auditoría, preparación y EDA con baselines clásicos
-sobre validation. El notebook 04 añade seis entrenamientos reales (Dense y dropout, tres semillas).
-Los notebooks 05–12 conservan planes sin redes entrenadas. El código reutilizable vive en `src/`.
-El protocolo previo al entrenamiento está en `config/experimental_protocol_v1.json`: macro-F1 primaria, pérdida inicial sin pesos, comparación controlada RGB64 y ablaciones previstas. La muestra equilibrada no representa por sí sola la prevalencia original del catálogo.
+Los notebooks están en `notebooks/` con numeración fija. 01–04 contienen la
+implementación revisada y requieren reejecución sobre la cohorte completa.
+El 04 prevé seis entrenamientos (Dense y dropout, tres semillas), precedidos por
+una época piloto de coste cuyos pesos se descartan. No se han ejecutado esos
+ajustes sobre la cohorte completa. 05–12 conservan planes. El código reutilizable vive en `src/`.
+El protocolo previo al entrenamiento está en `config/experimental_protocol_v1.json`: macro-F1 primaria, pérdida inicial sin pesos, comparación controlada RGB64 y ablaciones previstas. Se conservan todas las imágenes elegibles de las doce prendas tras controles comunes, sin cupos por clase. Las particiones se construyen sobre la cohorte completa; las métricas describen ese alcance, no todo el catálogo. Cualquier muestra computacional futura exigiría medir el coste y se aplicaría solo a train.
 
 ## Recordatorios de la guía
 

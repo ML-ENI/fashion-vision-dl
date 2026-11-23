@@ -1,9 +1,8 @@
 # Revisión de preparación de datos — 20 de octubre de 2026
 
-> Nota del 19 de noviembre de 2026: este documento conserva la revisión histórica.
-> Las imágenes reales ya se han incorporado y auditado. Los notebooks 01 y 02
-> están ejecutados y han publicado el conjunto local de 18.000 imágenes.
-> Consulta `local-image-dataset.md` para el flujo actual y sus resultados.
+> Este documento conserva la revisión histórica del contrato compartido con ML.
+> El flujo visual vigente se documenta en `local-image-dataset.md`: selección por
+> alcance y calidad, sin cupos por clase. `CURRENT.json` identifica una sola cohorte activa.
 
 ## Alcance y decisiones
 

@@ -47,7 +47,13 @@ def write_json(path, obj):
 def load_context(root):
     root = Path(root)
     processed = root / 'data/processed'
-    run = processed / json.loads((processed / 'CURRENT.json').read_text())['run_dir']
+    pointer = processed / 'CURRENT.json'
+    if not pointer.exists():
+        raise FileNotFoundError('Primero ejecuta el notebook 02 para publicar la cohorte completa; el conjunto anterior no está activo')
+    run = processed / json.loads(pointer.read_text())['run_dir']
+    preparation = json.loads((run / 'config.json').read_text())
+    if 'max_images_per_class' in preparation:
+        raise ValueError('La publicación contiene cupos antiguos: ejecutar 02 con la configuración vigente antes de entrenar')
     checks = json.loads((run / 'checksums.json').read_text())
     for name in ['image_manifest.csv.gz', 'labels.json']:
         if sha256(run / name) != checks[name]:
@@ -88,8 +94,9 @@ def prepare_arrays(context):
         if path.exists() and marker.exists():
             metadata = json.loads(marker.read_text())
             valid_cache = metadata['sha256'] == sha256(path) and metadata['article_ids'] == rows.article_id.tolist()
+        pending = cache / f'{split}.pending.npy'
         array = (np.load(path, mmap_mode='r') if valid_cache else
-                 np.empty((len(rows), 3, size, size), dtype=np.uint8))
+                 np.lib.format.open_memmap(pending, mode='w+', shape=(len(rows), 3, size, size), dtype=np.uint8))
         if array.shape != (len(rows), 3, size, size) or array.dtype != np.uint8:
             raise ValueError('Caché con forma o tipo incorrectos')
         for i, row in enumerate(rows.itertuples()):
@@ -103,9 +110,11 @@ def prepare_arrays(context):
             if (i + 1) % 4000 == 0:
                 print(f'{split}: {i+1:,} imágenes verificadas'.replace(',', '.'), flush=True)
         if not valid_cache:
-            np.save(path, array)
+            array.flush()
+            del array
+            os.replace(pending, path)
             write_json(marker, {'sha256': sha256(path), 'article_ids': rows.article_id.tolist()})
-        raw[split] = array
+        raw[split] = np.load(path, mmap_mode='r')
     # Momentos poblacionales por canal en la representación RGB64, no en RGB224.
     sums = np.zeros(3, dtype=np.float64)
     squares = np.zeros(3, dtype=np.float64)
@@ -124,10 +133,55 @@ def prepare_arrays(context):
 
 
 def normalized_tensors(raw, normalization):
-    mean = torch.tensor(normalization['mean'], dtype=torch.float32)[None, :, None, None]
-    std = torch.tensor(normalization['std'], dtype=torch.float32)[None, :, None, None]
-    return {split: torch.from_numpy(np.array(values, copy=True)).float().div_(255).sub_(mean).div_(std)
-            for split, values in raw.items()}
+    """Arrays respaldados por disco: la cohorte completa no exige una copia RAM."""
+    mean = np.asarray(normalization['mean'], dtype=np.float32)[None, :, None, None]
+    std = np.asarray(normalization['std'], dtype=np.float32)[None, :, None, None]
+    tensors = {}
+    for split, values in raw.items():
+        # La ruta depende del hash del manifiesto y de RGB64; los bloques se
+        # recalculan de forma determinista para evitar cachés de normalización obsoletas.
+        path = Path(values.filename).with_name(split+'_normalized.npy')
+        mapped = np.lib.format.open_memmap(path, mode='w+', dtype=np.float32, shape=values.shape)
+        for start in range(0, len(values), 128):
+            mapped[start:start+128] = (values[start:start+128].astype(np.float32)/255-mean)/std
+        mapped.flush()
+        del mapped
+        tensors[split] = torch.from_numpy(np.load(path, mmap_mode='c'))
+    return tensors
+
+
+def measure_feasibility(context, tensors, directory):
+    """Una época real, descartada: decidir por coste, nunca por su puntuación."""
+    path = directory / 'cost_feasibility.json'
+    if path.exists():
+        return json.loads(path.read_text(encoding='utf-8'))
+    config = context['config']
+    budget = config['training']
+    torch.manual_seed(config['cost_feasibility']['pilot_seed'])
+    model = model_from_config(config, 0.0)
+    y = {s: torch.tensor(f.label_id.astype(int).to_numpy(), dtype=torch.long) for s, f in context['rows'].items()}
+    loader = DataLoader(TensorDataset(tensors['train'], y['train']), batch_size=budget['batch_size'],
+                        shuffle=True, generator=torch.Generator().manual_seed(901), num_workers=0)
+    optimizer = torch.optim.Adam(model.parameters(), lr=budget['learning_rate'])
+    started = time.perf_counter()
+    with PeakRSS() as memory:
+        train_epoch(model, loader, optimizer, nn.CrossEntropyLoss())
+        evaluate(model, tensors['train'], y['train'], budget['batch_size'])
+        evaluate(model, tensors['validation'], y['validation'], budget['batch_size'])
+    seconds = time.perf_counter()-started
+    estimate = seconds*budget['max_epochs']*len(budget['seeds'])*len(config['variants'])*config['cost_feasibility']['safety_factor']
+    report = {'dataset_run': context['run'].name, 'train_images': len(y['train']), 'validation_images': len(y['validation']),
+              'pilot_epoch_seconds': seconds, 'peak_process_rss_bytes': memory.peak,
+              'conservative_six_fit_upper_seconds': estimate, 'budget_seconds': config['cost_feasibility']['max_total_training_seconds'],
+              'fits_budget': estimate <= config['cost_feasibility']['max_total_training_seconds'],
+              'sampling_applied': False,
+              'decision': 'keep_all_eligible_images' if estimate <= config['cost_feasibility']['max_total_training_seconds'] else 'review_computational_budget_before_training',
+              'note': 'Pilot weights discarded; no pilot prediction or metric used for selection. Includes evaluation time; preprocessing separate.'}
+    write_json(path, report)
+    print('Coste medido: '+str(round(seconds, 1))+' s/época; estimación máxima conservadora: '+str(round(estimate/60, 1))+' min', flush=True)
+    if not report['fits_budget']:
+        raise RuntimeError('El coste supera el presupuesto: revisar explícitamente el diseño antes de entrenar, sin eliminar fotografías automáticamente')
+    return report
 
 
 def scores(y, pred, classes):
@@ -355,6 +409,9 @@ def run_or_load(context, tensors, normalization):
                 raise ValueError('Checkpoint ausente o modificado')
         print('Resultados verificados reutilizados: '+signature)
         return summary, directory
+    feasibility = measure_feasibility(context, tensors, directory)
+    if not feasibility['fits_budget']:
+        raise RuntimeError('Es necesario revisar el presupuesto computacional')
     write_json(directory / 'design.json', {'identity': identity, 'config': config, 'normalization': normalization,
                                          'dataset_run': context['run'].name, 'test_images_opened': 0})
     results = []
@@ -377,10 +434,10 @@ def run_or_load(context, tensors, normalization):
                'config': config, 'identity': identity, 'normalization': normalization,
                'hardware': {'device': 'cpu', 'processor': platform.processor(), 'physical_cores': psutil.cpu_count(logical=False),
                             'threads_used': torch.get_num_threads(), 'ram_total_bytes': psutil.virtual_memory().total},
-               'test_images_opened': 0, 'test_predictions_generated': 0,
+               'test_images_opened': 0, 'test_predictions_generated': 0, 'cost_feasibility': feasibility,
                'cost_notes': {'train_seconds': 'includes all epoch train and train/validation evaluation; excludes resize and final artifact export',
-                              'latency': 'median of 3 warm in-memory CPU batch passes; excludes decode, resize, normalization and disk IO',
-                              'peak_process_rss_bytes': '50ms sampled entire Python process incl. datasets; not incremental tensor memory',
+                              'latency': 'median of 3 warmed CPU passes over disk-backed normalized arrays; excludes JPEG decode, resize and normalization, but may include OS paging or disk reads',
+                              'peak_process_rss_bytes': '50ms sampled entire Python process including mapped file pages and datasets; not incremental tensor memory',
                               'FLOPs': '2 per dense weight per image; excludes activations, bias, normalization and softmax'},
                'runs': results, 'artifacts_sha256': {p.name: sha256(p) for p in files}}
     write_json(marker, summary)
