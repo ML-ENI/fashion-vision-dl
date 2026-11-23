@@ -1,8 +1,8 @@
 {
   "01_data_understanding.ipynb": {
-    "verified_date": "2026-11-20",
     "status": "executed",
-    "code_cells": 10,
+    "verified_date": "2026-11-23",
+    "code_cells": 11,
     "errors": 0
   },
   "02_data_preparation.ipynb": {
