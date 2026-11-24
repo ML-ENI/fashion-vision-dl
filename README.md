@@ -28,15 +28,15 @@ el archivo de configuración, no dos propuestas de dataset. `data/processed/CURR
 se crea al terminar y verificar la preparación. Las publicaciones internas anteriores
 son trazabilidad y no se presentan como experimentos paralelos.
 
-## Estado: 01 y 02 ejecutados por la estudiante
+## Estado: 01–03 ejecutados por la estudiante
 
-Los notebooks 01 y 02 conservan sus ejecuciones completas sin errores guardados.
+Los notebooks 01, 02 y 03 conservan sus ejecuciones completas sin errores guardados.
 La preparación ha publicado 74.525 imágenes de 26 clases: 51.791 en train,
 11.583 en validation y 11.151 en test. Las copias ocupan aproximadamente 571 MB.
 El ZIP y los originales siguen locales.
 
-Esta actualización publica únicamente 01–02 y los archivos que necesitan.
-03 y los notebooks posteriores siguen pendientes de ejecución completa y validación;
+Están publicados 01–03 y los archivos que necesitan.
+04 y los notebooks posteriores siguen pendientes de ejecución completa y validación;
 las adaptaciones de entrenamiento permanecen en desarrollo local. No hay resultados
 Dense validados para esta cohorte. No se ha vuelto a ejecutar código al revisar
 las salidas guardadas. Los registros están en `docs/notebook-execution-status.json`

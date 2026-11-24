@@ -10,9 +10,9 @@
     "reason": "Student execution saved in the notebook; all code cells have execution counts and no stored errors. Inspected without rerunning."
   },
   "03_eda_images.ipynb": {
-    "status": "pending_reexecution",
-    "updated_date": "2026-11-23",
-    "reason": "Scope updated to all 26 product types of the three H&M garment families; reexecution and validation left to the student"
+    "status": "executed_saved_without_errors",
+    "updated_date": "2026-11-24",
+    "reason": "Student execution saved for all seven code cells, including compact gallery, validation baselines and separate confusion matrices; no stored errors. Inspected without rerunning."
   },
   "04_dense_mlp.ipynb": {
     "status": "pending_reexecution",
