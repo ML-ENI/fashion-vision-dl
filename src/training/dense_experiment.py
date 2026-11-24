@@ -54,6 +54,10 @@ def load_context(root):
     preparation = json.loads((run / 'config.json').read_text())
     if 'max_images_per_class' in preparation:
         raise ValueError('La publicación contiene cupos antiguos: ejecutar 02 con la configuración vigente antes de entrenar')
+    requested = json.loads((root / 'config/local_images_v1.json').read_text(encoding='utf-8'))
+    if (set(preparation.get('include_classes', [])) != set(requested['include_classes']) or
+            set(preparation.get('include_product_groups') or []) != set(requested.get('include_product_groups') or [])):
+        raise ValueError('El conjunto preparado tiene otro alcance de prendas; ejecutar 02 antes de entrenar con las 26 etiquetas')
     checks = json.loads((run / 'checksums.json').read_text())
     for name in ['image_manifest.csv.gz', 'labels.json']:
         if sha256(run / name) != checks[name]:

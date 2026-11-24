@@ -73,7 +73,7 @@ def dropout_figure(context, records):
 
 def confusion_figure(context, cm):
     names = context['names']
-    fig, axes = plt.subplots(1, 2, figsize=(25, 11))
+    fig, axes = plt.subplots(1, 2, figsize=(30, max(11, .46*len(names)+3)))
     proportions = cm / cm.sum(1, keepdims=True)
     for ax, values, title, vmax in zip(axes, [cm, proportions], ['Recuentos', 'Proporción por clase real'], [None, 1]):
         im = ax.imshow(values, cmap='Blues', vmin=0, vmax=vmax)
@@ -91,15 +91,15 @@ def per_class_figure(context, dense_report, colour_report):
     names = context['names']
     dense = np.array([dense_report[name]['f1-score'] for name in names])
     colour = colour_report.loc[names, 'f1-score'].to_numpy()
-    fig, ax = plt.subplots(figsize=(13, 10))
+    fig, ax = plt.subplots(figsize=(19, max(10, .43*len(names)+2)))
     y = np.arange(len(names))
     ax.barh(y-.18, colour, height=.34, color=ORANGE, label='Logística de color (03)')
     ax.barh(y+.18, dense, height=.34, color=BLUE, label='Dense (semilla 42)')
     ax.set_yticks(y, names)
     ax.invert_yaxis()
     ax.set(xlabel='F1 por clase en validation', xlim=(0, 1))
-    # Las dos primeras clases dejan libre esta esquina; abajo taparía Vest top.
-    ax.legend(loc='upper right')
+    # Fuera de los datos: no suponemos que una clase deje una esquina libre.
+    ax.legend(loc='upper left', bbox_to_anchor=(1.01, 1))
     fig.suptitle('La mejora global puede variar entre clases')
     return save(fig, context['root'], '05_per_class',
                 'Fuente: mismas imágenes y etiquetas de validation. Una semilla Dense prefijada; la variabilidad de entrenamiento se informa aparte. No aísla el efecto exclusivo de la arquitectura.')

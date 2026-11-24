@@ -10,7 +10,7 @@
       32
     ],
     "activation": "ReLU",
-    "classes": 12
+    "classes": 26
   },
   "training": {
     "seeds": [

@@ -1,0 +1,171 @@
+{
+  "Blazer": {
+    "precision": 0.8202247191011236,
+    "recall": 0.4319526627218935,
+    "f1-score": 0.5658914728682171,
+    "support": 169.0
+  },
+  "Blouse": {
+    "precision": 0.3238095238095238,
+    "recall": 0.05466237942122187,
+    "f1-score": 0.09353507565337002,
+    "support": 622.0
+  },
+  "Bodysuit": {
+    "precision": 0.33098591549295775,
+    "recall": 0.3381294964028777,
+    "f1-score": 0.33451957295373663,
+    "support": 139.0
+  },
+  "Cardigan": {
+    "precision": 0.2682926829268293,
+    "recall": 0.046610169491525424,
+    "f1-score": 0.07942238267148015,
+    "support": 236.0
+  },
+  "Coat": {
+    "precision": 0.20689655172413793,
+    "recall": 0.08955223880597014,
+    "f1-score": 0.125,
+    "support": 67.0
+  },
+  "Costumes": {
+    "precision": 0.0,
+    "recall": 0.0,
+    "f1-score": 0.0,
+    "support": 7.0
+  },
+  "Dress": {
+    "precision": 0.6549536359199609,
+    "recall": 0.8586052463211772,
+    "f1-score": 0.743078626799557,
+    "support": 1563.0
+  },
+  "Dungarees": {
+    "precision": 0.4375,
+    "recall": 0.14583333333333334,
+    "f1-score": 0.21875,
+    "support": 48.0
+  },
+  "Garment Set": {
+    "precision": 0.632183908045977,
+    "recall": 0.3107344632768362,
+    "f1-score": 0.4166666666666667,
+    "support": 177.0
+  },
+  "Hoodie": {
+    "precision": 0.5186440677966102,
+    "recall": 0.4383954154727794,
+    "f1-score": 0.4751552795031056,
+    "support": 349.0
+  },
+  "Jacket": {
+    "precision": 0.5212620027434842,
+    "recall": 0.6713780918727915,
+    "f1-score": 0.5868725868725869,
+    "support": 566.0
+  },
+  "Jumpsuit/Playsuit": {
+    "precision": 0.5714285714285714,
+    "recall": 0.18823529411764706,
+    "f1-score": 0.2831858407079646,
+    "support": 170.0
+  },
+  "Leggings/Tights": {
+    "precision": 0.41784037558685444,
+    "recall": 0.3771186440677966,
+    "f1-score": 0.39643652561247217,
+    "support": 236.0
+  },
+  "Outdoor Waistcoat": {
+    "precision": 0.0,
+    "recall": 0.0,
+    "f1-score": 0.0,
+    "support": 20.0
+  },
+  "Outdoor overall": {
+    "precision": 0.05263157894736842,
+    "recall": 0.16666666666666666,
+    "f1-score": 0.08,
+    "support": 6.0
+  },
+  "Outdoor trousers": {
+    "precision": 0.14285714285714285,
+    "recall": 0.03571428571428571,
+    "f1-score": 0.05714285714285714,
+    "support": 28.0
+  },
+  "Polo shirt": {
+    "precision": 0.6521739130434783,
+    "recall": 0.3191489361702128,
+    "f1-score": 0.42857142857142855,
+    "support": 47.0
+  },
+  "Shirt": {
+    "precision": 0.6155234657039711,
+    "recall": 0.6470588235294118,
+    "f1-score": 0.6308973172987974,
+    "support": 527.0
+  },
+  "Shorts": {
+    "precision": 0.7901498929336188,
+    "recall": 0.6795580110497238,
+    "f1-score": 0.7306930693069307,
+    "support": 543.0
+  },
+  "Skirt": {
+    "precision": 0.6216216216216216,
+    "recall": 0.60381861575179,
+    "f1-score": 0.612590799031477,
+    "support": 419.0
+  },
+  "Sweater": {
+    "precision": 0.5384615384615384,
+    "recall": 0.7146853146853147,
+    "f1-score": 0.6141826923076923,
+    "support": 1430.0
+  },
+  "T-shirt": {
+    "precision": 0.6324395029431,
+    "recall": 0.7432744043043813,
+    "f1-score": 0.6833922261484099,
+    "support": 1301.0
+  },
+  "Tailored Waistcoat": {
+    "precision": 0.0,
+    "recall": 0.0,
+    "f1-score": 0.0,
+    "support": 14.0
+  },
+  "Top": {
+    "precision": 0.22715404699738903,
+    "recall": 0.12663755458515283,
+    "f1-score": 0.16261682242990655,
+    "support": 687.0
+  },
+  "Trousers": {
+    "precision": 0.8094229751191107,
+    "recall": 0.8594716132658797,
+    "f1-score": 0.8336968375136314,
+    "support": 1779.0
+  },
+  "Vest top": {
+    "precision": 0.5361010830324909,
+    "recall": 0.6859122401847575,
+    "f1-score": 0.601823708206687,
+    "support": 433.0
+  },
+  "accuracy": 0.6139169472502806,
+  "macro avg": {
+    "precision": 0.43548302754757157,
+    "recall": 0.36665976543128564,
+    "f1-score": 0.3751585303179606,
+    "support": 11583.0
+  },
+  "weighted avg": {
+    "precision": 0.5837356967824298,
+    "recall": 0.6139169472502806,
+    "f1-score": 0.5822143848654999,
+    "support": 11583.0
+  }
+}

@@ -15,9 +15,9 @@
     "reason": "Student execution saved for all seven code cells, including compact gallery, validation baselines and separate confusion matrices; no stored errors. Inspected without rerunning."
   },
   "04_dense_mlp.ipynb": {
-    "status": "pending_reexecution",
-    "updated_date": "2026-11-23",
-    "reason": "Scope updated to all 26 product types of the three H&M garment families; reexecution and validation left to the student"
+    "status": "executed_saved_without_errors",
+    "updated_date": "2026-11-24",
+    "reason": "All 17 code cells saved without errors; experiment 9660884156e720ba completed on dataset 20261123T181635-92a8fcea BEFORE the local visual-detail filter. Stored artifact hashes inspected without rerunning."
   },
   "05_cnn.ipynb": {
     "status": "planned"

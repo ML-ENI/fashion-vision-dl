@@ -3,7 +3,7 @@ from torch import nn
 
 
 class DenseClassifier(nn.Module):
-    def __init__(self, image_size=64, hidden_dims=(80, 32), classes=12, dropout=0.0):
+    def __init__(self, image_size=64, hidden_dims=(80, 32), classes=26, dropout=0.0):
         super().__init__()
         inputs = 3 * image_size * image_size
         layers = [nn.Flatten()]

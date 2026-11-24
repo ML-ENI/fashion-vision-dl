@@ -1,0 +1,343 @@
+{
+  "status": "completed",
+  "experiment_id": "9660884156e720ba",
+  "dataset_run": "20261123T181635-92a8fcea",
+  "config": {
+    "version": "1.0.0",
+    "frozen_before_training": "2026-11-23",
+    "purpose": "Dense baseline on all eligible photographs, without artificial class balance",
+    "architecture": {
+      "image_size": 64,
+      "channels": 3,
+      "hidden_dims": [
+        80,
+        32
+      ],
+      "activation": "ReLU",
+      "classes": 26
+    },
+    "training": {
+      "seeds": [
+        42,
+        123,
+        2026
+      ],
+      "max_epochs": 30,
+      "patience": 5,
+      "batch_size": 32,
+      "optimizer": "Adam",
+      "learning_rate": 0.001,
+      "weight_decay": 0.0,
+      "class_weights": false,
+      "augmentation": false,
+      "threads": 4,
+      "device": "cpu",
+      "deterministic": true
+    },
+    "variants": [
+      {
+        "name": "baseline",
+        "dropout": 0.0
+      },
+      {
+        "name": "dropout_030",
+        "dropout": 0.3
+      }
+    ],
+    "normalization": "per-channel moments of all train RGB64 pixels; no sampling",
+    "checkpoint": "maximum validation macro-F1; first epoch wins ties",
+    "early_stopping": "stop after 5 successive epochs without validation loss decreasing by more than 0.0; different from checkpoint selection",
+    "primary_analysis": "all three seeds; mean and sample standard deviation; no selection of best seed",
+    "illustration_seed": 42,
+    "bootstrap": {
+      "unit": "group_id",
+      "draws": 300,
+      "seed": 42
+    },
+    "test_policy": "do not load or evaluate test images in this notebook",
+    "scope_limits": [
+      "no optimizer, width or depth search; those are future registered ablations",
+      "validation is used for stopping and selection, so this is not a final unbiased estimate",
+      "no CNN trained yet: do not conclude architecture superiority",
+      "evaluation describes selected garment types after quality controls, not the whole catalog"
+    ],
+    "sources": [
+      "https://docs.pytorch.org/docs/2.7/generated/torch.nn.CrossEntropyLoss.html",
+      "https://docs.pytorch.org/docs/2.7/notes/randomness.html"
+    ],
+    "cost_feasibility": {
+      "max_total_training_seconds": 5400,
+      "safety_factor": 1.25,
+      "decision": "Keep every eligible train product if the measured upper estimate fits 90 minutes for six local CPU fits. Otherwise stop for an explicit computational amendment; no automatic photo cap.",
+      "pilot_seed": 901
+    }
+  },
+  "identity": {
+    "manifest_sha256": "79662d323f1d6dd8221a715b55d0f5558f66fa6ba5e7e46826f5a402ec148660",
+    "sources": {
+      "config/dense_baseline_v1.json": "bc909ed09536f3a9cf3c31367bd312e17efe69e57335ccb1a6570bf805e34cd2",
+      "config/experimental_protocol_v1.json": "3bfb0dd8ac1c760543742e0a7eadd6c4321f31d720420fcdb043173bb8acff53",
+      "src/models/dense.py": "688afb2e8be29544a134adb924545eec33f3b3d62f7ecf06061cc952b6d63c95",
+      "src/training/dense_experiment.py": "8e4c5fbd9bfbbdedab6127476cdeac9199ea7b1595f0fa09626d7d46b71139e1"
+    },
+    "versions": {
+      "torch": "2.7.1+cpu",
+      "numpy": "2.1.3",
+      "pandas": "2.2.3",
+      "Pillow": "11.0.0",
+      "scikit-learn": "1.9.1",
+      "psutil": "7.2.2"
+    },
+    "platform": "Windows-11-10.0.26200-SP0",
+    "processor": "Intel64 Family 6 Model 165 Stepping 2, GenuineIntel"
+  },
+  "normalization": {
+    "mean": [
+      0.8291424400071244,
+      0.8147563994245725,
+      0.8132294558892799
+    ],
+    "std": [
+      0.2595668834896627,
+      0.2704118468062694,
+      0.26636184046945616
+    ],
+    "image_size": 64,
+    "partition": "train",
+    "pixels_per_channel": 212135936,
+    "method": "population pixel moments after RGB64 Lanczos resize"
+  },
+  "hardware": {
+    "device": "cpu",
+    "processor": "Intel64 Family 6 Model 165 Stepping 2, GenuineIntel",
+    "physical_cores": 6,
+    "threads_used": 4,
+    "ram_total_bytes": 16938582016
+  },
+  "test_images_opened": 0,
+  "test_predictions_generated": 0,
+  "cost_feasibility": {
+    "dataset_run": "20261123T181635-92a8fcea",
+    "train_images": 51791,
+    "validation_images": 11583,
+    "pilot_epoch_seconds": 21.662918799999716,
+    "peak_process_rss_bytes": 4476940288,
+    "conservative_six_fit_upper_seconds": 4874.156729999936,
+    "budget_seconds": 5400,
+    "fits_budget": true,
+    "sampling_applied": false,
+    "decision": "keep_all_eligible_images",
+    "note": "Pilot weights discarded; no pilot prediction or metric used for selection. Includes evaluation time; preprocessing separate."
+  },
+  "cost_notes": {
+    "train_seconds": "includes all epoch train and train/validation evaluation; excludes resize and final artifact export",
+    "latency": "median of 3 warmed CPU passes over disk-backed normalized arrays; excludes JPEG decode, resize and normalization, but may include OS paging or disk reads",
+    "peak_process_rss_bytes": "50ms sampled entire Python process including mapped file pages and datasets; not incremental tensor memory",
+    "FLOPs": "2 per dense weight per image; excludes activations, bias, normalization and softmax"
+  },
+  "runs": [
+    {
+      "variant": "baseline",
+      "seed": 42,
+      "dropout": 0.0,
+      "parameters": 986570,
+      "approx_linear_flops_per_image": 1972864,
+      "epochs_run": 15,
+      "selected_epoch": 14,
+      "stopped_early": true,
+      "train_seconds": 323.08103029999984,
+      "inference_ms_per_image": 0.041517629284267506,
+      "peak_process_rss_bytes": 4508979200,
+      "checkpoint": "results\\models\\04_dense\\9660884156e720ba\\baseline_seed42.pt",
+      "checkpoint_sha256": "34e10b668a4408e3fdcecab8896838679f2d80670856efd4e14e735cc370579a",
+      "train_loss": 1.1339995439052903,
+      "train_accuracy": 0.6486262091869244,
+      "train_macro_f1": 0.4438420984717013,
+      "validation_loss": 1.3018777096898282,
+      "validation_accuracy": 0.617629284295951,
+      "validation_macro_f1": 0.38527282686107484,
+      "validation_group_bootstrap_ci95_accuracy": [
+        0.5981067020350471,
+        0.6332497801122317
+      ],
+      "validation_group_bootstrap_ci95_macro_f1": [
+        0.36647039695259204,
+        0.4009604101616752
+      ]
+    },
+    {
+      "variant": "baseline",
+      "seed": 123,
+      "dropout": 0.0,
+      "parameters": 986570,
+      "approx_linear_flops_per_image": 1972864,
+      "epochs_run": 15,
+      "selected_epoch": 10,
+      "stopped_early": true,
+      "train_seconds": 368.4612397000001,
+      "inference_ms_per_image": 0.053618881118899106,
+      "peak_process_rss_bytes": 4496257024,
+      "checkpoint": "results\\models\\04_dense\\9660884156e720ba\\baseline_seed123.pt",
+      "checkpoint_sha256": "88e2315b4e93bf8350bf818fbee9d0fec44643b98343ae522af9d9dfd4b6f0f8",
+      "train_loss": 1.1844010491100563,
+      "train_accuracy": 0.6361143828078237,
+      "train_macro_f1": 0.4330116941160943,
+      "validation_loss": 1.2983332045037317,
+      "validation_accuracy": 0.6139169472502806,
+      "validation_macro_f1": 0.3751585303179606,
+      "validation_group_bootstrap_ci95_accuracy": [
+        0.5954515290427712,
+        0.6288889243775372
+      ],
+      "validation_group_bootstrap_ci95_macro_f1": [
+        0.35533793135985203,
+        0.3888682979196262
+      ]
+    },
+    {
+      "variant": "baseline",
+      "seed": 2026,
+      "dropout": 0.0,
+      "parameters": 986570,
+      "approx_linear_flops_per_image": 1972864,
+      "epochs_run": 19,
+      "selected_epoch": 14,
+      "stopped_early": true,
+      "train_seconds": 464.9523282,
+      "inference_ms_per_image": 0.04767666407665898,
+      "peak_process_rss_bytes": 4496375808,
+      "checkpoint": "results\\models\\04_dense\\9660884156e720ba\\baseline_seed2026.pt",
+      "checkpoint_sha256": "ee03cbe345c68f8f6263b931bdc8b932baeaa57eba5e0df26e955fda81cf9648",
+      "train_loss": 1.1489958051126081,
+      "train_accuracy": 0.6379872950898805,
+      "train_macro_f1": 0.42335540490537255,
+      "validation_loss": 1.3150083226448697,
+      "validation_accuracy": 0.6140032806699474,
+      "validation_macro_f1": 0.3782926387953266,
+      "validation_group_bootstrap_ci95_accuracy": [
+        0.5963489582672944,
+        0.627569032200036
+      ],
+      "validation_group_bootstrap_ci95_macro_f1": [
+        0.3565897507437548,
+        0.39871719050935545
+      ]
+    },
+    {
+      "variant": "dropout_030",
+      "seed": 42,
+      "dropout": 0.3,
+      "parameters": 986570,
+      "approx_linear_flops_per_image": 1972864,
+      "epochs_run": 28,
+      "selected_epoch": 23,
+      "stopped_early": true,
+      "train_seconds": 725.5612047000004,
+      "inference_ms_per_image": 0.04212320642318803,
+      "peak_process_rss_bytes": 4470464512,
+      "checkpoint": "results\\models\\04_dense\\9660884156e720ba\\dropout_030_seed42.pt",
+      "checkpoint_sha256": "d8a5a866060d35798cf2171e05e0a44e7e54ba6d190bc70fb490d941d0fd830b",
+      "train_loss": 1.489999610272744,
+      "train_accuracy": 0.5524125813365256,
+      "train_macro_f1": 0.2168022842026281,
+      "validation_loss": 1.5352651383153701,
+      "validation_accuracy": 0.5508072174738842,
+      "validation_macro_f1": 0.2109628298717312,
+      "validation_group_bootstrap_ci95_accuracy": [
+        0.5307031603440084,
+        0.5672238183698302
+      ],
+      "validation_group_bootstrap_ci95_macro_f1": [
+        0.20129570835324323,
+        0.21984370499221617
+      ]
+    },
+    {
+      "variant": "dropout_030",
+      "seed": 123,
+      "dropout": 0.3,
+      "parameters": 986570,
+      "approx_linear_flops_per_image": 1972864,
+      "epochs_run": 16,
+      "selected_epoch": 16,
+      "stopped_early": true,
+      "train_seconds": 382.5335273999999,
+      "inference_ms_per_image": 0.039979245445923184,
+      "peak_process_rss_bytes": 4289900544,
+      "checkpoint": "results\\models\\04_dense\\9660884156e720ba\\dropout_030_seed123.pt",
+      "checkpoint_sha256": "cf89bd50e6346ce84ef088f89cd8d59a81cba4ad11ee116ebe68b8feae508bdc",
+      "train_loss": 1.5274400326945607,
+      "train_accuracy": 0.5401324554459269,
+      "train_macro_f1": 0.20405194316571343,
+      "validation_loss": 1.568585088130961,
+      "validation_accuracy": 0.5349218682552016,
+      "validation_macro_f1": 0.19633201985825824,
+      "validation_group_bootstrap_ci95_accuracy": [
+        0.5133709504340148,
+        0.5517498226229272
+      ],
+      "validation_group_bootstrap_ci95_macro_f1": [
+        0.188631848791586,
+        0.2030354526125641
+      ]
+    },
+    {
+      "variant": "dropout_030",
+      "seed": 2026,
+      "dropout": 0.3,
+      "parameters": 986570,
+      "approx_linear_flops_per_image": 1972864,
+      "epochs_run": 30,
+      "selected_epoch": 28,
+      "stopped_early": false,
+      "train_seconds": 773.7196336000006,
+      "inference_ms_per_image": 0.04051183631186701,
+      "peak_process_rss_bytes": 4117442560,
+      "checkpoint": "results\\models\\04_dense\\9660884156e720ba\\dropout_030_seed2026.pt",
+      "checkpoint_sha256": "7fe15bb661df8385aecf276bc015a94eeebc372fce4be6939e4c49117f818eee",
+      "train_loss": 1.4910805376044054,
+      "train_accuracy": 0.5457318839180553,
+      "train_macro_f1": 0.21481885610079413,
+      "validation_loss": 1.5438102948010035,
+      "validation_accuracy": 0.5380298713632047,
+      "validation_macro_f1": 0.20321751748126252,
+      "validation_group_bootstrap_ci95_accuracy": [
+        0.5152880332930048,
+        0.5549058107843312
+      ],
+      "validation_group_bootstrap_ci95_macro_f1": [
+        0.19522260493397112,
+        0.20995496797829732
+      ]
+    }
+  ],
+  "artifacts_sha256": {
+    "all_runs.csv": "c4c6774484009358bea8e99fd39dc44f26cb879361ed06d5130d50e3aa6b487b",
+    "baseline_seed123_history.csv": "95681c6100e99e6736d089b58147f1010176a3b85831959f544f3a7bb755eb82",
+    "baseline_seed123_metrics.json": "a86887936f65c1f323117042ff814bd8f5a763b1dbd2edc507d6642b2e2eaa44",
+    "baseline_seed123_per_class.json": "d23645bc40acf6f2e5c63d95d75a3901b74d54ef757ef05aae8a56be8aa52ae1",
+    "baseline_seed123_predictions.csv.gz": "266335a768f7df47a17d3c26f958545ef7cb63f6e2e046e817e6083d9c4a50db",
+    "baseline_seed2026_history.csv": "5a97630d53e21a949e7100eaf44a2055ff9fca1fe045b5e5acda34f8cb725db8",
+    "baseline_seed2026_metrics.json": "ba94bae08b756be003dff3cf3ae594548caa2a6a3d3166e7175bceedfeb270ee",
+    "baseline_seed2026_per_class.json": "9aff66ba2782fa372b301170d9c8afb2e7e6fc0fd32ec32bf5b9d18598d1ad6b",
+    "baseline_seed2026_predictions.csv.gz": "40c5d4416e7d4e6da47ee8bed9454a98401caa5ca5c9f9a0dca0ced16b8a3c46",
+    "baseline_seed42_history.csv": "52be2d8dd0e2038fd6387c84ca67644f9394acc56422896806a35dbfd66f274b",
+    "baseline_seed42_metrics.json": "30c0f4f4ad591a954da5a7e5320b81605d9835210136a7b4e9e7f85252dd86e3",
+    "baseline_seed42_per_class.json": "be6b66b0b2120941caba1e7cf3ccca6cd39610e4fde822af193734b599f0ac25",
+    "baseline_seed42_predictions.csv.gz": "7ba5a1c272fe4d376d8cf0a0fa0711affdc93d9ac7398720701de129a51e98c8",
+    "cost_feasibility.json": "de4be4436e9cb5298475cb4fe13547c2bc18ddf44467bdfe156d2c7f6adc9c42",
+    "design.json": "d60ee57c2bd1839792f8187f6808e937d713d2e1a494aae5681b0f8c6dcb4fbd",
+    "dropout_030_seed123_history.csv": "aee573de62af98b75a89ba5d48a9ef26adc31146dc4a3d48b77d3cdae39f3085",
+    "dropout_030_seed123_metrics.json": "68440552733819614f17eaf38aae01cb336f517e74d0992ff90c2f4dbe62d461",
+    "dropout_030_seed123_per_class.json": "ef479859ca7fdcddb746fd007c3354a15d57111bf348640a8b3125e2a3584563",
+    "dropout_030_seed123_predictions.csv.gz": "a88e5b5fd78848f374468feed4152521f2a1107c91af3364ed14c5f6486fff63",
+    "dropout_030_seed2026_history.csv": "0daf6fbec5445ae3a06aafc2f313bc83dfd44472ccf92bfdc08260ecf1af2ff2",
+    "dropout_030_seed2026_metrics.json": "5c12f8ae5f3cc58a519b8c179444c96a9fa258aceb380a9251d83f93bbfff005",
+    "dropout_030_seed2026_per_class.json": "65fcd88ae7ec2e684f0ffc71c6267c8a0465ab47a1526a48ae205561cd6d51fe",
+    "dropout_030_seed2026_predictions.csv.gz": "710c0f859eec2dc3916c6965a9530d7c8a24abf190bbd30532cdd20786342771",
+    "dropout_030_seed42_history.csv": "4b542d6f5a02c5ccc9e97491fb48fc92223b53712c02f8d69de6ff70df99b92c",
+    "dropout_030_seed42_metrics.json": "ed2596c02b26a43698ad9ded714e5d5b6e04ebcf71761e37d21898a87d33e97b",
+    "dropout_030_seed42_per_class.json": "1668683e1440a0a0a4b091019fb86ef4f7292e28d1ba9546fb644060a1b28eaa",
+    "dropout_030_seed42_predictions.csv.gz": "d7c5c1c111cc87839894c07e9ed9202f6f0608467c169e5a63a9ffaad6edfdf8"
+  }
+}

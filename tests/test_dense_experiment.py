@@ -17,9 +17,9 @@ class DenseExperimentTests(unittest.TestCase):
 
     def test_shapes_parameter_budget_and_cross_entropy(self):
         model = DenseClassifier()
-        self.assertEqual(parameter_count(model), 986108)
+        self.assertEqual(parameter_count(model), 986570)
         logits = model(torch.zeros(4, 3, 64, 64))
-        self.assertEqual(tuple(logits.shape), (4, 12))
+        self.assertEqual(tuple(logits.shape), (4, 26))
         loss = nn.CrossEntropyLoss()(logits, torch.tensor([0, 1, 2, 3]))
         expected = -logits.log_softmax(1)[range(4), [0, 1, 2, 3]].mean()
         torch.testing.assert_close(loss, expected)

@@ -1,0 +1,13 @@
+{
+  "dataset_run": "20261123T181635-92a8fcea",
+  "train_images": 51791,
+  "validation_images": 11583,
+  "pilot_epoch_seconds": 21.662918799999716,
+  "peak_process_rss_bytes": 4476940288,
+  "conservative_six_fit_upper_seconds": 4874.156729999936,
+  "budget_seconds": 5400,
+  "fits_budget": true,
+  "sampling_applied": false,
+  "decision": "keep_all_eligible_images",
+  "note": "Pilot weights discarded; no pilot prediction or metric used for selection. Includes evaluation time; preprocessing separate."
+}

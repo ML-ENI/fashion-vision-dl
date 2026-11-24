@@ -1,0 +1,651 @@
+Real,Predicha,Errores,Proporción de la clase real
+Top,Sweater,224,0.3260553129548763
+Top,T-shirt,186,0.27074235807860264
+Blouse,Sweater,159,0.25562700964630225
+Cardigan,Sweater,128,0.5423728813559322
+Leggings/Tights,Trousers,117,0.4957627118644068
+Hoodie,Sweater,102,0.2922636103151863
+T-shirt,Sweater,101,0.07763259031514219
+Blouse,T-shirt,95,0.1527331189710611
+Sweater,T-shirt,95,0.06643356643356643
+Sweater,Hoodie,93,0.06503496503496503
+Blouse,Shirt,81,0.1302250803858521
+Jumpsuit/Playsuit,Dress,77,0.45294117647058824
+Jacket,Hoodie,74,0.13074204946996468
+T-shirt,Dress,70,0.053804765564950036
+Skirt,Shorts,68,0.162291169451074
+Blouse,Dress,67,0.10771704180064309
+Jacket,Sweater,65,0.11484098939929328
+Top,Vest top,65,0.09461426491994178
+Top,Dress,64,0.09315866084425037
+Vest top,Dress,63,0.14549653579676675
+Trousers,Leggings/Tights,62,0.03485103991006183
+Jacket,Dress,48,0.08480565371024736
+Trousers,Dress,48,0.026981450252951095
+Sweater,Dress,45,0.03146853146853147
+Shirt,Sweater,42,0.07969639468690702
+Jacket,Coat,39,0.06890459363957598
+Skirt,Trousers,33,0.07875894988066826
+Cardigan,Dress,32,0.13559322033898305
+Dress,T-shirt,31,0.01983365323096609
+Skirt,Dress,30,0.07159904534606205
+Top,Blouse,30,0.043668122270742356
+Trousers,Shorts,30,0.016863406408094434
+Vest top,Blouse,30,0.06928406466512702
+Blouse,Top,29,0.04662379421221865
+Shirt,T-shirt,29,0.05502846299810247
+T-shirt,Garment Set,28,0.021521906225980016
+Trousers,Jumpsuit/Playsuit,27,0.01517706576728499
+Vest top,T-shirt,27,0.06235565819861432
+Coat,Jacket,26,0.3880597014925373
+Dress,Vest top,26,0.016634676903390915
+Garment Set,Dress,26,0.14689265536723164
+Shorts,Trousers,26,0.04788213627992634
+Hoodie,Jacket,24,0.06876790830945559
+Skirt,Sweater,24,0.057279236276849645
+Blouse,Shorts,23,0.03697749196141479
+Dress,Trousers,23,0.01471529110684581
+Blouse,Vest top,22,0.03536977491961415
+Bodysuit,Garment Set,21,0.1510791366906475
+Sweater,Shorts,21,0.014685314685314685
+T-shirt,Bodysuit,21,0.01614142966948501
+T-shirt,Shirt,21,0.01614142966948501
+Dress,Coat,20,0.012795905310300703
+Dress,Sweater,20,0.012795905310300703
+Shirt,Blouse,20,0.03795066413662239
+Shirt,Dress,20,0.03795066413662239
+Shirt,Jacket,20,0.03795066413662239
+Sweater,Jacket,20,0.013986013986013986
+T-shirt,Blouse,20,0.015372790161414296
+Blazer,Shirt,19,0.11242603550295859
+Bodysuit,Dress,19,0.1366906474820144
+Shorts,Dress,19,0.034990791896869246
+Shorts,Skirt,19,0.034990791896869246
+Dress,Garment Set,18,0.011516314779270634
+Shorts,Garment Set,18,0.03314917127071823
+Sweater,Top,18,0.012587412587412588
+T-shirt,Shorts,18,0.013835511145272867
+Blouse,Jacket,17,0.027331189710610933
+Blazer,Jacket,16,0.09467455621301775
+Dress,Jumpsuit/Playsuit,16,0.010236724248240563
+Dungarees,Dress,16,0.3333333333333333
+Sweater,Garment Set,16,0.011188811188811189
+Blazer,Sweater,15,0.08875739644970414
+Bodysuit,T-shirt,15,0.1079136690647482
+Cardigan,Jacket,15,0.0635593220338983
+Jacket,Shirt,15,0.026501766784452298
+Leggings/Tights,Garment Set,15,0.0635593220338983
+Polo shirt,T-shirt,15,0.3191489361702128
+Sweater,Blouse,15,0.01048951048951049
+Sweater,Shirt,15,0.01048951048951049
+T-shirt,Top,15,0.011529592621060722
+Trousers,Garment Set,15,0.008431703204047217
+Trousers,Skirt,15,0.008431703204047217
+Vest top,Garment Set,15,0.03464203233256351
+Blouse,Skirt,13,0.02090032154340836
+Bodysuit,Vest top,13,0.09352517985611511
+Cardigan,Shorts,13,0.05508474576271186
+Coat,Dress,13,0.19402985074626866
+Dress,Jacket,13,0.008317338451695458
+Jumpsuit/Playsuit,Trousers,13,0.07647058823529412
+Sweater,Cardigan,13,0.00909090909090909
+Hoodie,Dress,12,0.034383954154727794
+Sweater,Vest top,12,0.008391608391608392
+T-shirt,Vest top,12,0.009223674096848577
+Top,Garment Set,12,0.017467248908296942
+Top,Shorts,12,0.017467248908296942
+Top,Skirt,12,0.017467248908296942
+Trousers,T-shirt,12,0.006745362563237774
+Blouse,Hoodie,11,0.017684887459807074
+Cardigan,T-shirt,11,0.046610169491525424
+Dress,Blouse,11,0.007037747920665387
+Shirt,Polo shirt,11,0.020872865275142316
+Skirt,T-shirt,11,0.026252983293556086
+T-shirt,Trousers,11,0.008455034588777863
+Top,Hoodie,11,0.01601164483260553
+Blouse,Garment Set,10,0.01607717041800643
+Cardigan,Hoodie,10,0.0423728813559322
+Jacket,Blazer,10,0.0176678445229682
+Jumpsuit/Playsuit,T-shirt,10,0.058823529411764705
+Top,Trousers,10,0.01455604075691412
+Trousers,Sweater,10,0.005621135469364812
+Vest top,Top,10,0.023094688221709007
+Blazer,Dress,9,0.05325443786982249
+Dungarees,Trousers,9,0.1875
+Garment Set,T-shirt,9,0.05084745762711865
+Outdoor trousers,Dress,9,0.32142857142857145
+Bodysuit,Top,8,0.05755395683453238
+Dungarees,Jumpsuit/Playsuit,8,0.16666666666666666
+Garment Set,Trousers,8,0.04519774011299435
+Jumpsuit/Playsuit,Garment Set,8,0.047058823529411764
+Skirt,Blouse,8,0.01909307875894988
+Top,Jacket,8,0.011644832605531296
+Top,Shirt,8,0.011644832605531296
+Vest top,Shorts,8,0.018475750577367205
+Blouse,Trousers,7,0.011254019292604502
+Dress,Cardigan,7,0.004478566858605247
+Garment Set,Jumpsuit/Playsuit,7,0.03954802259887006
+Outdoor trousers,Trousers,7,0.25
+Shirt,Trousers,7,0.013282732447817837
+Sweater,Trousers,7,0.0048951048951048955
+T-shirt,Polo shirt,7,0.005380476556495004
+Top,Jumpsuit/Playsuit,7,0.010189228529839884
+Vest top,Bodysuit,7,0.016166281755196306
+Vest top,Sweater,7,0.016166281755196306
+Blouse,Bodysuit,6,0.00964630225080386
+Garment Set,Bodysuit,6,0.03389830508474576
+Garment Set,Shorts,6,0.03389830508474576
+Hoodie,Shirt,6,0.017191977077363897
+Jacket,Shorts,6,0.01060070671378092
+Outdoor trousers,Jumpsuit/Playsuit,6,0.21428571428571427
+Polo shirt,Sweater,6,0.1276595744680851
+Shirt,Garment Set,6,0.011385199240986717
+Shorts,T-shirt,6,0.011049723756906077
+Sweater,Skirt,6,0.004195804195804196
+Trousers,Dungarees,6,0.003372681281618887
+Blouse,Blazer,5,0.008038585209003215
+Blouse,Jumpsuit/Playsuit,5,0.008038585209003215
+Bodysuit,Leggings/Tights,5,0.03597122302158273
+Bodysuit,Trousers,5,0.03597122302158273
+Dress,Shirt,5,0.003198976327575176
+Dress,Skirt,5,0.003198976327575176
+Garment Set,Vest top,5,0.02824858757062147
+Hoodie,Garment Set,5,0.014326647564469915
+Jacket,Vest top,5,0.0088339222614841
+Outdoor Waistcoat,Sweater,5,0.25
+Outdoor trousers,Dungarees,5,0.17857142857142858
+Shirt,Hoodie,5,0.009487666034155597
+Shorts,Sweater,5,0.009208103130755065
+T-shirt,Skirt,5,0.003843197540353574
+Top,Bodysuit,5,0.00727802037845706
+Blazer,Blouse,4,0.023668639053254437
+Blazer,Shorts,4,0.023668639053254437
+Bodysuit,Blouse,4,0.02877697841726619
+Dress,Shorts,4,0.0025591810620601407
+Dress,Top,4,0.0025591810620601407
+Dungarees,Garment Set,4,0.08333333333333333
+Garment Set,Blouse,4,0.022598870056497175
+Garment Set,Sweater,4,0.022598870056497175
+Hoodie,T-shirt,4,0.011461318051575931
+Jacket,Blouse,4,0.007067137809187279
+Jacket,Garment Set,4,0.007067137809187279
+Jacket,Trousers,4,0.007067137809187279
+Jumpsuit/Playsuit,Sweater,4,0.023529411764705882
+Leggings/Tights,Dress,4,0.01694915254237288
+Leggings/Tights,Jumpsuit/Playsuit,4,0.01694915254237288
+Leggings/Tights,Shorts,4,0.01694915254237288
+Outdoor Waistcoat,Dress,4,0.2
+Polo shirt,Hoodie,4,0.0851063829787234
+Shirt,Jumpsuit/Playsuit,4,0.007590132827324478
+Shorts,Shirt,4,0.007366482504604052
+Tailored Waistcoat,Jacket,4,0.2857142857142857
+Vest top,Trousers,4,0.009237875288683603
+Blazer,Cardigan,3,0.01775147928994083
+Bodysuit,Jumpsuit/Playsuit,3,0.02158273381294964
+Bodysuit,Shirt,3,0.02158273381294964
+Bodysuit,Shorts,3,0.02158273381294964
+Bodysuit,Sweater,3,0.02158273381294964
+Coat,Sweater,3,0.04477611940298507
+Costumes,Dress,3,0.42857142857142855
+Dress,Hoodie,3,0.0019193857965451055
+Garment Set,Leggings/Tights,3,0.01694915254237288
+Hoodie,Trousers,3,0.008595988538681949
+Jacket,Cardigan,3,0.00530035335689046
+Jumpsuit/Playsuit,Outdoor overall,3,0.01764705882352941
+Outdoor Waistcoat,Jacket,3,0.15
+Outdoor Waistcoat,Skirt,3,0.15
+Outdoor Waistcoat,Vest top,3,0.15
+Shirt,Blazer,3,0.0056925996204933585
+Shorts,Bodysuit,3,0.0055248618784530384
+Skirt,Vest top,3,0.007159904534606206
+T-shirt,Jumpsuit/Playsuit,3,0.0023059185242121443
+Tailored Waistcoat,Dress,3,0.21428571428571427
+Tailored Waistcoat,Top,3,0.21428571428571427
+Top,Cardigan,3,0.004366812227074236
+Trousers,Blouse,3,0.0016863406408094434
+Trousers,Bodysuit,3,0.0016863406408094434
+Trousers,Vest top,3,0.0016863406408094434
+Vest top,Shirt,3,0.006928406466512702
+Blazer,Coat,2,0.011834319526627219
+Blazer,Garment Set,2,0.011834319526627219
+Blazer,Jumpsuit/Playsuit,2,0.011834319526627219
+Blazer,Skirt,2,0.011834319526627219
+Blouse,Cardigan,2,0.003215434083601286
+Cardigan,Blouse,2,0.00847457627118644
+Cardigan,Coat,2,0.00847457627118644
+Cardigan,Outdoor overall,2,0.00847457627118644
+Dress,Dungarees,2,0.0012795905310300703
+Garment Set,Shirt,2,0.011299435028248588
+Garment Set,Top,2,0.011299435028248588
+Hoodie,Coat,2,0.0057306590257879654
+Hoodie,Outdoor overall,2,0.0057306590257879654
+Hoodie,Shorts,2,0.0057306590257879654
+Jacket,T-shirt,2,0.0035335689045936395
+Jumpsuit/Playsuit,Blouse,2,0.011764705882352941
+Jumpsuit/Playsuit,Dungarees,2,0.011764705882352941
+Jumpsuit/Playsuit,Vest top,2,0.011764705882352941
+Leggings/Tights,Blazer,2,0.00847457627118644
+Leggings/Tights,Bodysuit,2,0.00847457627118644
+Leggings/Tights,T-shirt,2,0.00847457627118644
+Leggings/Tights,Vest top,2,0.00847457627118644
+Outdoor overall,Jumpsuit/Playsuit,2,0.3333333333333333
+Polo shirt,Shirt,2,0.0425531914893617
+Shirt,Shorts,2,0.003795066413662239
+Shirt,Top,2,0.003795066413662239
+Sweater,Jumpsuit/Playsuit,2,0.0013986013986013986
+T-shirt,Hoodie,2,0.0015372790161414297
+T-shirt,Leggings/Tights,2,0.0015372790161414297
+Tailored Waistcoat,Vest top,2,0.14285714285714285
+Top,Polo shirt,2,0.002911208151382824
+Trousers,Hoodie,2,0.0011242270938729624
+Vest top,Leggings/Tights,2,0.004618937644341801
+Blazer,Hoodie,1,0.005917159763313609
+Blouse,Coat,1,0.001607717041800643
+Blouse,Polo shirt,1,0.001607717041800643
+Bodysuit,Hoodie,1,0.007194244604316547
+Bodysuit,Jacket,1,0.007194244604316547
+Bodysuit,Outdoor overall,1,0.007194244604316547
+Cardigan,Blazer,1,0.00423728813559322
+Cardigan,Garment Set,1,0.00423728813559322
+Cardigan,Skirt,1,0.00423728813559322
+Cardigan,Top,1,0.00423728813559322
+Cardigan,Trousers,1,0.00423728813559322
+Coat,Blazer,1,0.014925373134328358
+Coat,Blouse,1,0.014925373134328358
+Coat,Garment Set,1,0.014925373134328358
+Coat,Shirt,1,0.014925373134328358
+Coat,Trousers,1,0.014925373134328358
+Costumes,Blouse,1,0.14285714285714285
+Costumes,Garment Set,1,0.14285714285714285
+Costumes,Jumpsuit/Playsuit,1,0.14285714285714285
+Costumes,Top,1,0.14285714285714285
+Dress,Outdoor overall,1,0.0006397952655150352
+Dungarees,Blouse,1,0.020833333333333332
+Dungarees,Outdoor overall,1,0.020833333333333332
+Dungarees,Skirt,1,0.020833333333333332
+Dungarees,Sweater,1,0.020833333333333332
+Dungarees,T-shirt,1,0.020833333333333332
+Dungarees,Vest top,1,0.020833333333333332
+Garment Set,Hoodie,1,0.005649717514124294
+Garment Set,Skirt,1,0.005649717514124294
+Hoodie,Blouse,1,0.0028653295128939827
+Hoodie,Cardigan,1,0.0028653295128939827
+Hoodie,Skirt,1,0.0028653295128939827
+Hoodie,Vest top,1,0.0028653295128939827
+Jacket,Bodysuit,1,0.0017667844522968198
+Jacket,Jumpsuit/Playsuit,1,0.0017667844522968198
+Jacket,Tailored Waistcoat,1,0.0017667844522968198
+Jacket,Top,1,0.0017667844522968198
+Jumpsuit/Playsuit,Hoodie,1,0.0058823529411764705
+Jumpsuit/Playsuit,Jacket,1,0.0058823529411764705
+Jumpsuit/Playsuit,Skirt,1,0.0058823529411764705
+Leggings/Tights,Top,1,0.00423728813559322
+Outdoor Waistcoat,Cardigan,1,0.05
+Outdoor Waistcoat,Shirt,1,0.05
+Outdoor overall,Dress,1,0.16666666666666666
+Outdoor trousers,Skirt,1,0.03571428571428571
+Polo shirt,Blouse,1,0.02127659574468085
+Polo shirt,Garment Set,1,0.02127659574468085
+Polo shirt,Skirt,1,0.02127659574468085
+Polo shirt,Vest top,1,0.02127659574468085
+Shirt,Bodysuit,1,0.0018975332068311196
+Shirt,Skirt,1,0.0018975332068311196
+Shorts,Blouse,1,0.001841620626151013
+Shorts,Dungarees,1,0.001841620626151013
+Shorts,Hoodie,1,0.001841620626151013
+Shorts,Jumpsuit/Playsuit,1,0.001841620626151013
+Shorts,Leggings/Tights,1,0.001841620626151013
+Shorts,Top,1,0.001841620626151013
+Shorts,Vest top,1,0.001841620626151013
+Skirt,Blazer,1,0.002386634844868735
+Skirt,Garment Set,1,0.002386634844868735
+Skirt,Leggings/Tights,1,0.002386634844868735
+Skirt,Top,1,0.002386634844868735
+Sweater,Blazer,1,0.0006993006993006993
+Sweater,Bodysuit,1,0.0006993006993006993
+Sweater,Coat,1,0.0006993006993006993
+Sweater,Polo shirt,1,0.0006993006993006993
+T-shirt,Jacket,1,0.0007686395080707148
+Tailored Waistcoat,Garment Set,1,0.07142857142857142
+Tailored Waistcoat,Shirt,1,0.07142857142857142
+Top,Coat,1,0.001455604075691412
+Top,Leggings/Tights,1,0.001455604075691412
+Trousers,Shirt,1,0.0005621135469364812
+Trousers,Top,1,0.0005621135469364812
+Vest top,Coat,1,0.0023094688221709007
+Vest top,Jumpsuit/Playsuit,1,0.0023094688221709007
+Vest top,Skirt,1,0.0023094688221709007
+Vest top,Tailored Waistcoat,1,0.0023094688221709007
+Blazer,Bodysuit,0,0.0
+Blazer,Costumes,0,0.0
+Blazer,Dungarees,0,0.0
+Blazer,Leggings/Tights,0,0.0
+Blazer,Outdoor Waistcoat,0,0.0
+Blazer,Outdoor overall,0,0.0
+Blazer,Outdoor trousers,0,0.0
+Blazer,Polo shirt,0,0.0
+Blazer,T-shirt,0,0.0
+Blazer,Tailored Waistcoat,0,0.0
+Blazer,Top,0,0.0
+Blazer,Trousers,0,0.0
+Blazer,Vest top,0,0.0
+Blouse,Costumes,0,0.0
+Blouse,Dungarees,0,0.0
+Blouse,Leggings/Tights,0,0.0
+Blouse,Outdoor Waistcoat,0,0.0
+Blouse,Outdoor overall,0,0.0
+Blouse,Outdoor trousers,0,0.0
+Blouse,Tailored Waistcoat,0,0.0
+Bodysuit,Blazer,0,0.0
+Bodysuit,Cardigan,0,0.0
+Bodysuit,Coat,0,0.0
+Bodysuit,Costumes,0,0.0
+Bodysuit,Dungarees,0,0.0
+Bodysuit,Outdoor Waistcoat,0,0.0
+Bodysuit,Outdoor trousers,0,0.0
+Bodysuit,Polo shirt,0,0.0
+Bodysuit,Skirt,0,0.0
+Bodysuit,Tailored Waistcoat,0,0.0
+Cardigan,Bodysuit,0,0.0
+Cardigan,Costumes,0,0.0
+Cardigan,Dungarees,0,0.0
+Cardigan,Jumpsuit/Playsuit,0,0.0
+Cardigan,Leggings/Tights,0,0.0
+Cardigan,Outdoor Waistcoat,0,0.0
+Cardigan,Outdoor trousers,0,0.0
+Cardigan,Polo shirt,0,0.0
+Cardigan,Shirt,0,0.0
+Cardigan,Tailored Waistcoat,0,0.0
+Cardigan,Vest top,0,0.0
+Coat,Bodysuit,0,0.0
+Coat,Cardigan,0,0.0
+Coat,Costumes,0,0.0
+Coat,Dungarees,0,0.0
+Coat,Hoodie,0,0.0
+Coat,Jumpsuit/Playsuit,0,0.0
+Coat,Leggings/Tights,0,0.0
+Coat,Outdoor Waistcoat,0,0.0
+Coat,Outdoor overall,0,0.0
+Coat,Outdoor trousers,0,0.0
+Coat,Polo shirt,0,0.0
+Coat,Shorts,0,0.0
+Coat,Skirt,0,0.0
+Coat,T-shirt,0,0.0
+Coat,Tailored Waistcoat,0,0.0
+Coat,Top,0,0.0
+Coat,Vest top,0,0.0
+Costumes,Blazer,0,0.0
+Costumes,Bodysuit,0,0.0
+Costumes,Cardigan,0,0.0
+Costumes,Coat,0,0.0
+Costumes,Dungarees,0,0.0
+Costumes,Hoodie,0,0.0
+Costumes,Jacket,0,0.0
+Costumes,Leggings/Tights,0,0.0
+Costumes,Outdoor Waistcoat,0,0.0
+Costumes,Outdoor overall,0,0.0
+Costumes,Outdoor trousers,0,0.0
+Costumes,Polo shirt,0,0.0
+Costumes,Shirt,0,0.0
+Costumes,Shorts,0,0.0
+Costumes,Skirt,0,0.0
+Costumes,Sweater,0,0.0
+Costumes,T-shirt,0,0.0
+Costumes,Tailored Waistcoat,0,0.0
+Costumes,Trousers,0,0.0
+Costumes,Vest top,0,0.0
+Dress,Blazer,0,0.0
+Dress,Bodysuit,0,0.0
+Dress,Costumes,0,0.0
+Dress,Leggings/Tights,0,0.0
+Dress,Outdoor Waistcoat,0,0.0
+Dress,Outdoor trousers,0,0.0
+Dress,Polo shirt,0,0.0
+Dress,Tailored Waistcoat,0,0.0
+Dungarees,Blazer,0,0.0
+Dungarees,Bodysuit,0,0.0
+Dungarees,Cardigan,0,0.0
+Dungarees,Coat,0,0.0
+Dungarees,Costumes,0,0.0
+Dungarees,Hoodie,0,0.0
+Dungarees,Jacket,0,0.0
+Dungarees,Leggings/Tights,0,0.0
+Dungarees,Outdoor Waistcoat,0,0.0
+Dungarees,Outdoor trousers,0,0.0
+Dungarees,Polo shirt,0,0.0
+Dungarees,Shirt,0,0.0
+Dungarees,Shorts,0,0.0
+Dungarees,Tailored Waistcoat,0,0.0
+Dungarees,Top,0,0.0
+Garment Set,Blazer,0,0.0
+Garment Set,Cardigan,0,0.0
+Garment Set,Coat,0,0.0
+Garment Set,Costumes,0,0.0
+Garment Set,Dungarees,0,0.0
+Garment Set,Jacket,0,0.0
+Garment Set,Outdoor Waistcoat,0,0.0
+Garment Set,Outdoor overall,0,0.0
+Garment Set,Outdoor trousers,0,0.0
+Garment Set,Polo shirt,0,0.0
+Garment Set,Tailored Waistcoat,0,0.0
+Hoodie,Blazer,0,0.0
+Hoodie,Bodysuit,0,0.0
+Hoodie,Costumes,0,0.0
+Hoodie,Dungarees,0,0.0
+Hoodie,Jumpsuit/Playsuit,0,0.0
+Hoodie,Leggings/Tights,0,0.0
+Hoodie,Outdoor Waistcoat,0,0.0
+Hoodie,Outdoor trousers,0,0.0
+Hoodie,Polo shirt,0,0.0
+Hoodie,Tailored Waistcoat,0,0.0
+Hoodie,Top,0,0.0
+Jacket,Costumes,0,0.0
+Jacket,Dungarees,0,0.0
+Jacket,Leggings/Tights,0,0.0
+Jacket,Outdoor Waistcoat,0,0.0
+Jacket,Outdoor overall,0,0.0
+Jacket,Outdoor trousers,0,0.0
+Jacket,Polo shirt,0,0.0
+Jacket,Skirt,0,0.0
+Jumpsuit/Playsuit,Blazer,0,0.0
+Jumpsuit/Playsuit,Bodysuit,0,0.0
+Jumpsuit/Playsuit,Cardigan,0,0.0
+Jumpsuit/Playsuit,Coat,0,0.0
+Jumpsuit/Playsuit,Costumes,0,0.0
+Jumpsuit/Playsuit,Leggings/Tights,0,0.0
+Jumpsuit/Playsuit,Outdoor Waistcoat,0,0.0
+Jumpsuit/Playsuit,Outdoor trousers,0,0.0
+Jumpsuit/Playsuit,Polo shirt,0,0.0
+Jumpsuit/Playsuit,Shirt,0,0.0
+Jumpsuit/Playsuit,Shorts,0,0.0
+Jumpsuit/Playsuit,Tailored Waistcoat,0,0.0
+Jumpsuit/Playsuit,Top,0,0.0
+Leggings/Tights,Blouse,0,0.0
+Leggings/Tights,Cardigan,0,0.0
+Leggings/Tights,Coat,0,0.0
+Leggings/Tights,Costumes,0,0.0
+Leggings/Tights,Dungarees,0,0.0
+Leggings/Tights,Hoodie,0,0.0
+Leggings/Tights,Jacket,0,0.0
+Leggings/Tights,Outdoor Waistcoat,0,0.0
+Leggings/Tights,Outdoor overall,0,0.0
+Leggings/Tights,Outdoor trousers,0,0.0
+Leggings/Tights,Polo shirt,0,0.0
+Leggings/Tights,Shirt,0,0.0
+Leggings/Tights,Skirt,0,0.0
+Leggings/Tights,Sweater,0,0.0
+Leggings/Tights,Tailored Waistcoat,0,0.0
+Outdoor Waistcoat,Blazer,0,0.0
+Outdoor Waistcoat,Blouse,0,0.0
+Outdoor Waistcoat,Bodysuit,0,0.0
+Outdoor Waistcoat,Coat,0,0.0
+Outdoor Waistcoat,Costumes,0,0.0
+Outdoor Waistcoat,Dungarees,0,0.0
+Outdoor Waistcoat,Garment Set,0,0.0
+Outdoor Waistcoat,Hoodie,0,0.0
+Outdoor Waistcoat,Jumpsuit/Playsuit,0,0.0
+Outdoor Waistcoat,Leggings/Tights,0,0.0
+Outdoor Waistcoat,Outdoor overall,0,0.0
+Outdoor Waistcoat,Outdoor trousers,0,0.0
+Outdoor Waistcoat,Polo shirt,0,0.0
+Outdoor Waistcoat,Shorts,0,0.0
+Outdoor Waistcoat,T-shirt,0,0.0
+Outdoor Waistcoat,Tailored Waistcoat,0,0.0
+Outdoor Waistcoat,Top,0,0.0
+Outdoor Waistcoat,Trousers,0,0.0
+Outdoor overall,Blazer,0,0.0
+Outdoor overall,Blouse,0,0.0
+Outdoor overall,Bodysuit,0,0.0
+Outdoor overall,Cardigan,0,0.0
+Outdoor overall,Coat,0,0.0
+Outdoor overall,Costumes,0,0.0
+Outdoor overall,Dungarees,0,0.0
+Outdoor overall,Garment Set,0,0.0
+Outdoor overall,Hoodie,0,0.0
+Outdoor overall,Jacket,0,0.0
+Outdoor overall,Leggings/Tights,0,0.0
+Outdoor overall,Outdoor Waistcoat,0,0.0
+Outdoor overall,Outdoor trousers,0,0.0
+Outdoor overall,Polo shirt,0,0.0
+Outdoor overall,Shirt,0,0.0
+Outdoor overall,Shorts,0,0.0
+Outdoor overall,Skirt,0,0.0
+Outdoor overall,Sweater,0,0.0
+Outdoor overall,T-shirt,0,0.0
+Outdoor overall,Tailored Waistcoat,0,0.0
+Outdoor overall,Top,0,0.0
+Outdoor overall,Trousers,0,0.0
+Outdoor overall,Vest top,0,0.0
+Outdoor trousers,Blazer,0,0.0
+Outdoor trousers,Blouse,0,0.0
+Outdoor trousers,Bodysuit,0,0.0
+Outdoor trousers,Cardigan,0,0.0
+Outdoor trousers,Coat,0,0.0
+Outdoor trousers,Costumes,0,0.0
+Outdoor trousers,Garment Set,0,0.0
+Outdoor trousers,Hoodie,0,0.0
+Outdoor trousers,Jacket,0,0.0
+Outdoor trousers,Leggings/Tights,0,0.0
+Outdoor trousers,Outdoor Waistcoat,0,0.0
+Outdoor trousers,Outdoor overall,0,0.0
+Outdoor trousers,Polo shirt,0,0.0
+Outdoor trousers,Shirt,0,0.0
+Outdoor trousers,Shorts,0,0.0
+Outdoor trousers,Sweater,0,0.0
+Outdoor trousers,T-shirt,0,0.0
+Outdoor trousers,Tailored Waistcoat,0,0.0
+Outdoor trousers,Top,0,0.0
+Outdoor trousers,Vest top,0,0.0
+Polo shirt,Blazer,0,0.0
+Polo shirt,Bodysuit,0,0.0
+Polo shirt,Cardigan,0,0.0
+Polo shirt,Coat,0,0.0
+Polo shirt,Costumes,0,0.0
+Polo shirt,Dress,0,0.0
+Polo shirt,Dungarees,0,0.0
+Polo shirt,Jacket,0,0.0
+Polo shirt,Jumpsuit/Playsuit,0,0.0
+Polo shirt,Leggings/Tights,0,0.0
+Polo shirt,Outdoor Waistcoat,0,0.0
+Polo shirt,Outdoor overall,0,0.0
+Polo shirt,Outdoor trousers,0,0.0
+Polo shirt,Shorts,0,0.0
+Polo shirt,Tailored Waistcoat,0,0.0
+Polo shirt,Top,0,0.0
+Polo shirt,Trousers,0,0.0
+Shirt,Cardigan,0,0.0
+Shirt,Coat,0,0.0
+Shirt,Costumes,0,0.0
+Shirt,Dungarees,0,0.0
+Shirt,Leggings/Tights,0,0.0
+Shirt,Outdoor Waistcoat,0,0.0
+Shirt,Outdoor overall,0,0.0
+Shirt,Outdoor trousers,0,0.0
+Shirt,Tailored Waistcoat,0,0.0
+Shirt,Vest top,0,0.0
+Shorts,Blazer,0,0.0
+Shorts,Cardigan,0,0.0
+Shorts,Coat,0,0.0
+Shorts,Costumes,0,0.0
+Shorts,Jacket,0,0.0
+Shorts,Outdoor Waistcoat,0,0.0
+Shorts,Outdoor overall,0,0.0
+Shorts,Outdoor trousers,0,0.0
+Shorts,Polo shirt,0,0.0
+Shorts,Tailored Waistcoat,0,0.0
+Skirt,Bodysuit,0,0.0
+Skirt,Cardigan,0,0.0
+Skirt,Coat,0,0.0
+Skirt,Costumes,0,0.0
+Skirt,Dungarees,0,0.0
+Skirt,Hoodie,0,0.0
+Skirt,Jacket,0,0.0
+Skirt,Jumpsuit/Playsuit,0,0.0
+Skirt,Outdoor Waistcoat,0,0.0
+Skirt,Outdoor overall,0,0.0
+Skirt,Outdoor trousers,0,0.0
+Skirt,Polo shirt,0,0.0
+Skirt,Shirt,0,0.0
+Skirt,Tailored Waistcoat,0,0.0
+Sweater,Costumes,0,0.0
+Sweater,Dungarees,0,0.0
+Sweater,Leggings/Tights,0,0.0
+Sweater,Outdoor Waistcoat,0,0.0
+Sweater,Outdoor overall,0,0.0
+Sweater,Outdoor trousers,0,0.0
+Sweater,Tailored Waistcoat,0,0.0
+T-shirt,Blazer,0,0.0
+T-shirt,Cardigan,0,0.0
+T-shirt,Coat,0,0.0
+T-shirt,Costumes,0,0.0
+T-shirt,Dungarees,0,0.0
+T-shirt,Outdoor Waistcoat,0,0.0
+T-shirt,Outdoor overall,0,0.0
+T-shirt,Outdoor trousers,0,0.0
+T-shirt,Tailored Waistcoat,0,0.0
+Tailored Waistcoat,Blazer,0,0.0
+Tailored Waistcoat,Blouse,0,0.0
+Tailored Waistcoat,Bodysuit,0,0.0
+Tailored Waistcoat,Cardigan,0,0.0
+Tailored Waistcoat,Coat,0,0.0
+Tailored Waistcoat,Costumes,0,0.0
+Tailored Waistcoat,Dungarees,0,0.0
+Tailored Waistcoat,Hoodie,0,0.0
+Tailored Waistcoat,Jumpsuit/Playsuit,0,0.0
+Tailored Waistcoat,Leggings/Tights,0,0.0
+Tailored Waistcoat,Outdoor Waistcoat,0,0.0
+Tailored Waistcoat,Outdoor overall,0,0.0
+Tailored Waistcoat,Outdoor trousers,0,0.0
+Tailored Waistcoat,Polo shirt,0,0.0
+Tailored Waistcoat,Shorts,0,0.0
+Tailored Waistcoat,Skirt,0,0.0
+Tailored Waistcoat,Sweater,0,0.0
+Tailored Waistcoat,T-shirt,0,0.0
+Tailored Waistcoat,Trousers,0,0.0
+Top,Blazer,0,0.0
+Top,Costumes,0,0.0
+Top,Dungarees,0,0.0
+Top,Outdoor Waistcoat,0,0.0
+Top,Outdoor overall,0,0.0
+Top,Outdoor trousers,0,0.0
+Top,Tailored Waistcoat,0,0.0
+Trousers,Blazer,0,0.0
+Trousers,Cardigan,0,0.0
+Trousers,Coat,0,0.0
+Trousers,Costumes,0,0.0
+Trousers,Jacket,0,0.0
+Trousers,Outdoor Waistcoat,0,0.0
+Trousers,Outdoor overall,0,0.0
+Trousers,Outdoor trousers,0,0.0
+Trousers,Polo shirt,0,0.0
+Trousers,Tailored Waistcoat,0,0.0
+Vest top,Blazer,0,0.0
+Vest top,Cardigan,0,0.0
+Vest top,Costumes,0,0.0
+Vest top,Dungarees,0,0.0
+Vest top,Hoodie,0,0.0
+Vest top,Jacket,0,0.0
+Vest top,Outdoor Waistcoat,0,0.0
+Vest top,Outdoor overall,0,0.0
+Vest top,Outdoor trousers,0,0.0
+Vest top,Polo shirt,0,0.0

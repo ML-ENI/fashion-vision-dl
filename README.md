@@ -28,19 +28,21 @@ el archivo de configuración, no dos propuestas de dataset. `data/processed/CURR
 se crea al terminar y verificar la preparación. Las publicaciones internas anteriores
 son trazabilidad y no se presentan como experimentos paralelos.
 
-## Estado: 01–03 ejecutados por la estudiante
+## Estado: 01–04 ejecutados por la estudiante
 
-Los notebooks 01, 02 y 03 conservan sus ejecuciones completas sin errores guardados.
+Los notebooks 01, 02, 03 y 04 conservan sus ejecuciones completas sin errores guardados.
 La preparación ha publicado 74.525 imágenes de 26 clases: 51.791 en train,
 11.583 en validation y 11.151 en test. Las copias ocupan aproximadamente 571 MB.
 El ZIP y los originales siguen locales.
 
-Están publicados 01–03 y los archivos que necesitan.
-04 y los notebooks posteriores siguen pendientes de ejecución completa y validación;
-las adaptaciones de entrenamiento permanecen en desarrollo local. No hay resultados
-Dense validados para esta cohorte. No se ha vuelto a ejecutar código al revisar
+Están publicados 01–04 y los archivos que necesitan.
+05 y los notebooks posteriores siguen pendientes de ejecución completa y validación;
+las siguientes arquitecturas permanecen en desarrollo. Los resultados
+Dense publicados corresponden a la cohorte anterior al filtro visual de detalles. No se ha vuelto a ejecutar código al revisar
 las salidas guardadas. Los registros están en `docs/notebook-execution-status.json`
 y `docs/local-preparation-verification.json`.
+
+El experimento Dense publicado es `9660884156e720ba`: tres semillas sin dropout y tres con dropout 0,30. No abre imágenes ni genera predicciones de test. El filtro visual nuevo de train sigue en desarrollo local y no forma parte de estos resultados.
 
 ## Qué hace cada notebook
 

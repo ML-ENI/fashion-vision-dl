@@ -1,22 +1,16 @@
 {
-  "status": "pending_user_execution",
-  "updated_date": "2026-11-23",
+  "status": "student_execution_saved_without_errors",
+  "updated_date": "2026-11-24",
   "notebook": "notebooks/04_dense_mlp.ipynb",
-  "experiment_id": null,
-  "dataset_run": null,
-  "validation_summary": null,
-  "design": "Full eligible cohort, unequal class frequencies, RGB64 Dense baseline and dropout ablation, three seeds each",
-  "cost_policy": "Measure a complete pilot epoch before the six fits; discard pilot weights; no automatic sampling",
-  "memory_policy": "Disk-backed normalized arrays, batches in memory",
-  "old_metrics": "Removed from active artifacts because they describe a different selection",
-  "execution_preference": "Run by the student; waiting jobs have been stopped",
-  "validation_required_after_execution": [
-    "all code cells executed without errors",
-    "dataset manifest and source hashes match the current cohort",
-    "class counts are not capped or equalized",
-    "six fits and checkpoint round trips complete",
-    "validation IDs match notebook 03",
-    "product-group confidence intervals and per-class results reported",
-    "test predictions remain reserved"
-  ]
+  "experiment_id": "9660884156e720ba",
+  "dataset_run": "20261123T181635-92a8fcea",
+  "visual_detail_filter_applied": false,
+  "code_cells_executed": 17,
+  "stored_errors": 0,
+  "fits": 6,
+  "test_images_opened": 0,
+  "test_predictions_generated": 0,
+  "artifact_checksums": "All artifacts listed by summary.json matched the saved files",
+  "source_verification": "Published training source matches the recorded execution hash; unpublished visual-filter guard is kept local",
+  "verification_limits": "Inspected saved notebook, metrics, source and artifact hashes without rerunning training or tests. Checkpoint round trips are evidenced by saved notebook execution; weights stay local."
 }
