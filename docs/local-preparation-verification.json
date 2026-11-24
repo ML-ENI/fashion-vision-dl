@@ -1,20 +1,22 @@
 {
-  "status": "pending_user_execution",
-  "updated_date": "2026-11-23",
-  "selection_policy": "All eligible photographs after common class-scope and quality controls; no class caps and no fixed total",
-  "active_prepared_run": null,
-  "final_image_count": null,
-  "final_split_counts": null,
+  "status": "student_execution_saved_without_errors",
+  "updated_date": "2026-11-24",
+  "selection_policy": "Every product type in H&M Garment Upper body, Garment Lower body and Garment Full body: 26 labels; all eligible photos; no class caps or fixed total",
+  "active_prepared_run": "data/processed/runs/20261123T181635-92a8fcea",
+  "final_image_count": 74525,
+  "final_split_counts": {
+    "train": 51791,
+    "validation": 11583,
+    "test": 11151
+  },
   "execution_preference": "Student runs preparation, notebooks and training; do not execute automatically",
-  "interrupted_work": "Preparation stopped before publication; waiting training and notebook jobs stopped",
+  "interrupted_work": "Earlier interrupted preparation was followed by the completed student publication recorded here",
   "previous_outputs": "Retired from the active proposal and preserved in ignored local backups and Git history",
   "raw_retained_locally": true,
   "raw_offloaded": false,
   "full_reexecution_required": [
-    "01_data_understanding.ipynb",
-    "02_data_preparation.ipynb",
     "03_eda_images.ipynb",
     "04_dense_mlp.ipynb"
   ],
-  "verification_limits": "No claim that the reconstructed full cohort has completed preparation or model evaluation"
+  "verification_limits": "Saved 01 and 02 execution counts, absence of stored errors and published summary inspected without rerunning project code or tests. No model evaluation claimed."
 }

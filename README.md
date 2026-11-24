@@ -5,9 +5,11 @@ es explicar los fundamentos y comparar experimentos sencillos en local.
 
 ## Una sola propuesta de datos
 
-1. **Definir qué prendas queremos clasificar.** El notebook 01 explica las doce
-   categorías incluidas y el alcance de las exclusiones. Una categoría fuera del
-   problema no contiene necesariamente fotografías de mala calidad.
+1. **Definir qué prendas queremos clasificar.** Incluimos todos los tipos de las
+   familias `Garment Upper body`, `Garment Lower body` y `Garment Full body` de H&M:
+   **26 etiquetas**, incluidas Top, polos, abrigos, blazers, conjuntos y disfraces.
+   Predecimos el tipo concreto, no solo una de las tres familias. Interior, baño,
+   pijamas, calzado y accesorios quedan fuera por alcance, no por mala calidad.
 2. **Aplicar controles iguales:** imagen enlazada y decodificable, lado mínimo de
    64 píxeles, grupos sin etiquetas contradictorias y un representante por copia
    exacta. Los controles de duplicados se repiten después de preparar las imágenes.
@@ -19,27 +21,26 @@ es explicar los fundamentos y comparar experimentos sencillos en local.
    sentido si el coste lo exige y con una justificación registrada. Validation y
    test no se recortan para equilibrarlos.
 
-`config/local_images_v1.json` contiene las decisiones vigentes; su nombre identifica
+`config/local_images_v1.json` contiene las familias y todas sus etiquetas. El preparador
+comprueba que la lista coincida con todos los tipos de esas familias, sin descartar
+etiquetas a mano. Este archivo contiene las decisiones vigentes; su nombre identifica
 el archivo de configuración, no dos propuestas de dataset. `data/processed/CURRENT.json`
 se crea al terminar y verificar la preparación. Las publicaciones internas anteriores
 son trazabilidad y no se presentan como experimentos paralelos.
 
-## Estado: preparado para que lo ejecutes tú
+## Estado: 01 y 02 ejecutados por la estudiante
 
-Los notebooks 01–04 se han adaptado al criterio anterior y **están pendientes de
-volver a ejecutarse**. Se han retirado sus salidas anteriores: aquellas métricas
-correspondían a otra selección y no serían evidencia de este diseño. Los notebooks
-05–12 siguen como planes y comparten el mismo protocolo actualizado.
+Los notebooks 01 y 02 conservan sus ejecuciones completas sin errores guardados.
+La preparación ha publicado 74.525 imágenes de 26 clases: 51.791 en train,
+11.583 en validation y 11.151 en test. Las copias ocupan aproximadamente 571 MB.
+El ZIP y los originales siguen locales.
 
-La preparación que estaba en marcha se detuvo a petición de la estudiante.
-También se detuvieron las colas de entrenamiento y notebooks. Los originales,
-las copias generadas y los respaldos locales se conservan. El puntero del conjunto
-anterior se retiró para evitar consumirlo por error como si fuera el nuevo.
-
-No hay un número final publicado de imágenes ni resultados Dense de esta cohorte
-hasta completar las ejecuciones. Los informes de estado están en
-`docs/notebook-execution-status.json`, `docs/local-preparation-verification.json`
-y `docs/dense-baseline-verification.json`.
+Esta actualización publica únicamente 01–02 y los archivos que necesitan.
+03 y los notebooks posteriores siguen pendientes de ejecución completa y validación;
+las adaptaciones de entrenamiento permanecen en desarrollo local. No hay resultados
+Dense validados para esta cohorte. No se ha vuelto a ejecutar código al revisar
+las salidas guardadas. Los registros están en `docs/notebook-execution-status.json`
+y `docs/local-preparation-verification.json`.
 
 ## Qué hace cada notebook
 
@@ -71,8 +72,8 @@ Guardamos copias RGB224 con proporción conservada, relleno blanco y JPEG calida
 90. Esto reduce el espacio de **las mismas fotografías**. No significa que debamos
 elegir menos fotos ni que todos los modelos tengan que recibir RGB224.
 
-Dense recibe RGB64: Flatten → Dense(80) → ReLU → Dense(32) → ReLU → doce logits,
-con 986.108 parámetros. Usa entropía cruzada sin pesos, sin aumentos y Adam.
+La adaptación prevista de Dense recibirá RGB64: Flatten → Dense(80) → ReLU → Dense(32) → ReLU → 26 logits,
+con 986.570 parámetros. Usa entropía cruzada sin pesos, sin aumentos y Adam.
 Las frecuencias desiguales hacen necesario leer macro-F1, accuracy y resultados
 por clase juntos. Los pesos de clase se reservan para una ablación explícita.
 Los loaders no activan aumentos por defecto. Al cambiar la resolución se pasan
@@ -102,6 +103,8 @@ Desde la raíz del repositorio, con el kernel **Python (Fashion Vision DL local)
 También puedes abrir los notebooks y ejecutar sus celdas en ese orden. El 02
 transforma todas las imágenes elegibles y puede tardar; el 04 entrena realmente.
 El ejecutor solo guarda un notebook como completado si termina sin errores.
+Si el notebook estaba abierto antes del cambio a 26 etiquetas, reinicia su kernel
+para recargar el código y la configuración antes de volver a ejecutar.
 
 El entorno `.venv` local ya existe. Las dependencias están en `requirements.txt`
 y `requirements-dl.txt`. El entrenamiento aislado se inicia con

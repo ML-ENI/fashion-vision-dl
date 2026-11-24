@@ -35,7 +35,7 @@ class LocalPreparationTests(unittest.TestCase):
         self.audit = pd.DataFrame(rows)
         publish(self.root / "data/audit", {"image_audit": self.audit},
                 {"summary": {"raw_image_base": str(self.raw), "raw_bytes": int(self.audit.file_bytes.sum())}})
-        self.config = {**DEFAULT_CONFIG, "include_classes": ["A", "B"], "min_side": 4,
+        self.config = {**DEFAULT_CONFIG, "include_classes": ["A", "B"], "include_product_groups": None, "min_side": 4,
                        "min_class_images": 3, "image_size": 16}
 
     def tearDown(self):

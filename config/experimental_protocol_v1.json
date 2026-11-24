@@ -94,9 +94,9 @@
     "limitations": "Group-wise proportions are approximate in images; category selection and historical exposure constrain inference to this cohort, not the entire catalog."
   },
   "class_review": {
-    "current_decision": "Exploratory garment-task scope, explicit definitions and exclusions; no claim that two Top examples establish heterogeneity prevalence.",
+    "current_decision": "Include every product type in Garment Upper body, Garment Lower body and Garment Full body: 26 catalog labels, not a hand-picked subset.",
     "training_review_products_per_class": 8,
-    "top_review": "Outside the explicitly defined repertoire because Top is not specific enough as a task label; two images are illustrative only, not proof of a population property.",
+    "top_review": "Top is included under the same family rule as every other type. Two previously inspected examples are registered on the training side; semantic overlap is analyzed, not used to remove the label.",
     "scope_review_criteria": [
       "visual garment task scope",
       "minimum independent product groups and split feasibility",

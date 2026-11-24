@@ -46,9 +46,9 @@ Colores fijos para particiones de datos:
 
 | Partición | Color |
 |---|---|
-| `train` | Morado `#6F4EAF` |
-| `validation` | Naranja `#E17C05` |
-| `test` | Cian `#00A6D6` |
+| `train` | Azul ETSIT `#00458A` |
+| `validation` | Naranja `#F18D01` |
+| `test` | Cian `#0099CC` (tercer grupo) |
 
 - Esta correspondencia es obligatoria en todos los gráficos que comparen o señalen particiones, incluidas líneas, barras, puntos, bandas, fronteras temporales y leyendas.
 - Estos tres colores son exclusivos de las particiones y distinguen conjuntos de datos; no representan rendimiento positivo, negativo o neutral.

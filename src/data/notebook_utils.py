@@ -20,6 +20,16 @@ def es(value, digits=0):
 
 def setup():
     apply_style()
+    # También los display(df) directos deben respetar el estilo compartido.
+    # Solo cambia la representación HTML; no modifica los datos ni los cálculos.
+    from IPython import get_ipython
+    shell = get_ipython()
+    if shell is not None:
+        import pandas as pd
+        from src.visualization.tables import report_table
+        html = shell.display_formatter.formatters["text/html"]
+        html.for_type(pd.DataFrame, lambda frame: report_table(frame).to_html())
+        html.for_type(pd.Series, lambda series: report_table(series).to_html())
 
 
 def numeric_axis(ax, axis="x", digits=0):

@@ -1,14 +1,46 @@
 {
-  "01_data_understanding.ipynb": {"status": "pending_reexecution", "updated_date": "2026-11-23", "reason": "Coherent full-eligibility design; previous outputs cleared"},
-  "02_data_preparation.ipynb": {"status": "pending_reexecution", "updated_date": "2026-11-23", "reason": "Preparation stopped before publishing the full cohort"},
-  "03_eda_images.ipynb": {"status": "pending_reexecution", "updated_date": "2026-11-23", "reason": "Requires the new prepared cohort; old balanced-selection outputs retired"},
-  "04_dense_mlp.ipynb": {"status": "pending_reexecution", "updated_date": "2026-11-23", "reason": "Requires new data, baselines and measured cost; no training was launched for the full cohort"},
-  "05_cnn.ipynb": {"status": "planned"},
-  "06_rnn_lstm.ipynb": {"status": "planned"},
-  "07_transfer_learning.ipynb": {"status": "planned"},
-  "08_vision_transformer.ipynb": {"status": "planned"},
-  "09_ablation_studies.ipynb": {"status": "planned"},
-  "10_final_evaluation.ipynb": {"status": "planned"},
-  "11_clip_zero_shot.ipynb": {"status": "planned"},
-  "12_generative_models.ipynb": {"status": "planned"}
+  "01_data_understanding.ipynb": {
+    "status": "executed_saved_without_errors",
+    "updated_date": "2026-11-24",
+    "reason": "Student execution saved in the notebook; all code cells have execution counts and no stored errors. Inspected without rerunning."
+  },
+  "02_data_preparation.ipynb": {
+    "status": "executed_saved_without_errors",
+    "updated_date": "2026-11-24",
+    "reason": "Student execution saved in the notebook; all code cells have execution counts and no stored errors. Inspected without rerunning."
+  },
+  "03_eda_images.ipynb": {
+    "status": "pending_reexecution",
+    "updated_date": "2026-11-23",
+    "reason": "Scope updated to all 26 product types of the three H&M garment families; reexecution and validation left to the student"
+  },
+  "04_dense_mlp.ipynb": {
+    "status": "pending_reexecution",
+    "updated_date": "2026-11-23",
+    "reason": "Scope updated to all 26 product types of the three H&M garment families; reexecution and validation left to the student"
+  },
+  "05_cnn.ipynb": {
+    "status": "planned"
+  },
+  "06_rnn_lstm.ipynb": {
+    "status": "planned"
+  },
+  "07_transfer_learning.ipynb": {
+    "status": "planned"
+  },
+  "08_vision_transformer.ipynb": {
+    "status": "planned"
+  },
+  "09_ablation_studies.ipynb": {
+    "status": "planned"
+  },
+  "10_final_evaluation.ipynb": {
+    "status": "planned"
+  },
+  "11_clip_zero_shot.ipynb": {
+    "status": "planned"
+  },
+  "12_generative_models.ipynb": {
+    "status": "planned"
+  }
 }

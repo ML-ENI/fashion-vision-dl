@@ -20,8 +20,12 @@ VERSION = "1.0.0"
 DEFAULT_CONFIG = {
     "preparation_version": VERSION,
     "target": "product_type_name",
-    "include_classes": ["Trousers", "Dress", "Sweater", "T-shirt", "Cardigan", "Blouse",
-                        "Jacket", "Shorts", "Shirt", "Vest top", "Skirt", "Hoodie"],
+    "include_product_groups": ["Garment Upper body", "Garment Lower body", "Garment Full body"],
+    "include_classes": ["Blazer", "Blouse", "Bodysuit", "Cardigan", "Coat", "Hoodie", "Jacket",
+                        "Outdoor Waistcoat", "Polo shirt", "Shirt", "Sweater", "T-shirt",
+                        "Tailored Waistcoat", "Top", "Vest top", "Leggings/Tights", "Outdoor trousers",
+                        "Shorts", "Skirt", "Trousers", "Costumes", "Dress", "Dungarees",
+                        "Garment Set", "Jumpsuit/Playsuit", "Outdoor overall"],
     "min_side": 64, "min_class_images": 3,
     "image_size": 224, "jpeg_quality": 90, "padding_rgb": [255, 255, 255],
     "seed": 42, "val_size": 0.15, "test_size": 0.15,
@@ -78,9 +82,19 @@ def select_candidates(audit, config, root=ROOT):
     target = config["target"]
     frame["label"] = frame[target].astype(str)
     frame["exclusion_reason"] = frame["reason"]
+    families = config.get('include_product_groups')
+    if families:
+        in_scope = frame.product_group_name.isin(families)
+        declared = set(config['include_classes'])
+        catalog_types = set(frame.loc[in_scope, 'label'])
+        if declared != catalog_types:
+            raise ValueError('Las etiquetas declaradas no coinciden con todos los tipos de las familias elegidas; revisar la configuración, sin descartar tipos silenciosamente')
+    else:
+        # Permite contratos pequeños de prueba sin taxonomía comercial.
+        in_scope = frame.label.isin(config['include_classes'])
     ok = frame.image_valid.astype(bool)
     for mask, reason in [
-        (~frame.label.isin(config["include_classes"]), "class_not_selected"),
+        (~in_scope, "class_not_selected"),
         (frame[["width", "height"]].min(axis=1) < config["min_side"], "too_small"),
     ]:
         frame.loc[ok & mask, "exclusion_reason"] = reason

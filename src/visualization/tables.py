@@ -68,7 +68,7 @@ def table_number(value, digits=3, integer=False):
         return 'Sí' if value else 'No'
     if not isinstance(value, numbers.Number):
         return str(label(value))
-    if integer or isinstance(value, numbers.Integral):
+    if integer or isinstance(value, numbers.Integral) or (isinstance(value, numbers.Real) and float(value).is_integer()):
         return format_number(value, 0)
     if 0 < abs(value) < 10**(-max(digits, 1)):
         return f'{value:.2e}'.replace('.', ',')
@@ -95,7 +95,7 @@ def report_table(frame, digits=3):
     formats = {}
     numeric = []
     for column in data.columns:
-        integer = is_integer_dtype(data[column]) or column in {'support', 'semillas'}
+        integer = is_integer_dtype(data[column]) or column in {'support', 'semillas', 'count', 'Imágenes', 'Fotografías', 'Artículos'}
         formats[column] = lambda value, integer=integer: table_number(value, digits, integer)
         if column in {'seed', 'Semilla'}:
             formats[column] = lambda value: str(int(value))

@@ -27,6 +27,12 @@ class LocalImageDataset:
         self.config = json.loads((self.run / "config.json").read_text())
         if 'max_images_per_class' in self.config:
             raise ValueError('Este manifiesto corresponde al cupo retirado; ejecutar el notebook 02 con la configuración vigente')
+        scope_path = self.root / 'config/local_images_v1.json'
+        if scope_path.exists():
+            requested = json.loads(scope_path.read_text(encoding='utf-8'))
+            if (set(self.config.get('include_classes', [])) != set(requested['include_classes']) or
+                    set(self.config.get('include_product_groups') or []) != set(requested.get('include_product_groups') or [])):
+                raise ValueError('El alcance preparado no coincide con las familias vigentes; volver a ejecutar 02')
         self.image_size = image_size or self.config["image_size"]
         if normalize and self.image_size != self.config['image_size'] and normalization is None:
             raise ValueError('A esta resolución debes pasar normalization calculada con train; no reutilizar automáticamente las estadísticas RGB224')

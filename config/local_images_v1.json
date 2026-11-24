@@ -1,19 +1,38 @@
 {
   "preparation_version": "1.0.0",
   "target": "product_type_name",
+  "include_product_groups": [
+    "Garment Upper body",
+    "Garment Lower body",
+    "Garment Full body"
+  ],
   "include_classes": [
-    "Trousers",
-    "Dress",
+    "Blazer",
+    "Blouse",
+    "Bodysuit",
+    "Cardigan",
+    "Coat",
+    "Hoodie",
+    "Jacket",
+    "Outdoor Waistcoat",
+    "Polo shirt",
+    "Shirt",
     "Sweater",
     "T-shirt",
-    "Cardigan",
-    "Blouse",
-    "Jacket",
-    "Shorts",
-    "Shirt",
+    "Tailored Waistcoat",
+    "Top",
     "Vest top",
+    "Leggings/Tights",
+    "Outdoor trousers",
+    "Shorts",
     "Skirt",
-    "Hoodie"
+    "Trousers",
+    "Costumes",
+    "Dress",
+    "Dungarees",
+    "Garment Set",
+    "Jumpsuit/Playsuit",
+    "Outdoor overall"
   ],
   "min_side": 64,
   "min_class_images": 3,
@@ -33,5 +52,5 @@
     "colour": 0.1
   },
   "split_exposure_path": "config/split_exposure.csv",
-  "selection_policy": "All eligible photographs after common quality checks; no per-class cap"
+  "selection_policy": "Every product type in the three declared H&M garment groups; all eligible photographs after common quality checks; no per-class cap"
 }
