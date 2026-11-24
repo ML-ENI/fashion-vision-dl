@@ -1,0 +1,24 @@
+{
+  "verified_date": "2026-11-25",
+  "status": "student_notebook_02_execution_verified",
+  "notebook": "notebooks/02_data_preparation.ipynb",
+  "saved_code_cells": 14,
+  "stored_errors": 0,
+  "source_run": "20261124T185853-e7045c19",
+  "scores_loaded": 74525,
+  "retained_images": 74126,
+  "new_inference_during_saved_results_run": false,
+  "normal_mode_flag": "CREAR_ANALISIS_CLIP=False",
+  "relevant_synthetic_tests": 23,
+  "test_breakdown": {
+    "saved_preparation": 5,
+    "local_preparation": 14,
+    "automatic_filter": 4
+  },
+  "test_scope": "Synthetic data only; no actual CLIP inference or model training",
+  "shared_copy_bytes": 33498172,
+  "deferred": [
+    "03",
+    "04"
+  ]
+}

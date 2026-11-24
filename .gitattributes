@@ -1,0 +1,5 @@
+# Los resultados publicados llevan checksums: conservar sus bytes entre sistemas.
+results/data_preparation/** -text whitespace=cr-at-eol
+# Estos dos archivos se comparan con los hashes del análisis ya realizado.
+src/data/automatic_visual_filter.py text eol=lf
+config/training_visual_review.csv text eol=lf

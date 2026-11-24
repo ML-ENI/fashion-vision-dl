@@ -1,22 +1,22 @@
 {
-  "status": "student_execution_saved_without_errors",
-  "updated_date": "2026-11-24",
+  "status": "student_saved_results_execution_verified",
+  "updated_date": "2026-11-25",
   "selection_policy": "Every product type in H&M Garment Upper body, Garment Lower body and Garment Full body: 26 labels; all eligible photos; no class caps or fixed total",
-  "active_prepared_run": "data/processed/runs/20261123T181635-92a8fcea",
-  "final_image_count": 74525,
+  "active_prepared_run": "data/processed/runs/20261124T185853-e7045c19",
+  "final_image_count": 74126,
   "final_split_counts": {
-    "train": 51791,
-    "validation": 11583,
-    "test": 11151
+    "train": 51506,
+    "validation": 11532,
+    "test": 11088
   },
   "execution_preference": "Student runs preparation, notebooks and training; do not execute automatically",
   "interrupted_work": "Earlier interrupted preparation was followed by the completed student publication recorded here",
   "previous_outputs": "Retired from the active proposal and preserved in ignored local backups and Git history",
   "raw_retained_locally": true,
   "raw_offloaded": false,
-  "full_reexecution_required": [
+  "verification_limits": "02 has 14 saved executed code cells and no stored errors. Existing scores and calculations were loaded without new inference. 23 relevant synthetic tests passed (5 saved preparation, 4 automatic filter, 14 preparation); no actual CLIP inference or training run by assistant. 03–04 changes are deferred.",
+  "pending_review_not_in_this_commit": [
     "03_eda_images.ipynb",
     "04_dense_mlp.ipynb"
-  ],
-  "verification_limits": "Saved 01 and 02 execution counts, absence of stored errors and published summary inspected without rerunning project code or tests. No model evaluation claimed."
+  ]
 }

@@ -6,8 +6,8 @@
   },
   "02_data_preparation.ipynb": {
     "status": "executed_saved_without_errors",
-    "updated_date": "2026-11-24",
-    "reason": "Student execution saved in the notebook; all code cells have execution counts and no stored errors. Inspected without rerunning."
+    "updated_date": "2026-11-25",
+    "reason": "Student saved all 14 code cells without errors. Loaded the existing 74,525 CLIP scores and reused calculations for run 20261124T185853-e7045c19; no new inference. 03 and 04 changes are deferred."
   },
   "03_eda_images.ipynb": {
     "status": "executed_saved_without_errors",

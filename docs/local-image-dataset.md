@@ -1,5 +1,7 @@
 # Conjunto local de imágenes: alcance y calidad antes que cantidad
 
+> El filtro visual se aplica a train, validation y test con la misma regla. El 02 ya puede cargar sus puntuaciones y cálculos guardados sin ejecutar CLIP. Ver `reusing-results.md`.
+
 ## Qué define el conjunto
 
 El objetivo es `product_type_name`. Incluimos todos los tipos de las familias
@@ -60,14 +62,13 @@ Los loaders consumen exclusivamente el conjunto preparado. No se eliminan
 originales ni respaldos al cambiar la propuesta. Para entradas de resolución
 superior a las copias guardadas habrá que recuperar los originales.
 
-## Estado al 24/11/2026
+## Estado al 25/11/2026
 
-La estudiante ha ejecutado 01 y 02. Ambos conservan contadores de ejecución en
-sus celdas de código y no contienen errores guardados. La publicación vigente es
-`runs/20261123T181635-92a8fcea`: 74.525 imágenes de 26 clases, con 51.791 en train,
-11.583 en validation y 11.151 en test. Las copias preparadas ocupan 570.836.280 bytes.
-Los originales y el ZIP siguen locales; no se ha liberado ese espacio.
+La publicación `20261124T185853-e7045c19` conserva 74.126 fotos después del filtro
+visual: 51.506 en train, 11.532 en validation y 11.088 en test. CLIP analizó las
+74.525 fotos elegibles; las puntuaciones completas están preservadas. Las líneas
+infantiles se mantienen. No se han borrado originales ni movido fotos entre particiones.
 
-La revisión de estos registros no ha vuelto a ejecutar la preparación ni pruebas.
-El EDA y los entrenamientos siguientes siguen pendientes de ejecución completa y
-validación. No se presentan métricas de la selección anterior como evidencia nueva.
+El 02 está guardado con sus 14 celdas ejecutadas sin errores en modo de lectura.
+Carga el resultado existente y reutiliza los cálculos. Los cambios nuevos de
+03 y 04 se revisarán por separado; el 04 publicado antes describe otra cohorte.

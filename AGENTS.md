@@ -28,3 +28,21 @@
 - Usar principalmente azul ETSIT y naranja con los módulos visuales existentes.
   Introducir más colores cuando hagan falta más grupos y mantener la coherencia
   de las particiones. Tablas legibles, números alineados y precisión justificada.
+- El filtro visual de detalles se aplica en 02 después de asignar particiones,
+  a TODAS las fotos elegibles: train, validation y test, por petición expresa.
+  CLIP usa la misma regla y textos fijados para las tres particiones;
+  se excluyen los detalles unánimes y se conservan dudas. Las correcciones
+  manuales ligadas al hash del original prevalecen. No borrar fotos ni reasignar
+  productos. Distinguir análisis automático completo de validación humana.
+  Las fotos conservadas no cambian de partición. La evaluación se referirá al
+  conjunto filtrado; no ajustar este filtro según los resultados de test.
+  Todas las fotos se normalizan, pero medias y desviaciones se calculan solo
+  con train y se reutilizan para validation/test.
+- El 04 debe explicar cada paso con la claridad de 02, frases cortas y una
+  indicación de cómo leer cada resultado. Mostrar fotos pequeñas, figuras con
+  ancho limitado y matrices separadas. El código largo puede ser desplegable.
+
+- Run All debe cargar resultados existentes por defecto. CLIP y entrenamientos
+  nuevos requieren activar su bandera explícita; nunca arrancan por faltar una
+  caché. Separar la lectura de puntuaciones de los cálculos posteriores. Mantener
+  la copia compartible results/data_preparation y los originales inmutables.

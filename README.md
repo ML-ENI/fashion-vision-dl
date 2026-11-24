@@ -28,21 +28,28 @@ el archivo de configuración, no dos propuestas de dataset. `data/processed/CURR
 se crea al terminar y verificar la preparación. Las publicaciones internas anteriores
 son trazabilidad y no se presentan como experimentos paralelos.
 
-## Estado: 01–04 ejecutados por la estudiante
+## Estado del 01–02
 
-Los notebooks 01, 02, 03 y 04 conservan sus ejecuciones completas sin errores guardados.
-La preparación ha publicado 74.525 imágenes de 26 clases: 51.791 en train,
-11.583 en validation y 11.151 en test. Las copias ocupan aproximadamente 571 MB.
-El ZIP y los originales siguen locales.
+El 01 mantiene su auditoría ejecutada. El 02 está ejecutado en modo de lectura:
+carga las 74.525 puntuaciones CLIP guardadas y reutiliza manifiesto y cálculos.
+El resultado conserva 74.126 fotos (train 51.506, validation 11.532, test 11.088).
+No se ha repetido la inferencia al validar la carga.
 
-Están publicados 01–04 y los archivos que necesitan.
-05 y los notebooks posteriores siguen pendientes de ejecución completa y validación;
-las siguientes arquitecturas permanecen en desarrollo. Los resultados
-Dense publicados corresponden a la cohorte anterior al filtro visual de detalles. No se ha vuelto a ejecutar código al revisar
-las salidas guardadas. Los registros están en `docs/notebook-execution-status.json`
-y `docs/local-preparation-verification.json`.
+El filtro de detalle usa la misma regla en los tres conjuntos. Las dudas se
+conservan y el registro manual tiene prioridad. Las líneas infantiles permanecen.
+No hay cupos por clase ni cambios de partición de las fotos conservadas.
 
-El experimento Dense publicado es `9660884156e720ba`: tres semillas sin dropout y tres con dropout 0,30. No abre imágenes ni genera predicciones de test. El filtro visual nuevo de train sigue en desarrollo local y no forma parte de estos resultados.
+`CREAR_ANALISIS_CLIP=False` es el modo normal. Si faltan resultados compatibles,
+se muestra un aviso, no se inicia un análisis largo por sorpresa. La carga y los
+cálculos están separados. La inferencia nueva se activa únicamente de forma explícita.
+
+La carpeta `results/data_preparation` contiene una copia verificada y compartible
+de tablas/puntuaciones (aprox. 33,5 MB), sin fotos ni pesos de CLIP. Las compañeras
+pueden leerla sin RAW ni descargar el modelo; necesitan las fotos preparadas para
+las galerías y los loaders. [Instrucciones](docs/reusing-results.md).
+
+Los cambios nuevos de 03–04 quedan fuera de esta publicación y se revisarán aparte.
+El 04 ya publicado corresponde a la cohorte anterior al filtro visual.
 
 ## Qué hace cada notebook
 

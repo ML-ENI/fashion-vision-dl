@@ -1,0 +1,3 @@
+-r requirements-dl.txt
+# Versión de la API comprobada contra el código oficial de Transformers.
+transformers==4.57.1

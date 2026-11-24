@@ -30,6 +30,8 @@ class LocalImageDataset:
         scope_path = self.root / 'config/local_images_v1.json'
         if scope_path.exists():
             requested = json.loads(scope_path.read_text(encoding='utf-8'))
+            from src.data.data_contract import require_current_visual_review
+            require_current_visual_review(self.root, self.run, requested, self.config)
             if (set(self.config.get('include_classes', [])) != set(requested['include_classes']) or
                     set(self.config.get('include_product_groups') or []) != set(requested.get('include_product_groups') or [])):
                 raise ValueError('El alcance preparado no coincide con las familias vigentes; volver a ejecutar 02')

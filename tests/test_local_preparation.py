@@ -11,7 +11,7 @@ from PIL import Image
 sys.path.insert(0, str(Path(__file__).resolve().parents[1] / "src/data"))
 from data_contract import publish
 from process_data import inspect_image
-from prepare_local import DEFAULT_CONFIG, connect_groups, prepare, select_candidates, verify_run
+from prepare_local import DEFAULT_CONFIG, apply_visual_review, connect_groups, prepare, select_candidates, verify_run
 from local_dataset import LocalImageDataset
 from audit_images import inspect_record
 
@@ -83,6 +83,17 @@ class LocalPreparationTests(unittest.TestCase):
         for row in anchors.itertuples():
             self.assertEqual(frame.loc[row.article_id, 'split'], row.split)
 
+    def test_family_scope_keeps_every_type_and_detects_an_incomplete_snapshot(self):
+        audit = self.audit.copy()
+        audit['product_group_name'] = np.where(audit.product_type_name.eq('A'), 'Garment Upper body', 'Shoes')
+        cfg = {**self.config, 'include_product_groups': ['Garment Upper body'], 'include_classes': ['A']}
+        _, selected = select_candidates(audit, cfg)
+        self.assertEqual(len(selected), 20)
+        self.assertTrue(selected.product_type_name.eq('A').all())
+        audit.loc[0, 'product_type_name'] = 'C'
+        with self.assertRaisesRegex(ValueError, 'todos los tipos'):
+            select_candidates(audit, cfg)
+
     def test_merged_exposure_components_use_most_exposed_partition(self):
         from prepare_local import exposure_by_group
         frame = pd.DataFrame({'group_id': ['a','a','b','b'],
@@ -95,6 +106,57 @@ class LocalPreparationTests(unittest.TestCase):
         full, selected = select_candidates(audit, self.config)
         self.assertTrue(full.loc[[0, 1], "exclusion_reason"].eq("conflicting_group_labels").all())
         self.assertFalse(selected.product_code.eq("0000000").any())
+
+    def test_visual_review_excludes_only_confirmed_training_image(self):
+        candidate = self.audit.copy()
+        candidate['label'] = candidate.product_type_name
+        candidate['split'] = ['train'] * 36 + ['validation'] * 2 + ['test'] * 2
+        row = candidate.iloc[0]
+        review = pd.DataFrame([{'article_id': row.article_id, 'file_sha256': row.file_sha256,
+                                'decision': 'exclude_detail', 'reason': 'Only fabric detail visible'}])
+        result, report = apply_visual_review(candidate, review)
+        self.assertEqual(result.loc[0, 'split'], 'excluded')
+        self.assertEqual(result.loc[0, 'assigned_split'], 'train')
+        pd.testing.assert_frame_equal(result.loc[1:, candidate.columns], candidate.loc[1:])
+        self.assertEqual(report['excluded_detail_images'], 1)
+        self.assertEqual(report['unreviewed_images'], 39)
+        self.assertFalse(report['complete_visual_review'])
+
+    def test_visual_review_filters_validation_and_test_and_rejects_changed_original(self):
+        candidate = self.audit.copy()
+        candidate['label'] = candidate.product_type_name
+        candidate['split'] = ['train'] * 36 + ['validation'] * 2 + ['test'] * 2
+        for index in [36, 38]:
+            row = candidate.iloc[index]
+            review = pd.DataFrame([{'article_id': row.article_id, 'file_sha256': row.file_sha256,
+                                    'decision': 'exclude_detail', 'reason': 'Detail'}])
+            result, _ = apply_visual_review(candidate, review)
+            self.assertEqual(result.loc[index, 'split'], 'excluded')
+            self.assertEqual(result.loc[index, 'assigned_split'], candidate.loc[index, 'split'])
+        review.loc[0, 'article_id'] = candidate.iloc[0].article_id
+        review.loc[0, 'file_sha256'] = '0' * 64
+        with self.assertRaisesRegex(ValueError, 'foto revisada ha cambiado'):
+            apply_visual_review(candidate, review)
+
+    def test_visual_review_publication_recomputes_training_statistics(self):
+        previous = prepare(self.config, self.root, workers=2)
+        before = verify_run(previous, self.root)
+        row = before.loc[before.split.eq('train')].iloc[0]
+        review = pd.DataFrame([{'article_id': row.article_id, 'file_sha256': row.file_sha256,
+                                'decision': 'exclude_detail', 'reason': 'Detail confirmed by reviewer'}])
+        review.to_csv(self.root / 'review.csv', index=False)
+        cfg = {**self.config, 'training_visual_review_path': 'review.csv'}
+        current = prepare(cfg, self.root, workers=2)
+        after = verify_run(current, self.root)
+        rejected = after.loc[after.article_id.eq(row.article_id)].iloc[0]
+        self.assertEqual(rejected.reason, 'detail_only_image')
+        self.assertEqual(rejected.training_weight, 0)
+        for split in ['validation', 'test']:
+            self.assertEqual(set(before.loc[before.split.eq(split), 'article_id']),
+                             set(after.loc[after.split.eq(split), 'article_id']))
+        stats = json.loads((current / 'normalization.json').read_text())
+        self.assertEqual(stats['pixels'], int(after.split.eq('train').sum()) * cfg['image_size']**2)
+        self.assertEqual(prepare(cfg, self.root, workers=2), current)
 
     def test_deduplication_preserves_transitive_origin_component(self):
         audit = self.audit.copy()

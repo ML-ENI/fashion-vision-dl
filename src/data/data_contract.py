@@ -35,6 +35,24 @@ def require_columns(frame, columns):
         raise ValueError(f"Faltan columnas: {missing}")
 
 
+def require_current_visual_review(root, run, requested, preparation):
+    """Impedir entrenar con una publicación anterior al filtro visual vigente."""
+    key = 'training_visual_review_path'
+    if requested.get(key) != preparation.get(key):
+        raise ValueError('El filtro visual preparado está desactualizado; ejecutar 02 antes de entrenar')
+    if requested.get('automatic_visual_filter') != preparation.get('automatic_visual_filter'):
+        raise ValueError('El filtro automático preparado está desactualizado; ejecutar 02 antes de entrenar')
+    if requested.get('automatic_visual_filter', {}).get('enabled', False):
+        signature = json.loads((Path(run) / 'signature.json').read_text(encoding='utf-8'))
+        source = Path(root) / 'src/data/automatic_visual_filter.py'
+        if signature.get('code_sha256', {}).get(source.name) != sha256(source):
+            raise ValueError('El código del filtro automático ha cambiado; ejecutar 02 antes de entrenar')
+    if requested.get(key):
+        signature = json.loads((Path(run) / 'signature.json').read_text(encoding='utf-8'))
+        if signature.get('training_visual_review_sha256') != sha256(Path(root) / requested[key]):
+            raise ValueError('La revisión visual ha cambiado; ejecutar 02 antes de entrenar')
+
+
 def load_articles(path: Path) -> pd.DataFrame:
     frame = pd.read_csv(path, dtype={"article_id": "string", "product_code": "string"})
     require_columns(frame, ARTICLE_COLUMNS)
