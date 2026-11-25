@@ -21,17 +21,18 @@
     "dataset_run": "20261125T152902-c912cdcc",
     "train_images": 33618,
     "validation_images": 7515,
-    "reason": "Ejecutado completo sin errores (7/7 celdas, 213 s) con la publicación 20261125T152902-c912cdcc. Mismas imágenes, etiquetas y referencia de mayoría; la logística de color cambia 27 de 7.515 predicciones (accuracy 0,2170 → 0,2176; macro-F1 0,0506 → 0,0508) al recalcular características en otro entorno. Figuras en inglés, estilos ML y ETSIT. Pendiente de revisión de la estudiante."
+    "reason": "Ejecutado completo sin errores tras unir dev/iratxe (macro-F1 sobre las 25 clases, criterio del grupo). La logística de color cambia 27 de 7.515 predicciones respecto a la ejecución de Iratxe por el entorno (accuracy 0,2170 → 0,2176; macro-F1 0,0506 → 0,0508). Figuras en inglés, estilos ML y ETSIT. Pendiente de revisión."
   },
   "04_dense_mlp.ipynb": {
-    "status": "executed_saved_without_errors",
+    "status": "executed_pending_review",
     "updated_date": "2026-11-25",
     "code_cells": 18,
     "dataset_run": "20261125T152902-c912cdcc",
     "experiment_id": "143ad91452347fef",
     "fits": 6,
     "test_predictions": 0,
-    "post_execution_change": "Bandera ENTRENAR_SI_FALTA devuelta a False; salidas reales conservadas."
+    "post_execution_change": "Bandera ENTRENAR_SI_FALTA devuelta a False; salidas reales conservadas.",
+    "reason": "Ejecutado completo sin errores con ENTRENAR_SI_FALTA=False: carga el experimento 143ad91452347fef de Iratxe (torch 2.7.1) sin entrenar. Figuras en inglés, estilos ML y ETSIT. Faltan las figuras de pesos y activaciones: los pesos no están en este equipo. Pendiente de revisión."
   },
   "05_cnn.ipynb": {
     "status": "planned"
