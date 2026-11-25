@@ -10,13 +10,23 @@ from PIL import Image, ImageEnhance, ImageOps
 
 ROOT = Path(__file__).resolve().parents[2]
 
+# Se aplican al leer, nunca se escriben como fotografías adicionales.
+AUGMENTATION_PROFILES = {
+    'suave': {'horizontal_flip_probability': 0.5, 'brightness': 0.1, 'colour': 0.1},
+    'fuerte': {'horizontal_flip_probability': 0.5, 'brightness': 0.5, 'colour': 0.5},
+}
+
 
 class LocalImageDataset:
-    def __init__(self, split, root=ROOT, run=None, augment=False, normalize=True, image_size=None, seed=42, normalization=None):
+    def __init__(self, split, root=ROOT, run=None, augment=False, normalize=True, image_size=None, seed=42, normalization=None, augmentation_profile='suave'):
         if split not in {"train", "validation", "test"}:
             raise ValueError("Partición desconocida")
         if augment and split != "train":
             raise ValueError("Los aumentos solo se aplican a entrenamiento")
+        if augmentation_profile not in AUGMENTATION_PROFILES:
+            raise ValueError('Perfil de aumentos desconocido: usa suave o fuerte')
+        self.augmentation_profile = augmentation_profile
+        self.augmentation_config = dict(AUGMENTATION_PROFILES[augmentation_profile])
         self.root = Path(root)
         self.output = self.root / "data/processed"
         if run is None and not (self.output / 'CURRENT.json').exists():
@@ -55,7 +65,7 @@ class LocalImageDataset:
         if image.size != (self.image_size,) * 2:
             image = image.resize((self.image_size,) * 2, Image.Resampling.LANCZOS)
         if self.augment:
-            cfg = self.config["augmentation"]
+            cfg = self.augmentation_config
             if self.rng.random() < cfg["horizontal_flip_probability"]:
                 image = ImageOps.mirror(image)
             image = ImageEnhance.Brightness(image).enhance(self.rng.uniform(1-cfg["brightness"], 1+cfg["brightness"]))
@@ -76,7 +86,7 @@ class LocalImageDataset:
             yield np.stack([r[0] for r in rows]), np.asarray([r[1] for r in rows], dtype=np.int64)
 
 
-def make_torch_loaders(root=ROOT, run=None, batch_size=32, image_size=None, seed=42, augment_train=False, normalization=None):
+def make_torch_loaders(root=ROOT, run=None, batch_size=32, image_size=None, seed=42, augment_train=False, normalization=None, augmentation_profile='suave'):
     """Adaptador opcional: importar PyTorch solo cuando se vaya a entrenar.
 
     num_workers=0 evita cierres anidados no serializables en Windows y permite
@@ -86,6 +96,7 @@ def make_torch_loaders(root=ROOT, run=None, batch_size=32, image_size=None, seed
     from torch.utils.data import DataLoader
     generator = torch.Generator().manual_seed(seed)
     return {split: DataLoader(LocalImageDataset(split, root, run, augment=split == "train" and augment_train,
-                                               image_size=image_size, seed=seed, normalization=normalization),
+                                               image_size=image_size, seed=seed, normalization=normalization,
+                                               augmentation_profile=augmentation_profile),
                              batch_size=batch_size, shuffle=split == "train", num_workers=0, generator=generator)
             for split in ["train", "validation", "test"]}

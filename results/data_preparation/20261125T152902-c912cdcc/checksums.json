@@ -1,0 +1,13 @@
+{
+  "automatic_visual_scores.csv.gz": "e68438b26516f1b270c68a8add6c915bb2e4c176504a652485d6a90627a8e76d",
+  "config.json": "7b7404a208f8fb9a99be20cec70af7a809787259d5108fbea9b440eed04f5962",
+  "image_manifest.csv.gz": "004ec4f4bd064deceee286d1699eea3c4a5131ef8fd4ef299bb2e2ca6014df84",
+  "labels.json": "abb3f6da9d98b8ae69f6878f0fa6bb34344196051913258aa0c7dea7c0d4f0a2",
+  "normalization.json": "0b143796963096c66ed2cf52a8bab615a0ad2e267bed1c7c161e1ed919cf90b9",
+  "provenance.json": "52301e215de6c4f2cd90a5966222bccb4e2a63cd8847c6e78264b24c7bcf5990",
+  "schema.json": "9c3edb8428accf3c46952f40f151457141f32e31db9c73dc9ae41ab4f9509906",
+  "signature.json": "adf71b4ff2b2998ccb0f2733ac5de5bbe3cfefed0482d23f2c8492a963a2163e",
+  "summary.json": "fde803a886d8ef54045156a3a01234541c12421c11249340bfddbd8234a0d631",
+  "training_class_weights.json": "fa040e71ad4ebddf0e7910b11757d84e48d39e48022ce2a41268d6334e67554a",
+  "training_visual_review.csv.gz": "9d5418ba519abfc275ad4f8ccd7bf7ae7f08fa673e1cbaeaad66f0ab523e4453"
+}

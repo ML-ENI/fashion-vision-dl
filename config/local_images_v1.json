@@ -1,82 +1,97 @@
 {
-  "preparation_version": "1.0.0",
-  "target": "product_type_name",
-  "include_product_groups": [
-    "Garment Upper body",
-    "Garment Lower body",
-    "Garment Full body"
+ "preparation_version": "1.0.0",
+ "target": "product_type_name",
+ "include_product_groups": [
+  "Garment Upper body",
+  "Garment Lower body",
+  "Garment Full body"
+ ],
+ "include_classes": [
+  "Blazer",
+  "Blouse",
+  "Bodysuit",
+  "Cardigan",
+  "Coat",
+  "Hoodie",
+  "Jacket",
+  "Outdoor Waistcoat",
+  "Polo shirt",
+  "Shirt",
+  "Sweater",
+  "T-shirt",
+  "Tailored Waistcoat",
+  "Top",
+  "Vest top",
+  "Leggings/Tights",
+  "Outdoor trousers",
+  "Shorts",
+  "Skirt",
+  "Trousers",
+  "Costumes",
+  "Dress",
+  "Dungarees",
+  "Garment Set",
+  "Jumpsuit/Playsuit",
+  "Outdoor overall"
+ ],
+ "min_side": 64,
+ "min_class_images": 3,
+ "image_size": 224,
+ "jpeg_quality": 90,
+ "padding_rgb": [
+  255,
+  255,
+  255
+ ],
+ "seed": 42,
+ "val_size": 0.15,
+ "test_size": 0.15,
+ "augmentation": {
+  "horizontal_flip_probability": 0.5,
+  "brightness": 0.1,
+  "colour": 0.1
+ },
+ "split_exposure_path": "config/split_exposure.csv",
+ "selection_policy": "Every product type in the three declared H&M garment groups; all eligible photographs after common quality checks; no per-class cap",
+ "training_visual_review_path": "config/training_visual_review.csv",
+ "automatic_visual_filter": {
+  "enabled": true,
+  "splits": [
+   "train",
+   "validation",
+   "test"
   ],
-  "include_classes": [
-    "Blazer",
-    "Blouse",
-    "Bodysuit",
-    "Cardigan",
-    "Coat",
-    "Hoodie",
-    "Jacket",
-    "Outdoor Waistcoat",
-    "Polo shirt",
-    "Shirt",
-    "Sweater",
-    "T-shirt",
-    "Tailored Waistcoat",
-    "Top",
-    "Vest top",
-    "Leggings/Tights",
-    "Outdoor trousers",
-    "Shorts",
-    "Skirt",
-    "Trousers",
-    "Costumes",
-    "Dress",
-    "Dungarees",
-    "Garment Set",
-    "Jumpsuit/Playsuit",
-    "Outdoor overall"
+  "model_id": "openai/clip-vit-base-patch32",
+  "revision": "3d74acf9a28c67741b2f4f2ea7635f0aaf6f0268",
+  "device": "cpu",
+  "cpu_threads": 4,
+  "batch_size": 16,
+  "local_files_only": false,
+  "decision_rule": "unanimous_detail",
+  "prompt_pairs": [
+   [
+    "A catalog photograph showing the overall shape of a clothing item.",
+    "A close-up catalog photograph showing only a small detail of a clothing item."
+   ],
+   [
+    "A view of a garment with enough of its silhouette visible to recognize its type.",
+    "An extreme close-up of fabric, a seam, a collar or a fastening, without the overall garment shape."
+   ],
+   [
+    "A clothing product shown as a recognizable garment, laid flat, hanging or worn by a model.",
+    "A clothing product photographed as an isolated material or construction detail rather than a recognizable garment."
+   ]
+  ]
+ },
+ "saved_selection": {
+  "excluded_index_groups": [
+   "Baby/Children"
   ],
-  "min_side": 64,
-  "min_class_images": 3,
-  "image_size": 224,
-  "jpeg_quality": 90,
-  "padding_rgb": [
-    255,
-    255,
-    255
-  ],
-  "seed": 42,
-  "val_size": 0.15,
-  "test_size": 0.15,
-  "augmentation": {
-    "horizontal_flip_probability": 0.5,
-    "brightness": 0.1,
-    "colour": 0.1
-  },
-  "split_exposure_path": "config/split_exposure.csv",
-  "selection_policy": "Every product type in the three declared H&M garment groups; all eligible photographs after common quality checks; no per-class cap",
-  "training_visual_review_path": "config/training_visual_review.csv",
-  "automatic_visual_filter": {
-    "enabled": true,
-    "splits": ["train", "validation", "test"],
-    "model_id": "openai/clip-vit-base-patch32",
-    "revision": "3d74acf9a28c67741b2f4f2ea7635f0aaf6f0268",
-    "device": "cpu",
-    "cpu_threads": 4,
-    "batch_size": 16,
-    "local_files_only": false,
-    "decision_rule": "unanimous_detail",
-    "prompt_pairs": [
-      [
-        "A catalog photograph showing the overall shape of a clothing item.",
-        "A close-up catalog photograph showing only a small detail of a clothing item."
-      ],
-      [
-        "A view of a garment with enough of its silhouette visible to recognize its type.",
-        "An extreme close-up of fabric, a seam, a collar or a fastening, without the overall garment shape."
-      ],
-      [
-        "A clothing product shown as a recognizable garment, laid flat, hanging or worn by a model.",
-        "A clothing product photographed as an isolated material or construction detail rather than a recognizable garment."
-      ]
-    ]
+  "visual_rule": "exclude_unanimous_detail",
+  "zoom_geometry": {
+   "enabled": true,
+   "recipe": "border-foreground-rgb64-bicubic-cutoff078-band4-v1",
+   "threshold": 0.4
   }
+ }
 }

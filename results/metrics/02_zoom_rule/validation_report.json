@@ -1,0 +1,59 @@
+{
+  "status": "exploratory_rule_full_preparation_executed_by_student",
+  "recipe": "border-foreground-rgb64-bicubic-cutoff078-band4-v1",
+  "threshold": 0.4,
+  "review_counts": {
+    "keep": 1125,
+    "exclude_detail": 62,
+    "uncertain": 17
+  },
+  "fit_scope": "train only; no validation/test used for threshold selection",
+  "method": "Exploratory comparison of CLIP margins and border features; five-fold StratifiedGroupKFold grouped by product group, seed42. OOF checks are internal and exploratory, not an independent final evaluation.",
+  "group_folds": 5,
+  "thresholds_by_fold": [
+    0.37109375,
+    0.37109375,
+    0.43359375,
+    0.37109375,
+    0.37109375
+  ],
+  "oof_confusion_true_rows_keep_detail": [
+    [
+      1124,
+      1
+    ],
+    [
+      7,
+      55
+    ]
+  ],
+  "fixed_rule_confusion_on_reviewed_data": [
+    [
+      1124,
+      1
+    ],
+    [
+      7,
+      55
+    ]
+  ],
+  "limitations": [
+    "Reviewed examples came mainly from CLIP-uncertain adult train photos, in ID order; not a random catalog sample.",
+    "White details can pass; dark backgrounds, people or garments near edges can be wrongly excluded.",
+    "Min RGB<0.78 is a foreground proxy, not semantic cloth segmentation.",
+    "Metrics exclude uncertain labels; manual corrections take priority. No guarantee of removing every zoom."
+  ],
+  "no_clip_inference": true,
+  "no_deep_learning_training": true,
+  "review_snapshot_sha256": "4b1fe59755df99ded710252a3073c5190bf5b8e3d3a67503c0fa6d59452ea821",
+  "additional_checks": {
+    "random_unreviewed_train_pilot": 400,
+    "flagged_in_pilot": 4,
+    "flagged_visually_inspected": 4,
+    "interpretation": "Four flagged pilot images appeared partial on assistant inspection. Not a complete sensitivity/precision assessment; retained photos not exhaustively reviewed.",
+    "small_class_support_checked": true
+  },
+  "geometry_source_sha256": "6d0dc6d1737b75afbb0a3b99638ea77d147944615d1bc7792e1e41fa49cf00a6",
+  "prepared_dataset_run": "20261125T152902-c912cdcc",
+  "additional_geometric_exclusions": 999
+}

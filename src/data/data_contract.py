@@ -38,6 +38,12 @@ def require_columns(frame, columns):
 def require_current_visual_review(root, run, requested, preparation):
     """Impedir entrenar con una publicación anterior al filtro visual vigente."""
     key = 'training_visual_review_path'
+    if requested.get('saved_selection', {}) != preparation.get('saved_selection', {}):
+        raise ValueError('La selección de segmentos/encuadres ha cambiado; ejecutar 02 antes de continuar')
+    if requested.get('saved_selection', {}).get('zoom_geometry', {}).get('enabled'):
+        signature = json.loads((Path(run) / 'signature.json').read_text(encoding='utf-8'))
+        if signature.get('zoom_geometry_code_sha256') != sha256(Path(root) / 'src/data/zoom_geometry.py'):
+            raise ValueError('La regla de encuadre ha cambiado; ejecutar 02 antes de continuar')
     if requested.get(key) != preparation.get(key):
         raise ValueError('El filtro visual preparado está desactualizado; ejecutar 02 antes de entrenar')
     if requested.get('automatic_visual_filter') != preparation.get('automatic_visual_filter'):

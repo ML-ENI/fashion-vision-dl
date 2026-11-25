@@ -16,7 +16,35 @@ import pandas as pd
 from src.data.data_contract import sha256, publish, write_json
 
 SPLITS = ['train', 'validation', 'test']
-CALCULATION_RECIPE = 'saved-scores-selection-v1'
+CALCULATION_RECIPE = 'saved-scores-selection-v2'
+
+
+def selection_from_saved_scores(manifest, scores, policy):
+    """Seleccionar filas sin cargar modelos ni abrir fotografías."""
+    if not policy:
+        return pd.Series(False, index=manifest.index), pd.Series(False, index=manifest.index)
+    if policy.get('visual_rule') not in ['unanimous_general_view', 'exclude_unanimous_detail']:
+        raise ValueError('Regla de selección guardada desconocida')
+    required = ['clip_similarity_' + str(i) for i in range(6)]
+    indexed = scores.set_index('article_id')
+    if not indexed.index.is_unique:
+        raise ValueError('Puntuaciones duplicadas')
+    eligible = manifest.assigned_split.isin(SPLITS)
+    rows = manifest.loc[eligible]
+    aligned = indexed.reindex(rows.article_id)
+    values = aligned[required].to_numpy(dtype=float)
+    import numpy as np
+    if not np.isfinite(values).all():
+        raise ValueError('Faltan puntuaciones finitas para la selección')
+    if policy['visual_rule'] == 'unanimous_general_view':
+        general = (values[:, 0::2] > values[:, 1::2]).all(axis=1)
+    else:
+        # Un desacuerdo no demuestra que la fotografía sea un zoom.
+        general = ~((values[:, 1::2] > values[:, 0::2]).all(axis=1))
+    children = eligible & manifest.index_group_name.isin(policy['excluded_index_groups'])
+    rejected_visual = pd.Series(False, index=manifest.index)
+    rejected_visual.loc[rows.index] = ~general
+    return children, rejected_visual
 
 
 def _verify(run):
@@ -27,9 +55,13 @@ def _verify(run):
 
 
 def _read(run, name):
-    return pd.read_csv(run / f'{name}.csv.gz', keep_default_na=False,
-                       dtype={'article_id': 'string', 'product_code': 'string',
-                              'group_id': 'string', 'raw_group_id': 'string'})
+    frame = pd.read_csv(run / f'{name}.csv.gz', keep_default_na=False,
+                        dtype={'article_id': 'string', 'product_code': 'string',
+                               'group_id': 'string', 'raw_group_id': 'string'})
+    if 'zoom_border_score' in frame:
+        frame['zoom_border_score'] = pd.to_numeric(
+            frame['zoom_border_score'].replace('', float('nan')), errors='raise')
+    return frame
 
 
 def _compatible(requested, saved):
@@ -134,6 +166,9 @@ def finalize_saved_analysis(context, excluded_article_ids=()):
 
     identity = {'source_checksums': sha256(source / 'checksums.json'), 'config': config,
                 'excluded_article_ids': excluded, 'manual_sha256': manual_hash, 'recipe': CALCULATION_RECIPE}
+    geometry_policy = config.get('saved_selection', {}).get('zoom_geometry', {})
+    if geometry_policy.get('enabled'):
+        identity['geometry_code_sha256'] = sha256(Path(__file__).with_name('zoom_geometry.py'))
     key = hashlib.sha256(json.dumps(identity, sort_keys=True).encode()).hexdigest()
     output = root / 'data/processed'
     pointer = output / 'CURRENT.json'
@@ -142,6 +177,17 @@ def finalize_saved_analysis(context, excluded_article_ids=()):
         if json.loads((current / 'signature.json').read_text()).get('saved_result_key') == key:
             _verify(current)
             return current
+    # Una compañera puede instalar la selección terminada compartida sin abrir
+    # JPEG ni recalcular estadísticas. La clave exige la misma selección y código.
+    shared = root / 'results/data_preparation'
+    shared_pointer = shared / 'CURRENT.json'
+    if shared_pointer.exists():
+        completed = shared / json.loads(shared_pointer.read_text())['run_dir']
+        signature_path = completed / 'signature.json'
+        if signature_path.exists() and json.loads(signature_path.read_text()).get('saved_result_key') == key:
+            _verify(completed)
+            print('Selección terminada compartida: se cargan manifiesto y estadísticas; no se abren fotos.', flush=True)
+            return _install_metadata(root, completed)
 
     frame = context['manifest'].copy(deep=True)
     candidate = frame.loc[frame.assigned_split.isin(SPLITS)].copy()
@@ -163,10 +209,44 @@ def finalize_saved_analysis(context, excluded_article_ids=()):
     selection = frame.article_id.isin(excluded) & frame.split.isin(SPLITS)
     frame.loc[selection, 'split'] = 'excluded'
     frame.loc[selection, 'reason'] = 'explicit_metadata_selection'
-    labels = json.loads((source / 'labels.json').read_text())
-    for split in SPLITS:
-        if set(frame.loc[frame.split.eq(split), 'label']) != set(labels):
-            raise ValueError(f'La selección deja clases sin ejemplos en {split}; no se publica ni se elimina una clase automáticamente')
+    policy = config.get('saved_selection', {})
+    children, rejected_visual = selection_from_saved_scores(frame, scores, policy)
+    if policy:
+        # La selección explícita es más estricta que la decisión original de CLIP.
+        # No reescribir las puntuaciones ni fingir que las dudas son detalles ciertos.
+        strict = rejected_visual & frame.split.isin(SPLITS)
+        if policy['visual_rule'] == 'exclude_unanimous_detail':
+            strict &= ~frame.visual_review.eq('keep')
+        frame.loc[strict, 'split'] = 'excluded'
+        frame.loc[strict, 'reason'] = ('not_unanimous_general_view' if policy['visual_rule'] == 'unanimous_general_view'
+                                       else 'unanimous_detail_selection')
+        child_selection = children & frame.split.isin(SPLITS)
+        frame.loc[child_selection, 'split'] = 'excluded'
+        frame.loc[child_selection, 'reason'] = 'excluded_commercial_segment'
+        if geometry_policy.get('enabled'):
+            from src.data.zoom_geometry import geometry_scores, RECIPE
+            if geometry_policy.get('recipe') != RECIPE or not 0 <= geometry_policy['threshold'] <= 1:
+                raise ValueError('Configuración del filtro de bordes no válida')
+            # Cubrir todas las fotos adultas elegibles, independientemente de las
+            # decisiones: cambiar una revisión no obliga a extraer de nuevo.
+            evaluated = frame.assigned_split.isin(SPLITS) & ~children
+            frame.loc[evaluated, 'zoom_border_score'] = geometry_scores(frame.loc[evaluated], root)
+            rejected = (frame.split.isin(SPLITS) & ~frame.visual_review.eq('keep') &
+                        frame.zoom_border_score.gt(geometry_policy['threshold']))
+            frame.loc[rejected, 'split'] = 'excluded'
+            frame.loc[rejected, 'reason'] = 'geometric_partial_frame'
+        active = frame.loc[frame.split.isin(SPLITS)]
+        labels = {name: i for i, name in enumerate(sorted(active.label.unique()))}
+        if not labels:
+            raise ValueError('La selección no conserva ninguna clase')
+        frame['label_id'] = frame.label.map(labels).astype('Int64')
+        if set(frame.loc[frame.split.eq('train'), 'label']) != set(labels):
+            raise ValueError('Hay clases sin train: revisar la selección sin mover productos')
+    else:
+        labels = json.loads((source / 'labels.json').read_text())
+        for split in SPLITS:
+            if set(frame.loc[frame.split.eq(split), 'label']) != set(labels):
+                raise ValueError(f'La selección deja clases sin ejemplos en {split}; no se publica ni se elimina una clase automáticamente')
     counts = frame.loc[frame.split.eq('train'), 'label'].value_counts()
     weights = (counts.sum() / (len(counts) * counts)).to_dict()
     frame['training_weight'] = 0.0
@@ -181,15 +261,25 @@ def finalize_saved_analysis(context, excluded_article_ids=()):
     selected = frame.loc[frame.split.isin(SPLITS)]
     summary = copy.deepcopy(context['summary'])
     summary.update({'images_usable': len(selected), 'split_counts': selected.split.value_counts().to_dict(),
+                    'classes_usable': len(labels),
                     'class_distribution_by_split': pd.crosstab(selected.label, selected.split).to_dict(),
                     'excluded_reasons': frame.loc[frame.split.eq('excluded'), 'reason'].value_counts().to_dict(),
                     'prepared_bytes': int(selected.prepared_bytes.sum()), 'training_visual_review': visual_report,
                     'saved_analysis_source': source.name, 'explicit_metadata_selection': excluded})
+    if policy:
+        summary['saved_selection'] = {
+            'policy': policy,
+            'removed_empty_classes': sorted(set(context['manifest'].loc[context['manifest'].assigned_split.isin(SPLITS), 'label']) - set(labels)),
+            'missing_classes_by_split': {split: sorted(set(labels) - set(selected.loc[selected.split.eq(split), 'label'])) for split in SPLITS},
+            'interpretation': 'Selection from saved scores and explicit policy; automatic decisions are not verified zoom ground truth. No new CLIP inference.',
+        }
     summary['automatic_visual_filter']['new_inferences_this_call'] = 0
     summary['automatic_visual_filter']['automatic_exclusions_applied'] = int(candidate.visual_review.eq('auto_exclude_detail').sum())
     summary['automatic_visual_filter']['human_overrides'] = len(review)
     signature = copy.deepcopy(source_signature)
     signature.update({'config': config, 'saved_result_key': key})
+    if geometry_policy.get('enabled'):
+        signature['zoom_geometry_code_sha256'] = identity['geometry_code_sha256']
     if manual_path:
         signature['training_visual_review_sha256'] = manual_hash
     provenance = json.loads((source / 'provenance.json').read_text())

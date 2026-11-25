@@ -1,5 +1,7 @@
 # Fashion Vision DL
 
+> **02 ejecutado y validado.** La publicación `20261125T152902-c912cdcc` conserva 48.376 fotos y 25 clases (train 33.618, validation 7.515, test 7.243), sin Baby/Children. El filtro exploratorio de bordes añadió 999 exclusiones; las revisiones humanas tienen prioridad. 03–04 están pendientes con esta selección.
+
 Clasificación visual de prendas H&M para los informes de PRDL y MLLB. La prioridad
 es explicar los fundamentos y comparar experimentos sencillos en local.
 
@@ -45,11 +47,26 @@ preparadas siguen siendo necesarias para galerías y cargas de imágenes.
 [Instrucciones y comprobaciones](docs/reusing-results.md). Ocho pruebas pequeñas
 con datos ficticios pasan; no se ha repetido CLIP ni entrenado redes reales.
 
-## Estado revisado de los cuadernos
+## Estado de la selección actual
+
+**02 terminado: 14/14 celdas ejecutadas, sin errores.** Las puntuaciones CLIP,
+las medidas de bordes y los cálculos finales están guardados. La copia compartida
+vigente está en `results/data_preparation/20261125T152902-c912cdcc`; conserva
+los archivos exactos y sus hashes. No contiene JPEG ni pesos de modelos.
+
+El modo normal instala la selección compartida y reutiliza las estadísticas,
+sin repetir CLIP ni medir bordes. Las fotos locales siguen siendo necesarias
+para galerías y entrenamiento. Costumes no tiene validation y Tailored Waistcoat
+no tiene test; sus soportes cero se declaran, sin mover fotografías.
+
+03–04 deben ejecutarse y validarse sobre esta selección antes de publicar
+sus nuevas versiones. Los resultados anteriores son históricos.
+
+## Ejecución anterior (antes del cambio de selección)
 
 01–04 tienen ejecuciones completas guardadas y sin errores. El 02 conserva
 74.126 fotos: train 51.506, validation 11.532 y test 11.088. El filtro visual
-se aplica a las tres particiones; se mantienen las líneas infantiles y no hay cupos.
+se aplica a las tres particiones; en esa ejecución se mantenían las líneas infantiles y no había cupos.
 El 03 y el experimento Dense `67338715b6e6941e` usan esa misma publicación
 `20261124T185853-e7045c19`. Las seis ejecuciones Dense terminaron sin evaluar test.
 

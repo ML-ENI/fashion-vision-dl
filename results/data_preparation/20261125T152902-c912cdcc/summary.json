@@ -1,0 +1,213 @@
+{
+  "preparation_version": "1.0.0",
+  "articles": 105542,
+  "images_usable": 48376,
+  "classes_usable": 25,
+  "split_counts": {
+    "train": 33618,
+    "validation": 7515,
+    "test": 7243
+  },
+  "class_distribution_by_split": {
+    "test": {
+      "Blazer": 144,
+      "Blouse": 552,
+      "Bodysuit": 48,
+      "Cardigan": 110,
+      "Coat": 82,
+      "Costumes": 1,
+      "Dress": 1079,
+      "Dungarees": 20,
+      "Garment Set": 6,
+      "Hoodie": 172,
+      "Jacket": 361,
+      "Jumpsuit/Playsuit": 69,
+      "Leggings/Tights": 120,
+      "Outdoor Waistcoat": 9,
+      "Outdoor trousers": 2,
+      "Polo shirt": 40,
+      "Shirt": 398,
+      "Shorts": 357,
+      "Skirt": 312,
+      "Sweater": 1004,
+      "T-shirt": 599,
+      "Tailored Waistcoat": 0,
+      "Top": 433,
+      "Trousers": 1007,
+      "Vest top": 318
+    },
+    "train": {
+      "Blazer": 679,
+      "Blouse": 2294,
+      "Bodysuit": 158,
+      "Cardigan": 642,
+      "Coat": 288,
+      "Costumes": 1,
+      "Dress": 5311,
+      "Dungarees": 71,
+      "Garment Set": 29,
+      "Hoodie": 865,
+      "Jacket": 1647,
+      "Jumpsuit/Playsuit": 272,
+      "Leggings/Tights": 584,
+      "Outdoor Waistcoat": 35,
+      "Outdoor trousers": 30,
+      "Polo shirt": 244,
+      "Shirt": 1694,
+      "Shorts": 1568,
+      "Skirt": 1549,
+      "Sweater": 4242,
+      "T-shirt": 2991,
+      "Tailored Waistcoat": 21,
+      "Top": 2141,
+      "Trousers": 4639,
+      "Vest top": 1623
+    },
+    "validation": {
+      "Blazer": 142,
+      "Blouse": 528,
+      "Bodysuit": 36,
+      "Cardigan": 133,
+      "Coat": 58,
+      "Costumes": 0,
+      "Dress": 1156,
+      "Dungarees": 19,
+      "Garment Set": 7,
+      "Hoodie": 228,
+      "Jacket": 294,
+      "Jumpsuit/Playsuit": 73,
+      "Leggings/Tights": 95,
+      "Outdoor Waistcoat": 10,
+      "Outdoor trousers": 4,
+      "Polo shirt": 40,
+      "Shirt": 405,
+      "Shorts": 228,
+      "Skirt": 351,
+      "Sweater": 970,
+      "T-shirt": 720,
+      "Tailored Waistcoat": 9,
+      "Top": 555,
+      "Trousers": 1124,
+      "Vest top": 330
+    }
+  },
+  "excluded_reasons": {
+    "class_not_selected": 29374,
+    "excluded_commercial_segment": 24682,
+    "conflicting_group_labels": 1048,
+    "geometric_partial_frame": 999,
+    "missing_image": 442,
+    "automatic_detail_image": 397,
+    "exact_pixel_duplicate": 152,
+    "detail_only_image": 71,
+    "prepared_pixel_duplicate": 1
+  },
+  "prepared_bytes": 354704074,
+  "raw_bytes": 30557038537,
+  "image_path_base": "data/processed (relative to project root)",
+  "image_size": 224,
+  "split_unit": "connected product_code, RAW pixel hash and prepared pixel hash",
+  "balance_policy": "No class caps or balancing; keep all eligible images. Optional loss weights derived from train only.",
+  "split_exposure_policy": "Preserve prior development exposure; conflicts inherit train > validation > test; new groups complete approximate class-stratified fractions",
+  "raw_required_for_training": false,
+  "raw_archive_moved_externally": false,
+  "audit_run": "data/audit/runs/20261123T142408-a23fc6de",
+  "training_visual_review": {
+    "policy": "Apply the same detail-only criterion to all three partitions; retain unreviewed photographs until automatic screening",
+    "images_before_review": 74525,
+    "images_before_review_by_split": {
+      "train": 51791,
+      "validation": 11583,
+      "test": 11151
+    },
+    "reviewed_images": 1196,
+    "excluded_detail_images": 71,
+    "unreviewed_images": 73329,
+    "complete_visual_review": false,
+    "scope": [
+      "train",
+      "validation",
+      "test"
+    ]
+  },
+  "automatic_visual_filter": {
+    "status": "completed",
+    "fingerprint": "5fc761298e443417ec70",
+    "model_id": "openai/clip-vit-base-patch32",
+    "revision": "3d74acf9a28c67741b2f4f2ea7635f0aaf6f0268",
+    "prompt_pairs": [
+      [
+        "A catalog photograph showing the overall shape of a clothing item.",
+        "A close-up catalog photograph showing only a small detail of a clothing item."
+      ],
+      [
+        "A view of a garment with enough of its silhouette visible to recognize its type.",
+        "An extreme close-up of fabric, a seam, a collar or a fastening, without the overall garment shape."
+      ],
+      [
+        "A clothing product shown as a recognizable garment, laid flat, hanging or worn by a model.",
+        "A clothing product photographed as an isolated material or construction detail rather than a recognizable garment."
+      ]
+    ],
+    "decision_rule": "unanimous_detail",
+    "versions": {
+      "torch": "2.7.1+cpu",
+      "transformers": "4.57.1",
+      "Pillow": "11.0.0",
+      "numpy": "2.1.3"
+    },
+    "images_scored": 74525,
+    "prediction_counts": {
+      "keep": 41738,
+      "uncertain": 32390,
+      "exclude_detail": 397
+    },
+    "new_inferences_this_call": 0,
+    "elapsed_seconds_this_call": 10200.2783379,
+    "images_scored_by_split": {
+      "train": 51791,
+      "validation": 11583,
+      "test": 11151
+    },
+    "scope": [
+      "train",
+      "validation",
+      "test"
+    ],
+    "interpretation": "Prompt similarities and votes, not calibrated probabilities or verified ground truth",
+    "checkpoint": {
+      "checkpoint_revision": "3d74acf9a28c67741b2f4f2ea7635f0aaf6f0268",
+      "weights_sha256": "a63082132ba4f97a80bea76823f544493bffa8082296d62d71581a4feff1576f"
+    },
+    "automatic_exclusions_applied": 397,
+    "human_overrides": 1196
+  },
+  "saved_analysis_source": "20261124T185853-e7045c19",
+  "explicit_metadata_selection": [],
+  "saved_selection": {
+    "policy": {
+      "excluded_index_groups": [
+        "Baby/Children"
+      ],
+      "visual_rule": "exclude_unanimous_detail",
+      "zoom_geometry": {
+        "enabled": true,
+        "recipe": "border-foreground-rgb64-bicubic-cutoff078-band4-v1",
+        "threshold": 0.4
+      }
+    },
+    "removed_empty_classes": [
+      "Outdoor overall"
+    ],
+    "missing_classes_by_split": {
+      "train": [],
+      "validation": [
+        "Costumes"
+      ],
+      "test": [
+        "Tailored Waistcoat"
+      ]
+    },
+    "interpretation": "Selection from saved scores and explicit policy; automatic decisions are not verified zoom ground truth. No new CLIP inference."
+  }
+}

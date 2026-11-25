@@ -253,6 +253,14 @@ def verify_run(run, root=ROOT, verify_assets=True):
         if sha256(run / name) != digest:
             raise ValueError(f"Salida modificada: {name}")
     manifest = pd.read_csv(run / "image_manifest.csv.gz", dtype={"article_id": "string", "product_code": "string", "group_id": "string", "raw_group_id": "string"}, keep_default_na=False)
+    if 'zoom_border_score' in manifest:
+        # Las fotos no analizadas (p. ej. infantiles excluidas) tienen un campo
+        # vacío. keep_default_na=False conserva ese vacío como texto en el CSV.
+        manifest['zoom_border_score'] = pd.to_numeric(
+            manifest['zoom_border_score'].replace('', float('nan')), errors='raise')
+        retained = manifest.loc[manifest.split.ne('excluded'), 'zoom_border_score']
+        if not retained.between(0, 1).all():
+            raise ValueError('Faltan medidas de borde válidas en fotografías conservadas')
     validate_manifest(manifest, output, verify_assets)
     return manifest
 
@@ -302,6 +310,8 @@ def reusable_assets(output, config, audit_run, packages):
 
 def prepare(config=None, root=ROOT, workers=4):
     config = dict(DEFAULT_CONFIG if config is None else config)
+    if config.get('saved_selection'):
+        raise ValueError('Esta selección utiliza puntuaciones ya guardadas. Ejecuta 02 con CREAR_ANALISIS_CLIP=False; no repitas CLIP.')
     root = Path(root)
     visual_review = read_visual_review(config, root)
     automatic_policy = config.get('automatic_visual_filter', {})

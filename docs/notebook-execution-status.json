@@ -1,51 +1,51 @@
 {
- "01_data_understanding.ipynb": {
-  "status": "executed_saved_without_errors",
-  "updated_date": "2026-11-25",
-  "code_cells": 10,
-  "reason": "Ejecución de la estudiante guardada; inspección de salidas sin reejecutar el cuaderno."
- },
- "02_data_preparation.ipynb": {
-  "status": "executed_saved_without_errors",
-  "updated_date": "2026-11-25",
-  "code_cells": 14,
-  "reason": "Ejecución de la estudiante guardada; inspección de salidas sin reejecutar el cuaderno."
- },
- "03_eda_images.ipynb": {
-  "status": "executed_saved_without_errors",
-  "updated_date": "2026-11-25",
-  "code_cells": 7,
-  "reason": "Ejecución de la estudiante guardada; inspección de salidas sin reejecutar el cuaderno."
- },
- "04_dense_mlp.ipynb": {
-  "status": "executed_saved_without_errors",
-  "updated_date": "2026-11-25",
-  "code_cells": 18,
-  "reason": "Ejecución de la estudiante guardada; inspección de salidas sin reejecutar el cuaderno.",
-  "post_execution_change": "Bandera ENTRENAR_SI_FALTA devuelta a False para cargar resultados; salidas históricas conservadas."
- },
- "05_cnn.ipynb": {
-  "status": "planned"
- },
- "06_rnn_lstm.ipynb": {
-  "status": "planned"
- },
- "07_transfer_learning.ipynb": {
-  "status": "planned"
- },
- "08_vision_transformer.ipynb": {
-  "status": "planned"
- },
- "09_ablation_studies.ipynb": {
-  "status": "planned"
- },
- "10_final_evaluation.ipynb": {
-  "status": "planned"
- },
- "11_clip_zero_shot.ipynb": {
-  "status": "planned"
- },
- "12_generative_models.ipynb": {
-  "status": "planned"
- }
+  "01_data_understanding.ipynb": {
+    "status": "executed_saved_without_errors",
+    "updated_date": "2026-11-25",
+    "code_cells": 10,
+    "reason": "Ejecución de la estudiante guardada; inspección de salidas sin reejecutar el cuaderno."
+  },
+  "02_data_preparation.ipynb": {
+    "status": "executed_saved_without_errors",
+    "updated_date": "2026-11-25",
+    "code_cells": 14,
+    "dataset_run": "20261125T152902-c912cdcc",
+    "images": 48376,
+    "classes": 25,
+    "reason": "Ejecución de la estudiante revisada: configuración, revisiones, código del filtro y hashes coinciden. Cero infantiles; medidas numéricas válidas; excepciones solo por keep humano."
+  },
+  "03_eda_images.ipynb": {
+    "status": "pending_user_execution",
+    "updated_date": "2026-11-25",
+    "reason": "Nueva regla exploratoria de encuadre por bordes y revisiones humanas incorporadas; no se ha ejecutado el dataset completo."
+  },
+  "04_dense_mlp.ipynb": {
+    "status": "pending_user_execution",
+    "updated_date": "2026-11-25",
+    "reason": "Nueva regla exploratoria de encuadre por bordes y revisiones humanas incorporadas; no se ha ejecutado el dataset completo."
+  },
+  "05_cnn.ipynb": {
+    "status": "planned"
+  },
+  "06_rnn_lstm.ipynb": {
+    "status": "planned"
+  },
+  "07_transfer_learning.ipynb": {
+    "status": "planned"
+  },
+  "08_vision_transformer.ipynb": {
+    "status": "planned"
+  },
+  "09_ablation_studies.ipynb": {
+    "status": "planned"
+  },
+  "10_final_evaluation.ipynb": {
+    "status": "planned"
+  },
+  "11_clip_zero_shot.ipynb": {
+    "status": "planned"
+  },
+  "12_generative_models.ipynb": {
+    "status": "planned"
+  }
 }

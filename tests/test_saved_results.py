@@ -21,6 +21,93 @@ from src.training.saved_experiments import load_saved_experiment
 
 
 class SavedPreparationTests(unittest.TestCase):
+    def test_shared_derived_selection_loads_without_images_or_statistics(self):
+        saved = load_saved_analysis(self.root, self.config)
+        selected = finalize_saved_analysis(saved, excluded_article_ids=['0000000000'])
+        friend = self.root/'friend'
+        shared = friend/'results/data_preparation'
+        shared.mkdir(parents=True)
+        shutil.copytree(self.run, shared/self.run.name)
+        shutil.copytree(selected, shared/selected.name)
+        (shared/'CURRENT.json').write_text(json.dumps({'run_dir':selected.name}))
+        with patch('src.data.prepare_local.channel_statistics',side_effect=AssertionError('No recalcular')):
+            context = load_saved_analysis(friend,self.config)
+            loaded = finalize_saved_analysis(context,excluded_article_ids=['0000000000'])
+        self.assertEqual(loaded.name,selected.name)
+        self.assertFalse((friend/'data/processed/images').exists())
+
+    def test_geometry_rule_keeps_human_overrides_and_does_not_call_clip(self):
+        from src.data.zoom_geometry import RECIPE
+        config=copy.deepcopy(self.config)
+        config['saved_selection']={'excluded_index_groups':['Baby/Children'],
+            'visual_rule':'exclude_unanimous_detail',
+            'zoom_geometry':{'enabled':True,'recipe':RECIPE,'threshold':.4}}
+        config['training_visual_review_path']='review.csv'
+        frame=pd.read_csv(self.run/'image_manifest.csv.gz',dtype={'article_id':'string'},keep_default_na=False)
+        keep=frame.iloc[[0,1,4,5,8,9]][['article_id','file_sha256']].copy()
+        keep['decision']='keep';keep['reason']='Human-verified whole garment'
+        keep.to_csv(self.root/'review.csv',index=False)
+        saved=load_saved_analysis(self.root,config)
+        saved['manifest']['index_group_name']='Ladieswear'
+        saved['manifest'].loc[2,'index_group_name']='Baby/Children'
+        saved['manifest']['width']=2;saved['manifest']['height']=2
+        with patch('src.data.automatic_visual_filter.ClipScorer',side_effect=AssertionError('No CLIP')):
+            result=finalize_saved_analysis(saved)
+        manifest=pd.read_csv(result/'image_manifest.csv.gz',dtype={'article_id':'string'})
+        active=manifest.loc[manifest.split.ne('excluded')]
+        self.assertEqual(set(active.article_id),set(keep.article_id))
+        self.assertEqual(int(manifest.reason.eq('geometric_partial_frame').sum()),5)
+        self.assertTrue(active.visual_review.eq('keep').all())
+        from src.data.prepare_local import verify_run
+        restored = verify_run(result, root=self.root, verify_assets=False)
+        self.assertTrue(pd.api.types.is_numeric_dtype(restored.zoom_border_score))
+        self.assertTrue(restored.loc[restored.article_id.eq('0000000002'), 'zoom_border_score'].isna().all())
+        self.assertTrue(restored.loc[restored.split.ne('excluded'), 'zoom_border_score'].between(0,1).all())
+
+    def test_uncertain_is_retained_and_only_unanimous_detail_is_rejected(self):
+        from src.data.saved_preparation import selection_from_saved_scores
+        frame = pd.DataFrame({'article_id':['a','b','c','d'], 'assigned_split':['train']*4,
+                              'index_group_name':['Ladieswear']*3+['Baby/Children']})
+        values = [[.3,.1,.3,.1,.3,.1], [.3,.4,.3,.1,.3,.1],
+                  [.3,.4,.3,.4,.3,.4], [.3,.1,.3,.1,.3,.1]]
+        scores = pd.DataFrame(values, columns=[f'clip_similarity_{i}' for i in range(6)])
+        scores['article_id']=frame.article_id
+        children, visual=selection_from_saved_scores(frame,scores,{
+            'visual_rule':'exclude_unanimous_detail','excluded_index_groups':['Baby/Children']})
+        self.assertEqual(children.tolist(),[False,False,False,True])
+        self.assertEqual(visual.tolist(),[False,False,True,False])
+
+    def test_adult_general_views_reuse_scores_and_remove_empty_classes(self):
+        frame = pd.read_csv(self.run / 'image_manifest.csv.gz', dtype={'article_id': 'string'}, keep_default_na=False)
+        scores = pd.read_csv(self.run / 'automatic_visual_scores.csv.gz', dtype={'article_id': 'string'})
+        frame['index_group_name'] = 'Ladieswear'
+        # En cada partición: dos vistas generales adultas, un artículo infantil
+        # de una clase que desaparece y una foto con desacuerdo de los textos.
+        frame.loc[[1, 5, 9], 'index_group_name'] = 'Baby/Children'
+        frame.loc[[1, 5, 9], 'label'] = 'B'
+        scores.loc[[2, 6, 10], 'clip_similarity_1'] = .5
+        source = publish(self.root / 'data/processed', {'image_manifest': frame, 'automatic_visual_scores': scores},
+                         {'summary': json.loads((self.run / 'summary.json').read_text()),
+                          'config': self.config, 'signature': {}, 'labels': {'A': 0, 'B': 1},
+                          'normalization': {'mean': [.1]*3, 'std': [.1]*3, 'pixels': 16},
+                          'training_class_weights': {}, 'provenance': {}})
+        config = copy.deepcopy(self.config)
+        config['saved_selection'] = {'excluded_index_groups': ['Baby/Children'], 'visual_rule': 'unanimous_general_view'}
+        with patch('src.data.automatic_visual_filter.ClipScorer', side_effect=AssertionError('No CLIP')):
+            saved = load_saved_analysis(self.root, config)
+            first = finalize_saved_analysis(saved)
+            self.assertEqual(first, finalize_saved_analysis(saved))
+        result = pd.read_csv(first/'image_manifest.csv.gz')
+        kept = result.loc[result.split.ne('excluded')]
+        self.assertEqual(len(kept), 6)
+        self.assertFalse(kept.index_group_name.eq('Baby/Children').any())
+        self.assertTrue(kept.split.eq(kept.assigned_split).all())
+        self.assertEqual(json.loads((first/'labels.json').read_text()), {'A': 0})
+        report = json.loads((first/'summary.json').read_text())
+        self.assertEqual(report['saved_selection']['removed_empty_classes'], ['B'])
+        self.assertEqual(report['automatic_visual_filter']['new_inferences_this_call'], 0)
+        self.assertTrue(source.exists())
+
     def setUp(self):
         self.temp = tempfile.TemporaryDirectory()
         self.root = Path(self.temp.name)
