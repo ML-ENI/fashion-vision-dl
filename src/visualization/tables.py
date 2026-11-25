@@ -1,12 +1,17 @@
-"""Tablas legibles para los notebooks: presentación sin modificar los datos."""
+"""Tablas de los notebooks con el estilo de fashion-demand-ml.
+
+Como en ML, solo se cambia el formato de los números (punto para miles y coma
+para decimales); no se añade CSS propio. Además se traducen las cabeceras al
+español. Nada de esto modifica los datos.
+"""
 from __future__ import annotations
 
 import numbers
 import numpy as np
 import pandas as pd
-from pandas.api.types import is_integer_dtype, is_numeric_dtype
+from pandas.api.types import is_integer_dtype
 
-from src.visualization.style import BLUE, ORANGE, INK, GRID, format_number
+from src.visualization.style import format_number
 
 
 LABELS = {
@@ -39,28 +44,6 @@ def label(value):
     return LABELS.get(value, value) if isinstance(value, str) else value
 
 
-def table_styles():
-    return [
-        {'selector': '', 'props': [('border-collapse', 'collapse'), ('border-spacing', '0'),
-            ('font-family', '"Latin Modern Roman", "LM Roman 10", Georgia, serif'),
-            ('font-size', '15px'), ('line-height', '1.45'), ('color', INK),
-            ('background-color', '#FFFFFF'), ('margin', '12px 0 22px'), ('max-width', '100%')]},
-        {'selector': 'th, td', 'props': [('padding', '9px 13px'), ('border', 'none'),
-            ('border-bottom', f'1px solid {GRID}'), ('vertical-align', 'top'),
-            ('text-align', 'left'), ('max-width', '28rem'), ('overflow-wrap', 'anywhere')]},
-        {'selector': 'thead th', 'props': [('background-color', BLUE), ('color', '#FFFFFF'),
-            ('font-weight', '600'), ('text-align', 'left'), ('max-width', '12rem'),
-            ('white-space', 'normal')]},
-        {'selector': 'thead tr:last-child th', 'props': [('border-bottom', f'3px solid {ORANGE}')]},
-        {'selector': 'tbody th', 'props': [('font-weight', '600'), ('white-space', 'nowrap')]},
-        {'selector': 'tbody tr:nth-child(even) th, tbody tr:nth-child(even) td',
-            'props': [('background-color', '#F1F5FA')]},
-        {'selector': 'tbody tr:nth-child(odd) th, tbody tr:nth-child(odd) td',
-            'props': [('background-color', '#FFFFFF')]},
-        {'selector': 'td', 'props': [('font-variant-numeric', 'tabular-nums')]},
-    ]
-
-
 def table_number(value, digits=3, integer=False):
     if value is None or (isinstance(value, numbers.Real) and not np.isfinite(value)):
         return '—'
@@ -91,23 +74,26 @@ def report_table(frame, digits=3):
         if name in data.columns:
             name += ' (índice)'
         data = data.rename_axis(name).reset_index()
-    style = data.style.set_table_styles(table_styles())
+    style = data.style
     formats = {}
-    numeric = []
     for column in data.columns:
         integer = is_integer_dtype(data[column]) or column in {'support', 'semillas', 'count', 'Imágenes', 'Fotografías', 'Artículos'}
         formats[column] = lambda value, integer=integer: table_number(value, digits, integer)
         if column in {'seed', 'Semilla'}:
             formats[column] = lambda value: str(int(value))
-        if is_numeric_dtype(data[column]):
-            numeric.append(column)
     style = style.format(formats, escape='html', na_rep='—')
     style = style.format_index(lambda x: label(x), axis=1, escape='html')
     index_format = (lambda x: str(int(x))) if data.index.name == 'Semilla' else (lambda x: table_number(x, 0))
     style = style.format_index(index_format, axis=0, escape='html')
-    if numeric:
-        style = style.set_properties(subset=numeric, **{'text-align': 'right !important', 'white-space': 'nowrap'})
     # Quitar índices automáticos; conservar clase, semilla y demás índices con significado.
     if data.index.nlevels == 1 and data.index.name is None and is_integer_dtype(data.index.dtype):
         style = style.hide(axis='index')
     return style
+
+
+def display_es(value, digits=3):
+    """Mostrar una tabla con números en español y cabeceras comprensibles."""
+    from IPython.display import display
+    if isinstance(value, (pd.DataFrame, pd.Series)) or value.__class__.__name__ == 'Styler':
+        value = report_table(value, digits=digits)
+    display(value)

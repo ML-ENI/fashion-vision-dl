@@ -1,12 +1,8 @@
 # Rúbrica de visualización
 
-> Adaptación a DL solicitada el 19/11/2026: se aplica el estilo actualizado del
-> proyecto ML, copiado íntegramente en `src/visualization/style.py`.
-> Sus preferencias de informe prevalecen sobre la tipografía y paleta base de
-> este documento: Latin Modern, texto grande, fondo blanco y azul/naranja ETSIT-UPM.
-> Los colores de particiones permanecen fijos. Los notebooks llaman a `apply_style()`.
+Esta es la fuente de verdad para cualquier gráfico del proyecto `fashion-vision-dl`. Debe leerse antes de crear, modificar, revisar o exportar una visualización.
 
-Esta es la fuente de verdad para cualquier gráfico del proyecto `fashion-demand-ml`. Debe leerse antes de crear, modificar, revisar o exportar una visualización.
+Las reglas visuales (tipografía, colores, leyendas y paneles) son las mismas que en `fashion-demand-ml`. Solo se han adaptado los ejemplos a la clasificación de imágenes. El notebook muestra este estilo y cada figura se guarda también en estilo ETSIT (`src/visualization/style_etsit.py`) mediante `src/visualization/themes.py`.
 
 ## 1. Jerarquía visual
 
@@ -46,9 +42,9 @@ Colores fijos para particiones de datos:
 
 | Partición | Color |
 |---|---|
-| `train` | Azul ETSIT `#00458A` |
-| `validation` | Naranja `#F18D01` |
-| `test` | Cian `#0099CC` (tercer grupo) |
+| `train` | Morado `#6F4EAF` |
+| `validation` | Naranja `#E17C05` |
+| `test` | Cian `#00A6D6` |
 
 - Esta correspondencia es obligatoria en todos los gráficos que comparen o señalen particiones, incluidas líneas, barras, puntos, bandas, fronteras temporales y leyendas.
 - Estos tres colores son exclusivos de las particiones y distinguen conjuntos de datos; no representan rendimiento positivo, negativo o neutral.
@@ -80,12 +76,10 @@ Paleta categórica extendida, optimizada para maximizar la distancia perceptual 
 ## 4. Títulos, ejes, fechas y números
 
 - El título comunica el hallazgo, no solo el tipo de gráfico.
-- Los ejes indican magnitud y unidad: por ejemplo, `Demanda semanal`, `Precio (€)` o `MAE · menor es mejor`.
-- Las fechas siguen el orden español:
-  - fecha completa: `dd/mm/aaaa`;
-  - mes y año: `mm/aaaa`.
-- En series temporales múltiples, todos los paneles muestran valores en el eje X.
-- Se incluyen suficientes referencias temporales para interpretar la evolución. Como guía, usar frecuencia trimestral en periodos de 12–24 meses; nunca dejar solo dos o tres fechas si caben más sin solapamiento.
+- Los ejes indican magnitud y unidad: por ejemplo, `Imágenes válidas`, `Peso de cada JPEG original (kB)` o `Entropía cruzada · menor es mejor`.
+- Si aparece una fecha, sigue el orden español: `dd/mm/aaaa`.
+- En las curvas de aprendizaje, el eje X muestra épocas enteras y todos los paneles muestran valores en ese eje.
+- Las matrices de confusión indican qué eje es la clase real y cuál la predicha, y si muestran recuentos o proporciones por clase real.
 - Las barras parten de cero. Toda escala logarítmica se declara en el eje.
 - El redondeo refleja la precisión real; se evitan decimales ficticios.
 - Todos los números visibles usan punto como separador de miles y coma como
@@ -103,7 +97,8 @@ Paleta categórica extendida, optimizada para maximizar la distancia perceptual 
 ## 6. Paneles múltiples
 
 - Los paneles comparten escalas cuando la comparación lo requiere.
-- Todos los paneles temporales muestran su eje X y usan la misma frecuencia de fechas.
+- Todos los paneles de curvas de aprendizaje muestran su eje X y usan las mismas épocas.
+- Los paneles con fotos no muestran ejes. Su título, en peso normal, indica la clase y el ID del artículo o lo que distingue cada versión.
 - La cuadrícula debe quedar equilibrada. Ninguna fila termina con un único panel aislado.
 - Para cinco paneles se usa una distribución `2 + 3`; para números impares se reorganizan los anchos para mantener al menos dos paneles por fila.
 - Se reduce el espacio vertical entre el título general y los paneles, sin provocar solapamientos.
@@ -113,34 +108,32 @@ Paleta categórica extendida, optimizada para maximizar la distancia perceptual 
 
 | Pregunta | Opción principal | Complemento riguroso | Evitar |
 |---|---|---|---|
-| ¿Cómo cambia en el tiempo? | Línea | Banda de incertidumbre; paneles equilibrados | Eje dual, demasiadas líneas, pocas fechas |
 | ¿Qué categoría es mayor? | Barras ordenadas o lollipop | Intervalo de confianza | Tarta con muchas categorías |
 | ¿Cómo se distribuye? | Histograma + KDE o ECDF | Intervalos robustos y ridgelines | Solo la media, puntos saturados |
 | ¿Hay relación? | Scatter o hexbin | Regresión con intervalo de confianza | Inferir causalidad |
 | ¿Cómo se compone? | Barra 100 % o área apilada | Tabla breve de porcentajes | 3D |
 | ¿Dónde están los patrones? | Heatmap | Etiquetas selectivas | Rainbow colormap |
-| ¿Predice bien una regresión? | Real vs. predicho y residuos | Error por segmento | Solo R² |
-| ¿Clasifica bien? | Confusión, PR/ROC y calibración | Umbral y prevalencia | Solo accuracy |
-| ¿Se separan los clústeres? | PCA, silhouette y perfiles | Estabilidad entre semillas | PCA como prueba de separación |
+| ¿Clasifica bien? | Confusión y F1 por clase | Macro-F1, prevalencia y calibración | Solo accuracy |
+| ¿Se separan las clases en una representación? | PCA o t-SNE de embeddings | Estabilidad entre semillas | Proyección como prueba de separación |
 | ¿Cómo entrenó la red? | Curvas de aprendizaje | Variación entre semillas | Solo el mejor epoch |
-| ¿Qué explica un cambio? | Barras divergentes de contribución | Base, resultado y cambio neto | Waterfall difícil de reconstruir |
+| ¿Qué ha aprendido o dónde falla? | Ejemplos de errores, pesos o activaciones | Criterio de selección declarado | Ejemplos elegidos a mano como si fueran representativos |
 
 ## 8. Rigor estadístico
 
 - Toda estimación muestra incertidumbre o variabilidad cuando sea relevante.
-- Se informa la población, el tamaño muestral `n`, el periodo y la transformación aplicada cuando afecten la interpretación.
+- Se informa la población, la partición, el tamaño muestral `n` y la transformación aplicada cuando afecten la interpretación.
 - Correlación no se presenta como causalidad.
 - PCA se describe como proyección, no como prueba de separación.
 - Las comparaciones de modelos incluyen un baseline y variabilidad entre particiones o semillas.
-- En clasificación se indican prevalencia y umbral; con clases desequilibradas se prioriza Precision–Recall.
-- Las contribuciones a un cambio deben ser aditivas y sumar exactamente el cambio neto.
+- En clasificación se indica la prevalencia de cada clase; con clases desequilibradas se priorizan macro-F1 y las métricas por clase.
+- Las figuras de validation no se presentan como evaluación de test.
 
 ## 9. Patrones aprobados
 
 - Distribución resumida: percentiles 5–95 como línea fina, IQR como banda gruesa y mediana como punto.
 - Distribución completa: ridgeline limpio, relleno transparente y mediana marcada; evitar nubes de puntos si saturan.
-- Cambio explicado: barras horizontales divergentes alrededor de cero, con positivos en verde, negativos en coral y valores directos.
-- Serie temporal: observación tenue, tendencia principal destacada y banda de incertidumbre semitransparente.
+- Pesos con signo: escala divergente centrada en cero, con positivos en azul y negativos en coral.
+- Curva de aprendizaje: train y validation con sus colores de partición y un estilo de línea por semilla.
 - Comparación categórica: orden lógico o por magnitud y etiquetas directas cuando mejoren la lectura.
 
 ## 10. Validación y exportación
@@ -150,23 +143,8 @@ Antes de dar una figura por terminada:
 1. Ejecutar la celda o script completo con semilla fija.
 2. Revisar visualmente la salida renderizada, no solo el código.
 3. Confirmar que no hay solapamientos ni texto cortado.
-4. Verificar títulos, pesos tipográficos, formatos de fecha, unidades y leyenda.
+4. Verificar títulos, pesos tipográficos, unidades y leyenda.
 5. Comprobar que los paneles múltiples están equilibrados y muestran ejes suficientes.
 6. Exportar en SVG para informes y PNG a 240–300 dpi para presentaciones.
 
-El notebook local `notebooks/eda/visualizacion_graficos.ipynb` contiene ejemplos ejecutables, pero esta rúbrica Markdown es la especificación canónica.
-
-
-## Actualización de presentación — 23/11/2026
-
-La base visual usa azul ETSIT `#00458A` y naranja `#F18D01` como primeros colores
-para distinguir categorías, según la preferencia de la estudiante. Se reservan
-otros colores para más grupos y se mantienen las correspondencias de particiones.
-En 01: azul para clases propuestas y naranja para otras clases; en 04: azul para
-Dense y naranja para la referencia de color.
-
-Las tablas usan `src/visualization/tables.py`: cabecera azul con línea naranja,
-fondo claro, filas espaciadas, rótulos comprensibles y números alineados. Recuentos
-enteros, métricas con precisión suficiente y columnas anchas divididas cuando
-mezclan rendimiento, entrenamiento y coste. El formato cambia la presentación,
-no los datos ni las métricas guardadas. `styled()` y `display_es()` comparten esta capa.
+Los ejemplos ejecutables son las figuras de los notebooks 01–04; esta rúbrica Markdown es la especificación canónica.

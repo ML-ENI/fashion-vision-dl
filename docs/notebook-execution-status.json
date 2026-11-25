@@ -1,32 +1,32 @@
 {
   "01_data_understanding.ipynb": {
-    "status": "executed_saved_without_errors",
+    "status": "pending_user_execution",
     "updated_date": "2026-11-25",
     "code_cells": 10,
-    "reason": "Ejecución de la estudiante guardada; inspección de salidas sin reejecutar el cuaderno."
+    "reason": "Figuras en dos estilos (ML mostrado, ETSIT guardado aparte) y tablas con el estilo de ML. Los datos y métricas no cambian; las salidas guardadas siguen en el estilo anterior hasta reejecutar con las fotos locales."
   },
   "02_data_preparation.ipynb": {
-    "status": "executed_saved_without_errors",
+    "status": "pending_user_execution",
     "updated_date": "2026-11-25",
     "code_cells": 14,
     "dataset_run": "20261125T152902-c912cdcc",
     "images": 48376,
     "classes": 25,
-    "reason": "Ejecución de la estudiante revisada: configuración, revisiones, código del filtro y hashes coinciden. Cero infantiles; medidas numéricas válidas; excepciones solo por keep humano."
+    "reason": "Figuras en dos estilos (ML mostrado, ETSIT guardado aparte) y tablas con el estilo de ML. Los datos y métricas no cambian; las salidas guardadas siguen en el estilo anterior hasta reejecutar con las fotos locales."
   },
   "03_eda_images.ipynb": {
-    "status": "executed_saved_without_errors",
+    "status": "pending_user_execution",
     "updated_date": "2026-11-25",
     "code_cells": 7,
     "dataset_run": "20261125T152902-c912cdcc",
     "train_images": 33618,
     "validation_images": 7515,
-    "reason": "Ejecución guardada de la estudiante; hash del manifiesto, IDs, etiquetas y métricas de las predicciones comprobados sin reejecutar el notebook."
+    "reason": "Figuras en dos estilos (ML mostrado, ETSIT guardado aparte) y tablas con el estilo de ML. Los datos y métricas no cambian; las salidas guardadas siguen en el estilo anterior hasta reejecutar con las fotos locales."
   },
   "04_dense_mlp.ipynb": {
     "status": "pending_user_execution",
     "updated_date": "2026-11-25",
-    "reason": "Nueva regla exploratoria de encuadre por bordes y revisiones humanas incorporadas; no se ha ejecutado el dataset completo."
+    "reason": "Nueva regla exploratoria de encuadre por bordes y revisiones humanas incorporadas; no se ha ejecutado el dataset completo. Además, sus figuras se guardan en dos estilos (ML mostrado, ETSIT aparte) y las tablas usan el estilo de ML."
   },
   "05_cnn.ipynb": {
     "status": "planned"

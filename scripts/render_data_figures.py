@@ -42,7 +42,7 @@ if __name__ == "__main__":
         if any(c.execution_count is None for c in original.cells if c.cell_type == "code"):
             raise ValueError("Ejecuta primero el notebook completo")
         setup = next(c.source for c in original.cells if c.cell_type == "code" and "from notebook_utils import" in c.source)
-        indices = [i for i, c in enumerate(original.cells) if c.cell_type == "code" and "save_figure(" in c.source]
+        indices = [i for i, c in enumerate(original.cells) if c.cell_type == "code" and "show_figure(" in c.source]
         rendering = nbformat.v4.new_notebook(cells=[nbformat.v4.new_code_cell(setup + "\n" + BOOTSTRAP)] +
                                            [nbformat.v4.new_code_cell(original.cells[i].source) for i in indices])
         NotebookClient(rendering, timeout=180, kernel_name="python3",

@@ -7,9 +7,10 @@ import matplotlib as mpl
 import matplotlib.pyplot as plt
 from matplotlib.ticker import FuncFormatter
 from src.visualization.style import (
-    BLUE, ORANGE, SPLIT_COLORS, TITLE_SIZE, TICK_SIZE,
-    apply_style, add_source, format_number,
+    BLUE, TEAL, CORAL, GRID, INK, MUTED, PAPER, SPLIT_COLORS,
+    apply_style, format_number,
 )
+from src.visualization.themes import render, display_figure
 
 SPLIT_COLOURS = SPLIT_COLORS
 
@@ -36,28 +37,46 @@ def numeric_axis(ax, axis="x", digits=0):
     getattr(ax, f"{axis}axis").set_major_formatter(FuncFormatter(lambda v, _: es(v, digits)))
 
 
-def save_figure(fig, root, name, source):
-    directory = Path(root) / "results/figures/data"
+def save_figure(fig, root, name, source, T, folder="data"):
+    """Guardar una versión de la figura en results/figures/<estilo>/<carpeta>."""
+    directory = Path(root) / "results/figures" / T.name / folder
     directory.mkdir(parents=True, exist_ok=True)
-    # Los títulos largos se ajustan al ancho con la tipografía grande de ML.
-    title_width = max(32, int(fig.get_figwidth() * 5))
+    # Como add_title en ML: sin un ajuste automático, add_source no puede
+    # reservar sitio para la nota y quedan márgenes vacíos.
+    if fig.get_layout_engine() is None:
+        fig.set_layout_engine("constrained")
+    # Los títulos largos se ajustan al ancho de la figura según la tipografía del estilo.
+    title_width = max(T.min_title, int(fig.get_figwidth() * T.title_chars))
     if fig._suptitle is not None:
         # Dejar la posición automática permite que constrained_layout reserve
         # espacio por encima de las etiquetas de la primera fila de imágenes.
         fig.suptitle(textwrap.fill(fig._suptitle.get_text(), title_width),
-                     fontsize=TITLE_SIZE, fontweight="bold", y=None)
+                     fontsize=T.title_size, fontweight="bold", y=None)
     for ax in fig.axes:
         if ax.get_title():
             image_panel = bool(ax.images)
-            panel_width = max(16, int(ax.get_position().width * fig.get_figwidth() * 5.8))
+            panel_width = max(16, int(ax.get_position().width * fig.get_figwidth() * T.panel_chars))
             title = ("\n".join(textwrap.fill(line, panel_width) for line in ax.get_title().splitlines())
                      if image_panel else textwrap.fill(ax.get_title(), title_width))
+            panel_size = T.pick(plt.rcParams["axes.titlesize"], T.title_size)
             ax.set_title(title,
-                         fontsize=TICK_SIZE if image_panel else TITLE_SIZE,
+                         fontsize=T.image_title_size if image_panel else panel_size,
                          fontweight="normal" if image_panel else "bold")
-    add_source(fig, textwrap.fill(source, max(45, int(fig.get_figwidth() * 10))))
+    # La nota puede depender del estilo, p. ej. cuando nombra un color.
+    T.add_note(fig, source(T) if callable(source) else source)
     fig.savefig(directory / f"{name}.png", dpi=300, bbox_inches="tight", facecolor=fig.get_facecolor())
     fig.savefig(directory / f"{name}.svg", bbox_inches="tight", facecolor=fig.get_facecolor())
+
+
+def show_figure(draw, root, name, source, width=None, folder="data"):
+    """Dibujar la figura con los dos estilos, guardar ambos y mostrar el de ML.
+
+    ``draw(T)`` recibe el tema y devuelve la figura. Los datos se calculan antes,
+    fuera de ``draw``: aquí solo se repite el dibujo.
+    """
+    fig = render(draw, lambda figure, T: save_figure(figure, root, name, source, T, folder))
+    display_figure(fig, width)
+    return fig
 
 
 def styled(frame, digits=0):

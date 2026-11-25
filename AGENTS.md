@@ -25,9 +25,18 @@
   datos ya utilizados en desarrollo no deben convertirse en un supuesto test nuevo.
 - Escribir explicaciones sencillas y autoexplicativas en español. Conservar las
   mejoras de redacción de la estudiante al cambiar el contenido técnico.
-- Usar principalmente azul ETSIT y naranja con los módulos visuales existentes.
-  Introducir más colores cuando hagan falta más grupos y mantener la coherencia
-  de las particiones. Tablas legibles, números alineados y precisión justificada.
+- Gráficos y tablas con el estilo de fashion-demand-ml, exactamente igual:
+  `src/visualization/style.py` y `docs/visualization-rubric.md` mantienen las
+  reglas visuales de ML sin cambios; solo sus textos y ejemplos están adaptados
+  a DL (sin variables de ventas ni modelos de ML). Arial, paleta y colores de particiones
+  de ML; las tablas solo localizan números y traducen cabeceras, sin CSS propio.
+  El notebook muestra siempre el estilo ML. Cada figura se guarda además en
+  estilo ETSIT (`style_etsit.py`, Latin Modern, azul ETSIT/naranja) en una sola
+  ejecución: `src/visualization/themes.py` dibuja dos veces con los mismos
+  datos; nunca se repiten cálculos. Salidas en `results/figures/ml/` y
+  `results/figures/etsit/`. Las figuras nuevas se escriben como `draw(T)` con
+  los papeles del tema (T.primary, T.reference...), sin colores fijos.
+  No cambiar el estilo principal sin acuerdo. Precisión justificada en números.
 - El filtro visual de detalles se aplica en 02 después de asignar particiones,
   a TODAS las fotos elegibles: train, validation y test, por petición expresa.
   CLIP usa la misma regla y textos fijados para las tres particiones;

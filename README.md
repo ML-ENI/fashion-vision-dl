@@ -154,8 +154,13 @@ y `requirements-dl.txt`. El entrenamiento aislado se inicia con
 - `results/metrics/`: evidencia numérica de las ejecuciones; no contiene resultados
   vigentes de los notebooks reconstruidos hasta que se vuelvan a ejecutar.
 - `results/models/04_dense/` y `tmp/`: checkpoints, cachés y respaldos locales.
-- `src/visualization/`: tipografía del proyecto ML, azul ETSIT y naranja como base,
-  tablas legibles y colores coherentes de particiones.
+- `src/visualization/`: estilo de gráficos de fashion-demand-ml (mismas reglas visuales;
+  textos de `style.py` y de la rúbrica adaptados a DL), tablas con números en español y colores de particiones de ML.
+  Cada figura se guarda en dos estilos en la misma ejecución, sin repetir cálculos:
+  `results/figures/ml/` (el que muestra el notebook) y `results/figures/etsit/`
+  (`style_etsit.py`: Latin Modern, azul ETSIT y naranja). Ver `themes.py`.
+  Las carpetas antiguas `results/figures/data/` y `results/figures/04_dense/`
+  son de ejecuciones anteriores y se retirarán al validar las nuevas.
 
 El resumen inicial del informe DL tendrá **máximo tres páginas**: alcance,
 metodología, hallazgos y conclusiones. El borrador se planifica para el 1 de
