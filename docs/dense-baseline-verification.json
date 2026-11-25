@@ -1,27 +1,22 @@
 {
- "status": "student_execution_saved_artifacts_reviewed",
- "updated_date": "2026-11-25",
- "notebook": "notebooks/04_dense_mlp.ipynb",
- "experiment_id": "67338715b6e6941e",
- "dataset_run": "20261124T185853-e7045c19",
- "manifest_sha256": "648d4a779f1b8572799afbdf326e33bab38616fda5e9fa5055a151b0d0ad9d56",
- "code_cells_executed": 18,
- "stored_errors": 0,
- "fits": 6,
- "train_images": 51506,
- "validation_images": 11532,
- "test_images_opened": 0,
- "test_predictions_generated": 0,
- "training_minutes": 42.28384022500019,
- "validation_summary": {
-  "baseline": {
-   "macro_f1_mean": 0.3854711108200843
-  },
-  "dropout_030": {
-   "macro_f1_mean": 0.19818540622545397
-  }
- },
- "review_method": "Lectura de salidas y comprobación de hashes y alineación de IDs; sin inferencia CLIP ni entrenamiento real.",
- "new_training_default_enabled": false,
- "limits": "Validation también selecciona épocas; 05–12 siguen como planes sin implementar."
+  "status": "student_execution_saved_artifacts_verified",
+  "updated_date": "2026-11-25",
+  "notebook": "notebooks/04_dense_mlp.ipynb",
+  "experiment_id": "143ad91452347fef",
+  "dataset_run": "20261125T152902-c912cdcc",
+  "manifest_sha256": "004ec4f4bd064deceee286d1699eea3c4a5131ef8fd4ef299bb2e2ca6014df84",
+  "code_cells_executed": 18,
+  "stored_errors": 0,
+  "classes": 25,
+  "fits": 6,
+  "artifact_hashes_verified": 27,
+  "checkpoints_verified": 6,
+  "validation_prediction_rows": 7515,
+  "test_images_opened": 0,
+  "test_predictions_generated": 0,
+  "train_minutes": 32.81183211666624,
+  "train_images": 33618,
+  "validation_images": 7515,
+  "new_training_default_enabled": false,
+  "limits": "Validation también selecciona épocas. Costumes sin validation. 05–12 permanecen como planes; 09 añade la comparación sin/suave/fuerte sin ejecutarla."
 }

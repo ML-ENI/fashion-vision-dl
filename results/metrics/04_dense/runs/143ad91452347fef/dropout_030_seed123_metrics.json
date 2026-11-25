@@ -1,0 +1,29 @@
+{
+  "variant": "dropout_030",
+  "seed": 123,
+  "dropout": 0.3,
+  "parameters": 986537,
+  "approx_linear_flops_per_image": 1972800,
+  "epochs_run": 27,
+  "selected_epoch": 26,
+  "stopped_early": true,
+  "train_seconds": 452.5192343999952,
+  "inference_ms_per_image": 0.04778022621533662,
+  "peak_process_rss_bytes": 2913443840,
+  "checkpoint": "results\\models\\04_dense\\143ad91452347fef\\dropout_030_seed123.pt",
+  "checkpoint_sha256": "592c75e8f534330c36c928e02c998ecc096054fa10f56b21bc79ac3753ccfb6f",
+  "train_loss": 1.309660422099155,
+  "train_accuracy": 0.5829615087155691,
+  "train_macro_f1": 0.23703249875458668,
+  "validation_loss": 1.3795698415257498,
+  "validation_accuracy": 0.5689953426480373,
+  "validation_macro_f1": 0.22060058503755064,
+  "validation_group_bootstrap_ci95_accuracy": [
+    0.5471630418948427,
+    0.5913592539247763
+  ],
+  "validation_group_bootstrap_ci95_macro_f1": [
+    0.20953051971816727,
+    0.2305666599058176
+  ]
+}

@@ -24,9 +24,14 @@
     "reason": "Ejecutado completo sin errores (7/7 celdas, 213 s) con la publicación 20261125T152902-c912cdcc. Mismas imágenes, etiquetas y referencia de mayoría; la logística de color cambia 27 de 7.515 predicciones (accuracy 0,2170 → 0,2176; macro-F1 0,0506 → 0,0508) al recalcular características en otro entorno. Figuras en inglés, estilos ML y ETSIT. Pendiente de revisión de la estudiante."
   },
   "04_dense_mlp.ipynb": {
-    "status": "pending_user_execution",
+    "status": "executed_saved_without_errors",
     "updated_date": "2026-11-25",
-    "reason": "Nueva regla exploratoria de encuadre por bordes y revisiones humanas incorporadas; no se ha ejecutado el dataset completo. Además, sus figuras se guardan en dos estilos (ML mostrado, ETSIT aparte) y las tablas usan el estilo de ML."
+    "code_cells": 18,
+    "dataset_run": "20261125T152902-c912cdcc",
+    "experiment_id": "143ad91452347fef",
+    "fits": 6,
+    "test_predictions": 0,
+    "post_execution_change": "Bandera ENTRENAR_SI_FALTA devuelta a False; salidas reales conservadas."
   },
   "05_cnn.ipynb": {
     "status": "planned"
@@ -51,5 +56,10 @@
   },
   "12_generative_models.ipynb": {
     "status": "planned"
+  },
+  "auxiliares/revision_visual_interactiva.ipynb": {
+    "status": "executed_saved_without_errors",
+    "code_cells": 1,
+    "purpose": "Galería local; las marcas se guardan como pendientes sin cambiar automáticamente el dataset."
   }
 }

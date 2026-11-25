@@ -2,6 +2,7 @@
 results/data_preparation/** -text whitespace=cr-at-eol
 results/metrics/02_zoom_rule/** -text whitespace=cr-at-eol
 results/metrics/04_dense/runs/67338715b6e6941e/** -text whitespace=cr-at-eol
+results/metrics/04_dense/runs/143ad91452347fef/** -text whitespace=cr-at-eol
 src/training/dense_experiment.py text eol=lf
 # Estos dos archivos se comparan con los hashes del análisis ya realizado.
 src/data/automatic_visual_filter.py text eol=lf

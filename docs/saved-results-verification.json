@@ -21,6 +21,10 @@
   "all_shared_checksums_verified": true,
   "CLIP_rerun": false,
   "assistant_ran_full_preparation": false,
-  "03_04": "pending_execution_on_this_selection",
-  "synthetic_tests": "saved_results, zoom_geometry, augmentation_profiles; separate test outputs record passing checks"
+  "03_04": "executed_saved_validated_on_current_selection",
+  "synthetic_tests": "saved_results, zoom_geometry, augmentation_profiles; separate test outputs record passing checks",
+  "dense_experiment_id": "143ad91452347fef",
+  "dense_artifact_hashes_verified": 27,
+  "dense_checkpoints_verified": 6,
+  "gallery_synthetic_tests_passed": 3
 }
