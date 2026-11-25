@@ -20,7 +20,7 @@ Si se cambia el umbral, las medidas guardadas en
 selección puede requerir recalcular estadísticas de train; eso no es CLIP.
 No se reasignan productos ni se borran fotografías.
 
-El 02 tiene sus 14 celdas ejecutadas sin errores. 03 y 04 siguen pendientes sobre
+El 02 tiene sus 14 celdas ejecutadas sin errores. 03 también está ejecutado y validado (7/7 celdas, mismos IDs y manifiesto). 04 sigue pendiente sobre
 este conjunto; los entrenamientos anteriores no describen esta selección. El 04
 mantiene su entrenamiento desactivado por defecto y requiere pesos locales para
 las visualizaciones de activaciones y pesos.

@@ -1,6 +1,6 @@
 # Fashion Vision DL
 
-> **02 ejecutado y validado.** La publicación `20261125T152902-c912cdcc` conserva 48.376 fotos y 25 clases (train 33.618, validation 7.515, test 7.243), sin Baby/Children. El filtro exploratorio de bordes añadió 999 exclusiones; las revisiones humanas tienen prioridad. 03–04 están pendientes con esta selección.
+> **02 ejecutado y validado.** La publicación `20261125T152902-c912cdcc` conserva 48.376 fotos y 25 clases (train 33.618, validation 7.515, test 7.243), sin Baby/Children. El filtro exploratorio de bordes añadió 999 exclusiones; las revisiones humanas tienen prioridad. 03 está ejecutado y validado con esta selección; 04 sigue pendiente.
 
 Clasificación visual de prendas H&M para los informes de PRDL y MLLB. La prioridad
 es explicar los fundamentos y comparar experimentos sencillos en local.
@@ -59,8 +59,8 @@ sin repetir CLIP ni medir bordes. Las fotos locales siguen siendo necesarias
 para galerías y entrenamiento. Costumes no tiene validation y Tailored Waistcoat
 no tiene test; sus soportes cero se declaran, sin mover fotografías.
 
-03–04 deben ejecutarse y validarse sobre esta selección antes de publicar
-sus nuevas versiones. Los resultados anteriores son históricos.
+03 está ejecutado y validado sobre esta selección: 7/7 celdas, sin errores.
+04 sigue pendiente de ejecutar y validar; sus resultados anteriores son históricos.
 
 ## Ejecución anterior (antes del cambio de selección)
 

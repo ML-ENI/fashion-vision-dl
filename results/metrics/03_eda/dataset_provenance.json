@@ -1,6 +1,6 @@
 {
-  "dataset_run": "20261124T185853-e7045c19",
-  "manifest_sha256": "648d4a779f1b8572799afbdf326e33bab38616fda5e9fa5055a151b0d0ad9d56",
-  "train_images": 51506,
-  "validation_images": 11532
+  "dataset_run": "20261125T152902-c912cdcc",
+  "manifest_sha256": "004ec4f4bd064deceee286d1699eea3c4a5131ef8fd4ef299bb2e2ca6014df84",
+  "train_images": 33618,
+  "validation_images": 7515
 }
