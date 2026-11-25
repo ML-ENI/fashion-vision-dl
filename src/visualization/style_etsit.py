@@ -61,7 +61,8 @@ def _report_font():
                 font_manager.fontManager.addfont(str(path))
         return font_manager.FontProperties(fname=str(FONT_FILE)).get_name()
     available = {font.name for font in font_manager.fontManager.ttflist}
-    return next((name for name in ["Latin Modern Roman", "LM Roman 10",
+    # «LMRoman10» es el nombre con el que matplotlib registra los OTF de GUST en macOS/Linux.
+    return next((name for name in ["Latin Modern Roman", "LM Roman 10", "LMRoman10",
                                   "DejaVu Serif", "Liberation Serif"]
                  if name in available), "DejaVu Serif")
 

@@ -75,8 +75,8 @@ def show_figure(draw, root, name, source, width=None, folder="data"):
     fuera de ``draw``: aquí solo se repite el dibujo.
     """
     fig = render(draw, lambda figure, T: save_figure(figure, root, name, source, T, folder))
+    # Sin valor de retorno: si la celda termina aquí, Jupyter no la muestra otra vez.
     display_figure(fig, width)
-    return fig
 
 
 def styled(frame, digits=0):

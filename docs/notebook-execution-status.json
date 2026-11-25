@@ -6,22 +6,22 @@
     "reason": "Figuras en dos estilos (ML mostrado, ETSIT guardado aparte) y tablas con el estilo de ML. Los datos y métricas no cambian; las salidas guardadas siguen en el estilo anterior hasta reejecutar con las fotos locales."
   },
   "02_data_preparation.ipynb": {
-    "status": "pending_user_execution",
+    "status": "executed_pending_review",
     "updated_date": "2026-11-25",
     "code_cells": 14,
     "dataset_run": "20261125T152902-c912cdcc",
     "images": 48376,
     "classes": 25,
-    "reason": "Figuras en dos estilos (ML mostrado, ETSIT guardado aparte) y tablas con el estilo de ML. Los datos y métricas no cambian; las salidas guardadas siguen en el estilo anterior hasta reejecutar con las fotos locales."
+    "reason": "Ejecutado completo sin errores (14/14 celdas, CLIP desactivado) con la selección compartida y las fotos preparadas de Iratxe. Mismos recuentos que la publicación validada. Figuras en estilo ML (mostrado) y ETSIT (results/figures/etsit/). Pendiente de revisión de la estudiante."
   },
   "03_eda_images.ipynb": {
-    "status": "pending_user_execution",
+    "status": "executed_pending_review",
     "updated_date": "2026-11-25",
     "code_cells": 7,
     "dataset_run": "20261125T152902-c912cdcc",
     "train_images": 33618,
     "validation_images": 7515,
-    "reason": "Figuras en dos estilos (ML mostrado, ETSIT guardado aparte) y tablas con el estilo de ML. Los datos y métricas no cambian; las salidas guardadas siguen en el estilo anterior hasta reejecutar con las fotos locales."
+    "reason": "Ejecutado completo sin errores (7/7 celdas, 213 s) con la publicación 20261125T152902-c912cdcc. Mismas imágenes, etiquetas y referencia de mayoría; la logística de color cambia 27 de 7.515 predicciones (accuracy 0,2170 → 0,2176; macro-F1 0,0506 → 0,0508) al recalcular características en otro entorno. Figuras en inglés, estilos ML y ETSIT. Pendiente de revisión de la estudiante."
   },
   "04_dense_mlp.ipynb": {
     "status": "pending_user_execution",

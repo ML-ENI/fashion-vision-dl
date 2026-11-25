@@ -37,6 +37,9 @@
   `results/figures/etsit/`. Las figuras nuevas se escriben como `draw(T)` con
   los papeles del tema (T.primary, T.reference...), sin colores fijos.
   No cambiar el estilo principal sin acuerdo. Precisión justificada en números.
+- Textos de los gráficos en inglés (títulos, ejes, leyendas, paneles, notas de
+  fuente); números con formato español como en ML (1.000 y 0,5). Las tablas y
+  las explicaciones de los notebooks siguen en castellano.
 - El filtro visual de detalles se aplica en 02 después de asignar particiones,
   a TODAS las fotos elegibles: train, validation y test, por petición expresa.
   CLIP usa la misma regla y textos fijados para las tres particiones;

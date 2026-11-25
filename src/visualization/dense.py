@@ -100,13 +100,13 @@ def input_figure(context, raw):
         fig, axes = plt.subplots(1, 2, figsize=T.pick((10, 5), (12, 6)))
         axes[0].imshow(stored)
         axes[1].imshow(small)
-        for ax, title in zip(axes, ['Almacenada: RGB224', 'Entrada Dense: RGB64']):
+        for ax, title in zip(axes, ['Stored: RGB224', 'Dense input: RGB64']):
             ax.axis('off')
             ax.set_title(title, **T.pick({}, {'fontsize': 21}))
-        fig.suptitle('La misma prenda con una entrada más pequeña')
+        fig.suptitle('The same garment with a smaller input')
         return fig
     return both(context, draw, '01_input',
-                f'Fuente: primer artículo de train {row.article_id}, {row.label}. Se conserva el encuadre preparado; no se abre test.')
+                f'Source: first train article {row.article_id}, {row.label}. The prepared framing is kept; test is not opened.')
 
 
 def curves_figure(context, directory):
@@ -121,15 +121,15 @@ def curves_figure(context, directory):
                     ax.plot(history.epoch, history[split+'_'+metric], color=T.split[split],
                             alpha=.75, linestyle={42: '-', 123: '--', 2026: ':'}[seed],
                             label=label if seed == 42 else None)
-        axes[0].set(ylabel='Entropía cruzada', xlabel='Época', title='Pérdida: menor es mejor')
-        axes[1].set(ylabel='Macro-F1', xlabel='Época', title='Macro-F1: mayor es mejor', ylim=(0, 1))
+        axes[0].set(ylabel='Cross-entropy', xlabel='Epoch', title='Loss: lower is better')
+        axes[1].set(ylabel='Macro-F1', xlabel='Epoch', title='Macro-F1: higher is better', ylim=(0, 1))
         for ax in axes:
             ax.xaxis.set_major_locator(MaxNLocator(integer=True))
             ax.legend(loc='best')
-        fig.suptitle('Cómo aprende la Dense sin dropout')
+        fig.suptitle('How the Dense network learns without dropout')
         return fig
     return both(context, draw, '02_learning_curves',
-                'Fuente: entrenamiento local. Una línea por semilla: 42 continua, 123 discontinua, 2026 punteada. Todas las curvas se miden en modo evaluación, sin dropout.')
+                'Source: local training. One line per seed: 42 solid, 123 dashed, 2026 dotted. All curves are measured in evaluation mode, without dropout.')
 
 
 def dropout_figure(context, records):
@@ -142,14 +142,14 @@ def dropout_figure(context, records):
         fig, ax = plt.subplots(figsize=T.pick((9, 5.6), (11, 7)))
         for seed, values in pairs.items():
             ax.plot([0, 1], values, color=T.primary, marker='o', alpha=.8,
-                    linestyle={42:'-',123:'--',2026:':'}[seed], label=f'Semilla {seed}')
-        ax.set_xticks([0, 1], ['Sin dropout', 'Dropout 0,30'])
-        ax.set(ylabel='Macro-F1 en validation', ylim=(0, 1))
+                    linestyle={42:'-',123:'--',2026:':'}[seed], label=f'Seed {seed}')
+        ax.set_xticks([0, 1], ['No dropout', 'Dropout 0,30'])
+        ax.set(ylabel='Validation macro-F1', ylim=(0, 1))
         ax.legend(loc='best')
-        fig.suptitle('Una sola modificación: apagar neuronas al entrenar')
+        fig.suptitle('A single change: switching off neurons during training')
         return fig
     return both(context, draw, '03_dropout_pairs',
-                'Fuente: tres pares con los mismos datos, inicialización por semilla y orden de minibatches. Cada punto usa el checkpoint elegido con validation; test reservado.')
+                'Source: three pairs with the same data, per-seed initialisation and minibatch order. Each point uses the checkpoint selected on validation; test held out.')
 
 
 def confusion_figure(context, cm):
@@ -157,21 +157,21 @@ def confusion_figure(context, cm):
     totals = cm.sum(1, keepdims=True)
     proportions = np.divide(cm, totals, out=np.zeros_like(cm, dtype=float), where=totals > 0)
     figures = []
-    for values, title, vmax, suffix in zip([cm, proportions], ['Recuentos', 'Proporción por clase real'], [None, 1], ['counts', 'proportions']):
+    for values, title, vmax, suffix in zip([cm, proportions], ['Counts', 'Proportion per true class'], [None, 1], ['counts', 'proportions']):
         def draw(T, values=values, title=title, vmax=vmax):
             fig, ax = plt.subplots(figsize=T.pick((10, 9), (12, 11)))
             im = ax.imshow(values, cmap=T.sequential, vmin=0, vmax=vmax)
             ax.set_xticks(range(len(names)), names, rotation=90, ha='center', fontsize=T.pick(8, 11))
             ax.set_yticks(range(len(names)), names, fontsize=T.pick(8, 11))
-            ax.set_xlabel('Clase predicha', **T.pick({}, {'fontsize': 14}))
-            ax.set_ylabel('Clase real', **T.pick({}, {'fontsize': 14}))
+            ax.set_xlabel('Predicted class', **T.pick({}, {'fontsize': 14}))
+            ax.set_ylabel('True class', **T.pick({}, {'fontsize': 14}))
             ax.grid(False)
             bar = fig.colorbar(im, ax=ax, shrink=.75)
             bar.ax.tick_params(labelsize=11)
-            fig.suptitle(f'Confusión de la Dense · {title}', color=T.title_accent)
+            fig.suptitle(f'Dense network confusion · {title}', color=T.title_accent)
             return fig
         figures.append(both(context, draw, f'04_confusion_{suffix}',
-                            'Fuente: validation, baseline Dense, semilla 42. Diagonal = aciertos. Test reservado.'))
+                            'Source: validation, baseline Dense, seed 42. Diagonal = correct predictions. Test held out.'))
     return figures
 
 
@@ -183,17 +183,17 @@ def per_class_figure(context, dense_report, colour_report):
     def draw(T):
         fig, ax = plt.subplots(figsize=T.pick((13, max(7, .3*len(names)+1.5)), (19, max(10, .43*len(names)+2))))
         y = np.arange(len(names))
-        ax.barh(y-.18, colour, height=.34, color=T.reference, label='Logística de color (03)')
-        ax.barh(y+.18, dense, height=.34, color=T.primary, label='Dense (semilla 42)')
+        ax.barh(y-.18, colour, height=.34, color=T.reference, label='Colour logistic regression (03)')
+        ax.barh(y+.18, dense, height=.34, color=T.primary, label='Dense (seed 42)')
         ax.set_yticks(y, names)
         ax.invert_yaxis()
-        ax.set(xlabel='F1 por clase en validation', xlim=(0, 1))
+        ax.set(xlabel='Per-class validation F1', xlim=(0, 1))
         # Fuera de los datos: no suponemos que una clase deje una esquina libre.
         ax.legend(loc='upper left', bbox_to_anchor=(1.01, 1))
-        fig.suptitle('La mejora global puede variar entre clases')
+        fig.suptitle('The overall improvement can vary across classes')
         return fig
     return both(context, draw, '05_per_class',
-                'Fuente: mismas imágenes y etiquetas de validation. Una semilla Dense prefijada; la variabilidad de entrenamiento se informa aparte. No aísla el efecto exclusivo de la arquitectura.')
+                'Source: same validation images and labels. One pre-set Dense seed; training variability is reported separately. It does not isolate the effect of the architecture alone.')
 
 
 def errors_figure(context, predictions, count=8):
@@ -212,15 +212,15 @@ def errors_figure(context, predictions, count=8):
         for ax, row, photo in zip(axes.flat, errors.itertuples(), photos):
             ax.imshow(photo)
             label = context['names'][row.prediction]
-            ax.set_title(f'Real: {row.label}\nPred.: {label}\nSoftmax: {format_percent(row.confidence)}',
+            ax.set_title(f'True: {row.label}\nPred.: {label}\nSoftmax: {format_percent(row.confidence)}',
                          fontsize=T.pick(8, 10), fontweight='normal')
             ax.axis('off')
         for ax in axes.flat[len(errors):]:
             ax.axis('off')
-        fig.suptitle('Errores con mayor confianza: también hay que mirarlos')
+        fig.suptitle('Most confident errors: they also need a look')
         return fig
     return both(context, draw, '06_confident_errors',
-                'Fuente: validation, Dense baseline semilla 42. Selección automática: los ocho errores de mayor softmax. No es una muestra representativa ni una revisión de etiquetas confirmada.')
+                'Source: validation, Dense baseline seed 42. Automatic selection: the eight errors with the highest softmax. Not a representative sample nor a confirmed label review.')
 
 
 def weight_figure(context, model):
@@ -232,13 +232,13 @@ def weight_figure(context, model):
         fig, axes = plt.subplots(2, 3, figsize=T.pick((13, 8), (16, 10)))
         for index, (ax, values) in enumerate(zip(axes.flat, weights)):
             image = ax.imshow(values, cmap=T.diverging, vmin=-bound, vmax=bound)
-            ax.set_title(f'Neurona {index}', **T.pick({}, {'fontsize': 20}))
+            ax.set_title(f'Neuron {index}', **T.pick({}, {'fontsize': 20}))
             ax.axis('off')
-        fig.colorbar(image, ax=list(axes.flat), shrink=.65, label='Peso medio de los tres canales')
-        fig.suptitle('La primera Dense asigna un peso a cada posición')
+        fig.colorbar(image, ax=list(axes.flat), shrink=.65, label='Mean weight over the three channels')
+        fig.suptitle('The first Dense layer assigns a weight to every position')
         return fig
     return both(context, draw, '07_first_layer_weights',
-                'Fuente: seis primeras neuronas, baseline semilla 42. Media de pesos RGB por posición, escala común centrada en cero. No son fotografías ni mapas causales de importancia.')
+                'Source: first six neurons, baseline seed 42. Mean RGB weight per position, common scale centred at zero. These are neither photographs nor causal importance maps.')
 
 
 @torch.inference_mode()
@@ -251,8 +251,8 @@ def activation_figure(context, model, tensors):
     def draw(T):
         fig, ax = plt.subplots(figsize=(13, 6))
         ax.bar(range(len(fraction)), fraction, color=T.primary)
-        ax.set(xlabel='Índice de neurona de la primera capa', ylabel='Fracción de entradas\ncon ReLU > 0', ylim=(0, 1))
-        fig.suptitle('Qué neuronas se activan en una muestra fija de train')
+        ax.set(xlabel='First-layer neuron index', ylabel='Fraction of inputs\nwith ReLU > 0', ylim=(0, 1))
+        fig.suptitle('Which neurons activate on a fixed train sample')
         return fig
     return both(context, draw, '08_activations',
-                'Fuente: primeras 512 imágenes de train, baseline semilla 42. Activación tras ReLU en modo evaluación. No generalizar inactividad de esta muestra a toda la población.')
+                'Source: first 512 train images, baseline seed 42. Activation after ReLU in evaluation mode. Do not generalise inactivity in this sample to the whole population.')

@@ -76,7 +76,8 @@ Paleta categórica extendida, optimizada para maximizar la distancia perceptual 
 ## 4. Títulos, ejes, fechas y números
 
 - El título comunica el hallazgo, no solo el tipo de gráfico.
-- Los ejes indican magnitud y unidad: por ejemplo, `Imágenes válidas`, `Peso de cada JPEG original (kB)` o `Entropía cruzada · menor es mejor`.
+- Los textos de los gráficos (títulos, ejes, leyendas, paneles y notas de fuente) están en inglés; las tablas y explicaciones de los notebooks siguen en castellano.
+- Los ejes indican magnitud y unidad: por ejemplo, `Valid images`, `Size of each original JPEG (kB)` o `Cross-entropy · lower is better`.
 - Si aparece una fecha, sigue el orden español: `dd/mm/aaaa`.
 - En las curvas de aprendizaje, el eje X muestra épocas enteras y todos los paneles muestran valores en ese eje.
 - Las matrices de confusión indican qué eje es la clase real y cuál la predicha, y si muestran recuentos o proporciones por clase real.
