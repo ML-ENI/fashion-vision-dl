@@ -1,0 +1,29 @@
+{
+  "variant": "baseline",
+  "seed": 123,
+  "dropout": 0.0,
+  "parameters": 986537,
+  "approx_linear_flops_per_image": 1972800,
+  "epochs_run": 19,
+  "selected_epoch": 14,
+  "stopped_early": true,
+  "train_seconds": 288.7917296999949,
+  "inference_ms_per_image": 0.04025194943428327,
+  "peak_process_rss_bytes": 2913234944,
+  "checkpoint": "results\\models\\04_dense\\143ad91452347fef\\baseline_seed123.pt",
+  "checkpoint_sha256": "9c9481d673fdd74f539ca26a203fb45e9524b616ff13217b1b52013c17744346",
+  "train_loss": 0.9224862731349157,
+  "train_accuracy": 0.7058421083943126,
+  "train_macro_f1": 0.4752827072845841,
+  "validation_loss": 1.101726416199507,
+  "validation_accuracy": 0.6657351962741185,
+  "validation_macro_f1": 0.42120251381671026,
+  "validation_group_bootstrap_ci95_accuracy": [
+    0.6464387916850322,
+    0.6851644629068984
+  ],
+  "validation_group_bootstrap_ci95_macro_f1": [
+    0.3921838296357005,
+    0.4418659753903599
+  ]
+}

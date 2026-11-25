@@ -59,7 +59,7 @@ def load_context(root):
     require_current_visual_review(root, run, requested, preparation)
     if (set(preparation.get('include_classes', [])) != set(requested['include_classes']) or
             set(preparation.get('include_product_groups') or []) != set(requested.get('include_product_groups') or [])):
-        raise ValueError('El conjunto preparado tiene otro alcance de prendas; ejecutar 02 antes de entrenar con las 26 etiquetas')
+        raise ValueError('El conjunto preparado tiene otro alcance de prendas; ejecutar 02 antes de entrenar')
     checks = json.loads((run / 'checksums.json').read_text())
     for name in ['image_manifest.csv.gz', 'labels.json']:
         if sha256(run / name) != checks[name]:
@@ -76,12 +76,16 @@ def load_context(root):
         raise ValueError('Índices de clase no consecutivos')
     rows = {split: active.loc[active.split.eq(split)].reset_index(drop=True)
             for split in ['train', 'validation']}
-    for frame in rows.values():
-        if frame.empty or set(frame.label) != set(names):
+    for split, frame in rows.items():
+        if frame.empty or (split == 'train' and set(frame.label) != set(names)):
             raise ValueError('Partición vacía o clases ausentes')
+        if not set(frame.label).issubset(names):
+            raise ValueError('Partición con etiquetas desconocidas')
         if not all(int(row.label_id) == labels[row.label] for row in frame.itertuples()):
             raise ValueError('Etiquetas e índices no coinciden')
     config = json.loads((root / 'config/dense_baseline_v1.json').read_text(encoding='utf-8'))
+    # La salida sigue las clases que sobreviven al filtro autorizado de 02.
+    config['architecture']['classes'] = len(names)
     return {'root': root, 'processed': processed, 'run': run, 'rows': rows,
             'names': names, 'config': config, 'manifest_sha256': checks['image_manifest.csv.gz'],
             'split_counts': active.split.value_counts().to_dict()}

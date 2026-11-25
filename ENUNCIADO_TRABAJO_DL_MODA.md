@@ -97,7 +97,7 @@ por clase, matriz de confusión) y curvas de aprendizaje.
 
 Los notebooks están en `notebooks/` con numeración fija. 01–04 tienen ejecución
 guardada y revisada sin errores. El 03 y el 04 usan la publicación filtrada
-`20261124T185853-e7045c19`. El 04 completó seis entrenamientos (Dense y dropout,
+`20261125T152902-c912cdcc`. Tras excluir Baby/Children y aplicar los filtros de encuadre, quedan 48.376 fotos y 25 clases. El 04 completó seis entrenamientos (Dense y dropout,
 tres semillas) tras una época piloto cuyos pesos se descartaron. No evaluó test.
 05–12 conservan planes sin implementación. El código reutilizable vive en `src/`.
 El protocolo previo al entrenamiento está en `config/experimental_protocol_v1.json`: macro-F1 primaria, pérdida inicial sin pesos, comparación controlada RGB64 y ablaciones previstas. Se conservan todas las imágenes elegibles de los 26 tipos de las tres familias corporales de H&M tras controles comunes, sin cupos por clase. Top también se incluye. Las particiones se construyen sobre la cohorte completa; las métricas describen ese alcance, no todo el catálogo. Cualquier muestra computacional futura exigiría medir el coste y se aplicaría solo a train.

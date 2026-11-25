@@ -24,9 +24,14 @@
     "reason": "Ejecución guardada de la estudiante; hash del manifiesto, IDs, etiquetas y métricas de las predicciones comprobados sin reejecutar el notebook."
   },
   "04_dense_mlp.ipynb": {
-    "status": "pending_user_execution",
+    "status": "executed_saved_without_errors",
     "updated_date": "2026-11-25",
-    "reason": "Nueva regla exploratoria de encuadre por bordes y revisiones humanas incorporadas; no se ha ejecutado el dataset completo."
+    "code_cells": 18,
+    "dataset_run": "20261125T152902-c912cdcc",
+    "experiment_id": "143ad91452347fef",
+    "fits": 6,
+    "test_predictions": 0,
+    "post_execution_change": "Bandera ENTRENAR_SI_FALTA devuelta a False; salidas reales conservadas."
   },
   "05_cnn.ipynb": {
     "status": "planned"
@@ -51,5 +56,10 @@
   },
   "12_generative_models.ipynb": {
     "status": "planned"
+  },
+  "auxiliares/revision_visual_interactiva.ipynb": {
+    "status": "executed_saved_without_errors",
+    "code_cells": 1,
+    "purpose": "Galería local; las marcas se guardan como pendientes sin cambiar automáticamente el dataset."
   }
 }
