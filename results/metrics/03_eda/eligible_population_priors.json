@@ -1,0 +1,32 @@
+{
+  "population": "all selected garment types after common quality checks, no caps",
+  "priors": {
+    "Blazer": 0.01447535277770283,
+    "Blouse": 0.052842457437336426,
+    "Bodysuit": 0.01212799827321048,
+    "Cardigan": 0.0205865688152605,
+    "Coat": 0.006111216037557672,
+    "Costumes": 0.000876885303402315,
+    "Dress": 0.1383725008768853,
+    "Dungarees": 0.003898766964357985,
+    "Garment Set": 0.0174162911798829,
+    "Hoodie": 0.030610042360305425,
+    "Jacket": 0.05216793028087311,
+    "Jumpsuit/Playsuit": 0.014920540700968621,
+    "Leggings/Tights": 0.024309958718938023,
+    "Outdoor Waistcoat": 0.002037072012519224,
+    "Outdoor overall": 0.0008094325877559831,
+    "Outdoor trousers": 0.0017402800636753637,
+    "Polo shirt": 0.005733480829938214,
+    "Shirt": 0.04543614925936918,
+    "Shorts": 0.051965572133934115,
+    "Skirt": 0.03581739200820225,
+    "Sweater": 0.1222782829236705,
+    "T-shirt": 0.10372878612092923,
+    "Tailored Waistcoat": 0.0009713191053071796,
+    "Top": 0.053368588619377814,
+    "Trousers": 0.14777540943798398,
+    "Vest top": 0.03962172517065537
+  },
+  "status": "descriptive cohort frequencies, not demand or entire catalog"
+}

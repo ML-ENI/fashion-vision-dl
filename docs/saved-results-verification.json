@@ -1,24 +1,26 @@
 {
   "verified_date": "2026-11-25",
-  "status": "student_notebook_02_execution_verified",
-  "notebook": "notebooks/02_data_preparation.ipynb",
-  "saved_code_cells": 14,
-  "stored_errors": 0,
-  "source_run": "20261124T185853-e7045c19",
-  "scores_loaded": 74525,
-  "retained_images": 74126,
-  "new_inference_during_saved_results_run": false,
-  "normal_mode_flag": "CREAR_ANALISIS_CLIP=False",
-  "relevant_synthetic_tests": 23,
-  "test_breakdown": {
-    "saved_preparation": 5,
-    "local_preparation": 14,
-    "automatic_filter": 4
-  },
-  "test_scope": "Synthetic data only; no actual CLIP inference or model training",
-  "shared_copy_bytes": 33498172,
-  "deferred": [
-    "03",
-    "04"
-  ]
+  "status": "synthetic_tests_passed_student_notebooks_saved_reviewed",
+  "tests": 8,
+  "test_command": ".venv/Scripts/python.exe -B -m unittest discover -s tests -p test_saved_results.py",
+  "real_clip_inference_run_by_assistant": false,
+  "real_model_training_run_by_assistant": false,
+  "protected_analysis": "runs/20261124T185853-e7045c19",
+  "protected_scores": 74525,
+  "shared_copy": "results/data_preparation/20261124T185853-e7045c19",
+  "copy_files": 12,
+  "copy_bytes": 33498172,
+  "detector_source_unchanged_since_original_analysis": true,
+  "clip_default_enabled": false,
+  "new_training_default_enabled": false,
+  "review_checks": {
+    "notebook_format_and_syntax": 12,
+    "executed_notebooks": 4,
+    "planned_notebooks": 8,
+    "dense_artifact_checksums": 27,
+    "dense_checkpoints_verified": 6,
+    "validation_ids_per_fit": 11532,
+    "dense_source_hashes_match": true,
+    "test_predictions": 0
+  }
 }

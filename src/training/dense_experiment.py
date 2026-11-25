@@ -55,6 +55,8 @@ def load_context(root):
     if 'max_images_per_class' in preparation:
         raise ValueError('La publicación contiene cupos antiguos: ejecutar 02 con la configuración vigente antes de entrenar')
     requested = json.loads((root / 'config/local_images_v1.json').read_text(encoding='utf-8'))
+    from src.data.data_contract import require_current_visual_review
+    require_current_visual_review(root, run, requested, preparation)
     if (set(preparation.get('include_classes', [])) != set(requested['include_classes']) or
             set(preparation.get('include_product_groups') or []) != set(requested.get('include_product_groups') or [])):
         raise ValueError('El conjunto preparado tiene otro alcance de prendas; ejecutar 02 antes de entrenar con las 26 etiquetas')
@@ -142,14 +144,21 @@ def normalized_tensors(raw, normalization):
     std = np.asarray(normalization['std'], dtype=np.float32)[None, :, None, None]
     tensors = {}
     for split, values in raw.items():
-        # La ruta depende del hash del manifiesto y de RGB64; los bloques se
-        # recalculan de forma determinista para evitar cachés de normalización obsoletas.
         path = Path(values.filename).with_name(split+'_normalized.npy')
-        mapped = np.lib.format.open_memmap(path, mode='w+', dtype=np.float32, shape=values.shape)
-        for start in range(0, len(values), 128):
-            mapped[start:start+128] = (values[start:start+128].astype(np.float32)/255-mean)/std
-        mapped.flush()
-        del mapped
+        marker = path.with_suffix('.json')
+        expected = {'raw_sha256': sha256(Path(values.filename)), 'normalization': normalization,
+                    'shape': list(values.shape), 'dtype': 'float32'}
+        cached = json.loads(marker.read_text()) if marker.exists() else {}
+        if not (path.exists() and cached.get('inputs') == expected and
+                cached.get('sha256') == sha256(path)):
+            temporary = path.with_name(path.stem + '.pending.npy')
+            mapped = np.lib.format.open_memmap(temporary, mode='w+', dtype=np.float32, shape=values.shape)
+            for start in range(0, len(values), 128):
+                mapped[start:start+128] = (values[start:start+128].astype(np.float32)/255-mean)/std
+            mapped.flush()
+            del mapped
+            os.replace(temporary, path)
+            write_json(marker, {'inputs': expected, 'sha256': sha256(path)})
         tensors[split] = torch.from_numpy(np.load(path, mmap_mode='c'))
     return tensors
 

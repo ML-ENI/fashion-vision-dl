@@ -1,15 +1,70 @@
 """Figuras de 04 con el estilo del proyecto ML; sin decisiones de modelado."""
 from pathlib import Path
+from io import BytesIO
 import textwrap
 
 import matplotlib.pyplot as plt
 from matplotlib.ticker import MaxNLocator
+from matplotlib.colors import LinearSegmentedColormap
 import numpy as np
 import pandas as pd
 from PIL import Image
 import torch
 
 from src.visualization.style import BLUE, ORANGE, SPLIT_COLORS, add_source, apply_style, format_number, format_percent
+
+
+def show_compact(figures, width=850):
+    """Acotar el tamaño en el notebook sin reducir los archivos de exportación."""
+    from IPython.display import Image as DisplayImage, display
+    if not isinstance(figures, (list, tuple)):
+        figures = [figures]
+    for fig in figures:
+        buffer = BytesIO()
+        fig.savefig(buffer, format='png', dpi=110, bbox_inches='tight', facecolor='white')
+        display(DisplayImage(data=buffer.getvalue(), width=width))
+        plt.close(fig)  # Evita otra salida automática de tamaño completo.
+
+
+def show_code(source, title):
+    """El código completo sigue disponible sin ocupar toda la lectura principal."""
+    from html import escape
+    from IPython.display import HTML, display
+    display(HTML(
+        '<details style="max-width:850px;margin:12px 0;border-top:3px solid #F18D01;padding:10px">'
+        f'<summary style="color:#00458A;cursor:pointer">{escape(title)}</summary>'
+        '<pre style="max-height:320px;overflow:auto;font-size:13px;line-height:1.5;white-space:pre">'
+        + escape(source) + '</pre></details>'
+    ))
+
+
+def run_with_progress(action, log_path):
+    """Mantener visible el progreso sin cientos de líneas en el cuaderno."""
+    import contextlib
+    from html import escape
+    from IPython.display import HTML, display
+    log_path = Path(log_path)
+    log_path.parent.mkdir(parents=True, exist_ok=True)
+    handle = display(HTML('<p style="color:#00458A">Entrenamiento en curso…</p>'), display_id=True)
+    with log_path.open('w', encoding='utf-8') as log:
+        class Stream:
+            buffer = ''
+            lines = []
+            def write(self, text):
+                log.write(text)
+                log.flush()
+                self.buffer += text
+                if '\n' in self.buffer:
+                    self.lines = (self.lines + self.buffer.splitlines())[-4:]
+                    self.buffer = ''
+                    handle.update(HTML('<pre style="font-size:13px;line-height:1.5;max-width:850px;white-space:pre-wrap">'
+                                       + escape('\n'.join(self.lines)) + '</pre>'))
+                return len(text)
+            def flush(self):
+                log.flush()
+        with contextlib.redirect_stdout(Stream()):
+            result = action()
+    return result
 
 
 def save(fig, root, name, note):
@@ -73,18 +128,24 @@ def dropout_figure(context, records):
 
 def confusion_figure(context, cm):
     names = context['names']
-    fig, axes = plt.subplots(1, 2, figsize=(30, max(11, .46*len(names)+3)))
-    proportions = cm / cm.sum(1, keepdims=True)
-    for ax, values, title, vmax in zip(axes, [cm, proportions], ['Recuentos', 'Proporción por clase real'], [None, 1]):
-        im = ax.imshow(values, cmap='Blues', vmin=0, vmax=vmax)
-        ax.set_xticks(range(len(names)), names, rotation=65, ha='right')
-        ax.set_yticks(range(len(names)), names)
-        ax.set(xlabel='Clase predicha', ylabel='Clase real', title=title)
+    totals = cm.sum(1, keepdims=True)
+    proportions = np.divide(cm, totals, out=np.zeros_like(cm, dtype=float), where=totals > 0)
+    figures = []
+    for values, title, vmax, suffix in zip([cm, proportions], ['Recuentos', 'Proporción por clase real'], [None, 1], ['counts', 'proportions']):
+        fig, ax = plt.subplots(figsize=(12, 11))
+        scale = LinearSegmentedColormap.from_list('etsit_confusion', ['#FFFFFF', BLUE])
+        im = ax.imshow(values, cmap=scale, vmin=0, vmax=vmax)
+        ax.set_xticks(range(len(names)), names, rotation=90, ha='center', fontsize=11)
+        ax.set_yticks(range(len(names)), names, fontsize=11)
+        ax.set_xlabel('Clase predicha', fontsize=14)
+        ax.set_ylabel('Clase real', fontsize=14)
         ax.grid(False)
-        fig.colorbar(im, ax=ax, shrink=.65)
-    fig.suptitle('Qué clases confunde la Dense de referencia')
-    return save(fig, context['root'], '04_confusion',
-                'Fuente: validation, baseline Dense, semilla 42 prefijada. Diagonal = aciertos. Cada fila de la matriz derecha suma uno; no son resultados de test.')
+        bar = fig.colorbar(im, ax=ax, shrink=.75)
+        bar.ax.tick_params(labelsize=11)
+        fig.suptitle(f'Confusión de la Dense · {title}', color=BLUE)
+        figures.append(save(fig, context['root'], f'04_confusion_{suffix}',
+                             'Fuente: validation, baseline Dense, semilla 42. Diagonal = aciertos. Test reservado.'))
+    return figures
 
 
 def per_class_figure(context, dense_report, colour_report):
@@ -111,12 +172,12 @@ def errors_figure(context, predictions, count=8):
     rows['confidence'] = predictions.confidence.to_numpy()
     rows['label_id'] = rows.label_id.astype(int)
     errors = rows.loc[rows.prediction.ne(rows.label_id)].sort_values(['confidence', 'article_id'], ascending=[False, True]).head(count)
-    fig, axes = plt.subplots(2, 4, figsize=(21, 12))
+    fig, axes = plt.subplots(2, 4, figsize=(12, 7))
     for ax, row in zip(axes.flat, errors.itertuples()):
         with Image.open(context['processed']/row.image_path) as image:
             ax.imshow(image)
         label = context['names'][row.prediction]
-        ax.set_title(f'Real: {row.label}\nPred.: {label}\nSoftmax: {format_percent(row.confidence)}', fontsize=17, fontweight='normal')
+        ax.set_title(f'Real: {row.label}\nPred.: {label}\nSoftmax: {format_percent(row.confidence)}', fontsize=10, fontweight='normal')
         ax.axis('off')
     for ax in axes.flat[len(errors):]:
         ax.axis('off')
@@ -129,9 +190,10 @@ def weight_figure(context, model):
     first = model.network[1]
     weights = first.weight.detach().numpy().reshape(-1, 3, 64, 64)[:6].mean(1)
     bound = abs(weights).max()
+    scale = LinearSegmentedColormap.from_list('etsit_signed_weights', [ORANGE, '#FFFFFF', BLUE])
     fig, axes = plt.subplots(2, 3, figsize=(16, 10))
     for index, (ax, values) in enumerate(zip(axes.flat, weights)):
-        image = ax.imshow(values, cmap='RdBu_r', vmin=-bound, vmax=bound)
+        image = ax.imshow(values, cmap=scale, vmin=-bound, vmax=bound)
         ax.set_title(f'Neurona {index}', fontsize=20)
         ax.axis('off')
     fig.colorbar(image, ax=list(axes.flat), shrink=.65, label='Peso medio de los tres canales')

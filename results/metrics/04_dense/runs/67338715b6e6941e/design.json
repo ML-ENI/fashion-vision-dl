@@ -1,0 +1,109 @@
+{
+  "identity": {
+    "manifest_sha256": "648d4a779f1b8572799afbdf326e33bab38616fda5e9fa5055a151b0d0ad9d56",
+    "sources": {
+      "config/dense_baseline_v1.json": "bc909ed09536f3a9cf3c31367bd312e17efe69e57335ccb1a6570bf805e34cd2",
+      "config/experimental_protocol_v1.json": "3bfb0dd8ac1c760543742e0a7eadd6c4321f31d720420fcdb043173bb8acff53",
+      "src/models/dense.py": "688afb2e8be29544a134adb924545eec33f3b3d62f7ecf06061cc952b6d63c95",
+      "src/training/dense_experiment.py": "9f3d34ddf227e8dfc5240211807cb91399b6de7b892de51f9939340f8ccab9a6"
+    },
+    "versions": {
+      "torch": "2.7.1+cpu",
+      "numpy": "2.1.3",
+      "pandas": "2.2.3",
+      "Pillow": "11.0.0",
+      "scikit-learn": "1.9.1",
+      "psutil": "7.2.2"
+    },
+    "platform": "Windows-11-10.0.26200-SP0",
+    "processor": "Intel64 Family 6 Model 165 Stepping 2, GenuineIntel"
+  },
+  "config": {
+    "version": "1.0.0",
+    "frozen_before_training": "2026-11-23",
+    "purpose": "Dense baseline on all eligible photographs, without artificial class balance",
+    "architecture": {
+      "image_size": 64,
+      "channels": 3,
+      "hidden_dims": [
+        80,
+        32
+      ],
+      "activation": "ReLU",
+      "classes": 26
+    },
+    "training": {
+      "seeds": [
+        42,
+        123,
+        2026
+      ],
+      "max_epochs": 30,
+      "patience": 5,
+      "batch_size": 32,
+      "optimizer": "Adam",
+      "learning_rate": 0.001,
+      "weight_decay": 0.0,
+      "class_weights": false,
+      "augmentation": false,
+      "threads": 4,
+      "device": "cpu",
+      "deterministic": true
+    },
+    "variants": [
+      {
+        "name": "baseline",
+        "dropout": 0.0
+      },
+      {
+        "name": "dropout_030",
+        "dropout": 0.3
+      }
+    ],
+    "normalization": "per-channel moments of all train RGB64 pixels; no sampling",
+    "checkpoint": "maximum validation macro-F1; first epoch wins ties",
+    "early_stopping": "stop after 5 successive epochs without validation loss decreasing by more than 0.0; different from checkpoint selection",
+    "primary_analysis": "all three seeds; mean and sample standard deviation; no selection of best seed",
+    "illustration_seed": 42,
+    "bootstrap": {
+      "unit": "group_id",
+      "draws": 300,
+      "seed": 42
+    },
+    "test_policy": "do not load or evaluate test images in this notebook",
+    "scope_limits": [
+      "no optimizer, width or depth search; those are future registered ablations",
+      "validation is used for stopping and selection, so this is not a final unbiased estimate",
+      "no CNN trained yet: do not conclude architecture superiority",
+      "evaluation describes selected garment types after quality controls, not the whole catalog"
+    ],
+    "sources": [
+      "https://docs.pytorch.org/docs/2.7/generated/torch.nn.CrossEntropyLoss.html",
+      "https://docs.pytorch.org/docs/2.7/notes/randomness.html"
+    ],
+    "cost_feasibility": {
+      "max_total_training_seconds": 5400,
+      "safety_factor": 1.25,
+      "decision": "Keep every eligible train product if the measured upper estimate fits 90 minutes for six local CPU fits. Otherwise stop for an explicit computational amendment; no automatic photo cap.",
+      "pilot_seed": 901
+    }
+  },
+  "normalization": {
+    "mean": [
+      0.8298640520069223,
+      0.8155561820379787,
+      0.8139861952803852
+    ],
+    "std": [
+      0.2589410609507649,
+      0.2697822513201321,
+      0.265768206883207
+    ],
+    "image_size": 64,
+    "partition": "train",
+    "pixels_per_channel": 210968576,
+    "method": "population pixel moments after RGB64 Lanczos resize"
+  },
+  "dataset_run": "20261124T185853-e7045c19",
+  "test_images_opened": 0
+}

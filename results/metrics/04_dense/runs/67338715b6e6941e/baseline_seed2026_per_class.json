@@ -1,0 +1,171 @@
+{
+  "Blazer": {
+    "precision": 0.5568862275449101,
+    "recall": 0.5535714285714286,
+    "f1-score": 0.5552238805970149,
+    "support": 168.0
+  },
+  "Blouse": {
+    "precision": 0.2047244094488189,
+    "recall": 0.25161290322580643,
+    "f1-score": 0.22575976845151954,
+    "support": 620.0
+  },
+  "Bodysuit": {
+    "precision": 0.2719665271966527,
+    "recall": 0.47101449275362317,
+    "f1-score": 0.3448275862068966,
+    "support": 138.0
+  },
+  "Cardigan": {
+    "precision": 0.22413793103448276,
+    "recall": 0.05555555555555555,
+    "f1-score": 0.08904109589041095,
+    "support": 234.0
+  },
+  "Coat": {
+    "precision": 0.2967032967032967,
+    "recall": 0.4153846153846154,
+    "f1-score": 0.34615384615384615,
+    "support": 65.0
+  },
+  "Costumes": {
+    "precision": 0.0,
+    "recall": 0.0,
+    "f1-score": 0.0,
+    "support": 7.0
+  },
+  "Dress": {
+    "precision": 0.6159387663214768,
+    "recall": 0.8774855676715844,
+    "f1-score": 0.7238095238095238,
+    "support": 1559.0
+  },
+  "Dungarees": {
+    "precision": 0.3333333333333333,
+    "recall": 0.041666666666666664,
+    "f1-score": 0.07407407407407407,
+    "support": 48.0
+  },
+  "Garment Set": {
+    "precision": 0.5641025641025641,
+    "recall": 0.5,
+    "f1-score": 0.5301204819277109,
+    "support": 176.0
+  },
+  "Hoodie": {
+    "precision": 0.47183098591549294,
+    "recall": 0.1936416184971098,
+    "f1-score": 0.27459016393442626,
+    "support": 346.0
+  },
+  "Jacket": {
+    "precision": 0.5050505050505051,
+    "recall": 0.5366726296958855,
+    "f1-score": 0.5203816131830009,
+    "support": 559.0
+  },
+  "Jumpsuit/Playsuit": {
+    "precision": 0.35185185185185186,
+    "recall": 0.11242603550295859,
+    "f1-score": 0.17040358744394618,
+    "support": 169.0
+  },
+  "Leggings/Tights": {
+    "precision": 0.47717842323651455,
+    "recall": 0.4872881355932203,
+    "f1-score": 0.48218029350104824,
+    "support": 236.0
+  },
+  "Outdoor Waistcoat": {
+    "precision": 0.0,
+    "recall": 0.0,
+    "f1-score": 0.0,
+    "support": 19.0
+  },
+  "Outdoor overall": {
+    "precision": 0.5,
+    "recall": 0.16666666666666666,
+    "f1-score": 0.25,
+    "support": 6.0
+  },
+  "Outdoor trousers": {
+    "precision": 0.0,
+    "recall": 0.0,
+    "f1-score": 0.0,
+    "support": 28.0
+  },
+  "Polo shirt": {
+    "precision": 0.5909090909090909,
+    "recall": 0.2765957446808511,
+    "f1-score": 0.37681159420289856,
+    "support": 47.0
+  },
+  "Shirt": {
+    "precision": 0.509090909090909,
+    "recall": 0.6933333333333334,
+    "f1-score": 0.5870967741935483,
+    "support": 525.0
+  },
+  "Shorts": {
+    "precision": 0.7495361781076066,
+    "recall": 0.7481481481481481,
+    "f1-score": 0.7488415199258572,
+    "support": 540.0
+  },
+  "Skirt": {
+    "precision": 0.594017094017094,
+    "recall": 0.6682692307692307,
+    "f1-score": 0.6289592760180995,
+    "support": 416.0
+  },
+  "Sweater": {
+    "precision": 0.5976775956284153,
+    "recall": 0.6144662921348315,
+    "f1-score": 0.6059556786703602,
+    "support": 1424.0
+  },
+  "T-shirt": {
+    "precision": 0.7063106796116505,
+    "recall": 0.6736111111111112,
+    "f1-score": 0.6895734597156398,
+    "support": 1296.0
+  },
+  "Tailored Waistcoat": {
+    "precision": 0.0,
+    "recall": 0.0,
+    "f1-score": 0.0,
+    "support": 14.0
+  },
+  "Top": {
+    "precision": 0.32432432432432434,
+    "recall": 0.052478134110787174,
+    "f1-score": 0.0903387703889586,
+    "support": 686.0
+  },
+  "Trousers": {
+    "precision": 0.8744047619047619,
+    "recall": 0.8285391990975748,
+    "f1-score": 0.8508543295684912,
+    "support": 1773.0
+  },
+  "Vest top": {
+    "precision": 0.5283687943262412,
+    "recall": 0.6882217090069284,
+    "f1-score": 0.5977933801404213,
+    "support": 433.0
+  },
+  "accuracy": 0.6004162330905307,
+  "macro avg": {
+    "precision": 0.41724400960230745,
+    "recall": 0.38102496992991985,
+    "f1-score": 0.37549194992298823,
+    "support": 11532.0
+  },
+  "weighted avg": {
+    "precision": 0.5845389576252054,
+    "recall": 0.6004162330905307,
+    "f1-score": 0.5772934227659712,
+    "support": 11532.0
+  }
+}

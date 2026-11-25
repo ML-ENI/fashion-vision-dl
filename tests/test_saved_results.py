@@ -17,6 +17,7 @@ from PIL import Image
 sys.path.insert(0, str(Path(__file__).resolve().parents[1] / 'src/data'))
 from src.data.data_contract import publish, sha256
 from src.data.saved_preparation import load_saved_analysis, finalize_saved_analysis
+from src.training.saved_experiments import load_saved_experiment
 
 
 class SavedPreparationTests(unittest.TestCase):
@@ -113,6 +114,80 @@ class SavedPreparationTests(unittest.TestCase):
         self.assertEqual(summary['images_usable'], 11)
         self.assertEqual(summary['automatic_visual_filter']['new_inferences_this_call'], 0)
 
+
+class SavedExperimentTests(unittest.TestCase):
+    def test_metric_changes_reuse_predictions_but_other_dataset_stops(self):
+        with tempfile.TemporaryDirectory() as temporary:
+            root = Path(temporary)
+            directory = root / 'results/metrics/04_dense/runs/test-run'
+            directory.mkdir(parents=True)
+            predictions = directory / 'predictions.csv'
+            predictions.write_text('y,prediction\n0,0\n')
+            config = {'architecture': {'classes': 2}, 'training': {'seeds': [42]},
+                      'variants': ['baseline'], 'bootstrap': {'draws': 300}}
+            summary = {'status': 'completed', 'experiment_id': 'test-run', 'config': config,
+                       'identity': {'manifest_sha256': 'dataset-a'},
+                       'artifacts_sha256': {'predictions.csv': hashlib.sha256(predictions.read_bytes()).hexdigest()}}
+            (directory / 'summary.json').write_text(json.dumps(summary))
+            changed = copy.deepcopy(config)
+            changed['bootstrap']['draws'] = 500
+            context = {'root': root, 'manifest_sha256': 'dataset-a', 'config': changed}
+            self.assertEqual(load_saved_experiment(context)[1], directory)
+            context['manifest_sha256'] = 'dataset-b'
+            with self.assertRaises(FileNotFoundError):
+                load_saved_experiment(context)
+
+    def test_normalized_arrays_are_not_rewritten_on_repeat(self):
+        from src.training.dense_experiment import normalized_tensors
+        with tempfile.TemporaryDirectory() as temporary:
+            path = Path(temporary) / 'train.npy'
+            np.save(path, np.arange(96, dtype=np.uint8).reshape(2, 3, 4, 4))
+            raw = {'train': np.load(path, mmap_mode='r')}
+            normalization = {'mean': [.1, .2, .3], 'std': [.2, .2, .2]}
+            tensors = normalized_tensors(raw, normalization)
+            expected = tensors['train'].clone()
+            del tensors
+            original = np.lib.format.open_memmap
+            def read_only(*args, **kwargs):
+                if kwargs.get('mode', 'r+') not in ['r', 'c']:
+                    raise AssertionError('No reescribir')
+                return original(*args, **kwargs)
+            with patch('numpy.lib.format.open_memmap', side_effect=read_only):
+                tensors = normalized_tensors(raw, normalization)
+            self.assertTrue(np.array_equal(tensors['train'].numpy(), expected.numpy()))
+            del tensors, expected, raw
+
+
+class NotebookCostGuardsTests(unittest.TestCase):
+    def test_syntax_and_expensive_calls_are_explicitly_guarded(self):
+        root = Path(__file__).resolve().parents[1]
+        for filename, flag, costly in [('02_data_preparation.ipynb', 'CREAR_ANALISIS_CLIP', 'prepare'),
+                                       ('04_dense_mlp.ipynb', 'ENTRENAR_SI_FALTA', 'run_or_load')]:
+            notebook = json.loads((root / 'notebooks' / filename).read_text(encoding='utf-8'))
+            found_default = False
+            found_call = False
+            for cell in notebook['cells']:
+                if cell['cell_type'] != 'code':
+                    continue
+                source = cell['source'] if isinstance(cell['source'], str) else ''.join(cell['source'])
+                tree = ast.parse(source)
+                parents = {child: parent for parent in ast.walk(tree) for child in ast.iter_child_nodes(parent)}
+                for node in ast.walk(tree):
+                    if isinstance(node, ast.Assign) and any(isinstance(t, ast.Name) and t.id == flag for t in node.targets):
+                        self.assertIsInstance(node.value, ast.Constant)
+                        self.assertIs(node.value.value, False)
+                        found_default = True
+                    if isinstance(node, ast.Call) and isinstance(node.func, ast.Name) and node.func.id == costly:
+                        found_call = True
+                        ancestor = parents.get(node)
+                        guarded = False
+                        while ancestor is not None:
+                            if isinstance(ancestor, ast.If) and isinstance(ancestor.test, ast.Name) and ancestor.test.id == flag:
+                                guarded = True
+                            ancestor = parents.get(ancestor)
+                        self.assertTrue(guarded, f'{costly} sin bandera explícita en {filename}')
+            self.assertTrue(found_default)
+            self.assertTrue(found_call)
 
 
 if __name__ == '__main__':

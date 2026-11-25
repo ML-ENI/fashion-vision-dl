@@ -1,27 +1,69 @@
-# Reutilizar los resultados del 02
+# Ejecutar de nuevo sin repetir las horas de cálculo
 
-El modo normal carga las puntuaciones CLIP existentes y, si no cambia la selección,
-reutiliza también el manifiesto, los pesos opcionales y la normalización. La carga
-y los cálculos están en celdas distintas. `CREAR_ANALISIS_CLIP=False` impide lanzar
-un análisis nuevo por sorpresa; si faltan resultados compatibles, aparece un aviso.
+## 02: el modo normal lee resultados
 
-Los resultados completos están en `results/data_preparation/20261124T185853-e7045c19`,
-con su CURRENT.json. Son 12 archivos y 33.498.172 bytes, sin fotografías ni pesos.
-Contienen las puntuaciones de 74.525 fotos. El conjunto filtrado conserva 74.126:
-51.506 en train, 11.532 en validation y 11.088 en test. Los checksums protegen la
-copia; .gitattributes conserva sus bytes entre sistemas.
+1. Carga la tabla completa de puntuaciones guardadas.
+2. Recupera el manifiesto y los cálculos existentes cuando no cambia la selección.
+3. Muestra tablas, gráficos y ejemplos con las fotos locales.
 
-Una compañera puede cargar esas tablas sin RAW, auditoría de 01 ni Transformers.
-Para mostrar fotos o entregar lotes sí necesita las copias preparadas locales.
-No se ha implementado una descarga automática de imágenes ni se ha cambiado
-su ubicación. Las líneas Baby/Children se mantienen; no se ha autorizado retirarlas.
+La celda opcional `CREAR_ANALISIS_CLIP` está en `False`. Si faltan resultados
+compatibles, el cuaderno se detiene y explica qué falta. No arranca CLIP por sí solo.
+Solo se activa esa celda cuando se decide generar un análisis nuevo o reanudar
+uno incompleto. Cambiar Markdown o una gráfica no requiere activarla.
 
-Una selección explícita puede usar estas puntuaciones sin volver a llamar a CLIP.
-Los cálculos se actualizan solo cuando cambia su entrada. Las publicaciones fuente
-se conservan y no se eliminan clases silenciosamente si una selección las deja vacías.
+La carga de puntuaciones no exige RAW, auditoría de 01, Transformers ni descargar
+un modelo. Para las galerías y lotes sí se necesitan las fotos preparadas locales.
 
-Validación: 14 celdas del 02 guardadas por la estudiante sin errores; mensajes de
-carga de puntuaciones y reutilización de cálculos confirmados. Pruebas pequeñas
-pertinentes al 02: cinco de carga/reutilización, cuatro del filtro con puntuaciones
-simuladas y catorce del preparador con imágenes sintéticas. Ninguna ejecuta CLIP
-real ni entrenamiento. Los cambios de 03–04 se revisan por separado.
+## Archivos para compartir
+
+`results/data_preparation/CURRENT.json` señala la copia completa guardada en
+`results/data_preparation/20261124T185853-e7045c19`.
+Son 12 archivos, aproximadamente 33,5 MB: tablas, puntuaciones y metadatos,
+sin imágenes ni pesos de CLIP. Los checksums se han verificado al copiar.
+
+Esta copia contiene las 74.525 puntuaciones del análisis terminado. El conjunto
+publicado conserva 74.126 fotos: train 51.506, validation 11.532 y test 11.088.
+La regla visual se aplica a los tres conjuntos. Las líneas infantiles se mantienen;
+no se ha cambiado el alcance para retirarlas.
+
+Una compañera necesita el código, esta carpeta de resultados y las fotos
+preparadas para ejecutar las galerías y los loaders. No necesita tu kernel ni
+repetir CLIP. La copia de puntuaciones de 02 ya está publicada. Los resultados nuevos de
+03–04 forman parte de esta revisión local; este commit no realiza push.
+
+## Cambiar una selección o una métrica
+
+`finalize_saved_analysis` recibe puntuaciones ya calculadas. No contiene ninguna
+llamada al analizador CLIP. Si cambia una selección explícita, recalcula los
+recuentos y los estadísticos necesarios; si no cambia train, reutiliza también
+sus medias y desviaciones. Las publicaciones originales permanecen intactas.
+No elimina clases automáticamente si una selección las deja sin ejemplos.
+
+En 04, `ENTRENAR_SI_FALTA=False` carga un experimento terminado para el mismo
+manifiesto, arquitectura y configuración de entrenamiento. Modificar métricas,
+Bootstrap, figuras o texto no inicia otro entrenamiento. Las métricas nuevas se
+calculan en las celdas de análisis a partir de las predicciones guardadas (`y` y
+`pred`), sin modificar los resultados históricos del entrenamiento.
+
+Si el dataset cambió desde el entrenamiento anterior, no se presentan esos
+resultados como si fueran del nuevo dataset: el cuaderno avisa antes de preparar
+arrays. Entrenar el modelo sobre ese dataset por primera vez requiere activar
+la bandera de la celda inicial. Después se reutiliza.
+
+Los arrays normalizados tienen también una caché verificada: no se reescriben
+si no cambian los arrays de entrada ni la normalización.
+
+## Validación realizada
+
+Ocho pruebas con datos ficticios, sin CLIP ni entrenamiento real: carga repetida,
+copia compartida sin RAW ni imágenes, incompatibilidad, archivos alterados,
+selección sin inferencia, reutilización de estadísticas y arrays normalizados,
+y comprobación de que las llamadas costosas están protegidas en los notebooks.
+Las ocho pasan. No se ha vuelto a ejecutar el análisis real de las fotografías.
+
+El 04 ya terminó sobre la publicación filtrada: experimento `67338715b6e6941e`.
+Su bandera queda en `False`. Los checkpoints siguen en local: son necesarios
+para la visualización de pesos y activaciones, aunque las predicciones y métricas
+permitan revisar resultados sin entrenar. El 03 reutiliza la extracción de color
+guardada, pero vuelve a ajustar sus dos baselines clásicos y calcular intervalos;
+no ejecuta CLIP ni entrena las redes de 04.

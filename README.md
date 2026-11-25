@@ -28,28 +28,38 @@ el archivo de configuración, no dos propuestas de dataset. `data/processed/CURR
 se crea al terminar y verificar la preparación. Las publicaciones internas anteriores
 son trazabilidad y no se presentan como experimentos paralelos.
 
-## Estado del 01–02
+## Ejecutar sin repetir CLIP ni entrenamientos
 
-El 01 mantiene su auditoría ejecutada. El 02 está ejecutado en modo de lectura:
-carga las 74.525 puntuaciones CLIP guardadas y reutiliza manifiesto y cálculos.
-El resultado conserva 74.126 fotos (train 51.506, validation 11.532, test 11.088).
-No se ha repetido la inferencia al validar la carga.
+El modo normal de 02 carga las puntuaciones completas guardadas. CLIP está
+apagado por defecto: si faltan resultados compatibles, muestra un aviso antes
+de iniciar cualquier análisis. La carga y los cálculos están en celdas distintas.
 
-El filtro de detalle usa la misma regla en los tres conjuntos. Las dudas se
-conservan y el registro manual tiene prioridad. Las líneas infantiles permanecen.
-No hay cupos por clase ni cambios de partición de las fotos conservadas.
+Los resultados de las 74.525 fotos están protegidos en
+`results/data_preparation/20261124T185853-e7045c19` (aprox. 33,5 MB, sin fotos ni
+pesos). Esa carpeta permite compartir las puntuaciones con el proyecto.
 
-`CREAR_ANALISIS_CLIP=False` es el modo normal. Si faltan resultados compatibles,
-se muestra un aviso, no se inicia un análisis largo por sorpresa. La carga y los
-cálculos están separados. La inferencia nueva se activa únicamente de forma explícita.
+El 04 carga resultados compatibles antes de preparar arrays; no entrena
+por sorpresa. Las métricas y figuras usan predicciones guardadas. Las fotos
+preparadas siguen siendo necesarias para galerías y cargas de imágenes.
 
-La carpeta `results/data_preparation` contiene una copia verificada y compartible
-de tablas/puntuaciones (aprox. 33,5 MB), sin fotos ni pesos de CLIP. Las compañeras
-pueden leerla sin RAW ni descargar el modelo; necesitan las fotos preparadas para
-las galerías y los loaders. [Instrucciones](docs/reusing-results.md).
+[Instrucciones y comprobaciones](docs/reusing-results.md). Ocho pruebas pequeñas
+con datos ficticios pasan; no se ha repetido CLIP ni entrenado redes reales.
 
-Los cambios nuevos de 03–04 quedan fuera de esta publicación y se revisarán aparte.
-El 04 ya publicado corresponde a la cohorte anterior al filtro visual.
+## Estado revisado de los cuadernos
+
+01–04 tienen ejecuciones completas guardadas y sin errores. El 02 conserva
+74.126 fotos: train 51.506, validation 11.532 y test 11.088. El filtro visual
+se aplica a las tres particiones; se mantienen las líneas infantiles y no hay cupos.
+El 03 y el experimento Dense `67338715b6e6941e` usan esa misma publicación
+`20261124T185853-e7045c19`. Las seis ejecuciones Dense terminaron sin evaluar test.
+
+05–12 contienen planes, sin código ni experimentos terminados. Su revisión
+comprueba coherencia y cobertura docente; no equivale a ejecución. La revisión
+del 25/11 prepara un commit local en `dev/iratxe`; no realiza push.
+
+Los pesos y las fotografías siguen en local. El 04 necesita sus checkpoints
+locales para las visualizaciones de pesos y activaciones; las predicciones y
+métricas compartidas permiten revisar resultados sin volver a entrenar.
 
 ## Qué hace cada notebook
 
