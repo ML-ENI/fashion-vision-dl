@@ -1,0 +1,67 @@
+{
+  "version": "1.0.0",
+  "frozen_before_training": "2026-11-26",
+  "purpose": "H1: small CNN trained from scratch versus the Dense baseline of 04, same photos and training budget",
+  "architecture": {
+    "image_size": 64,
+    "channels": 3,
+    "conv_channels": [16, 32, 64, 128],
+    "kernel_size": 3,
+    "padding": 1,
+    "pooling": "max 2x2 after every convolution",
+    "hidden_dims": [400],
+    "activation": "ReLU",
+    "classes": "number of classes in the current publication (set when loading)"
+  },
+  "parameter_matching": {
+    "reference": "Dense baseline of 04 (986537 trainable parameters with 25 classes)",
+    "tolerance": 0.10,
+    "note": "Parameters are matched, operations are not: the CNN performs many more multiply-adds per image. Both are reported."
+  },
+  "training": {
+    "seeds": [42, 123, 2026],
+    "max_epochs": 30,
+    "patience": 5,
+    "batch_size": 32,
+    "optimizer": "Adam",
+    "learning_rate": 0.001,
+    "weight_decay": 0.0,
+    "class_weights": false,
+    "augmentation": false,
+    "threads": 4,
+    "device": "cpu",
+    "deterministic": true
+  },
+  "phases": {
+    "h1": {
+      "question": "Does spatial weight sharing help? CNN without BatchNorm versus Dense without dropout",
+      "variants": [{"name": "cnn", "batchnorm": false}],
+      "max_total_training_seconds": 10800
+    },
+    "batchnorm": {
+      "question": "Does BatchNorm help the same CNN? Only BatchNorm changes",
+      "variants": [{"name": "cnn_batchnorm", "batchnorm": true}],
+      "max_total_training_seconds": 10800
+    }
+  },
+  "phase_order": "h1 first; batchnorm only after h1 results are saved",
+  "normalization": "same RGB64 per-channel train moments as 04 (shared cache)",
+  "checkpoint": "maximum validation macro-F1; first epoch wins ties",
+  "early_stopping": "stop after 5 successive epochs without validation loss decreasing; different from checkpoint selection",
+  "primary_analysis": "all three seeds; paired by seed with the Dense baseline of 04; no selection of best seed",
+  "illustration_seed": 42,
+  "bootstrap": {"unit": "group_id", "draws": 300, "seed": 42},
+  "test_policy": "do not load or evaluate test images in this notebook",
+  "cost_feasibility": {
+    "pilot_seed": 901,
+    "safety_factor": 1.25,
+    "decision": "Measure one real epoch per phase. Train only if the conservative estimate for three seeds fits the phase budget; otherwise stop for an explicit amendment. Never cap photos automatically.",
+    "amendment": "On 2026-11-26 the 90-minute budget of 04 was raised to 3 hours per CNN phase, before any CNN training, because a CPU micro-benchmark estimated about 17 times more operations per image than the Dense."
+  },
+  "scope_limits": [
+    "no width, depth, kernel or optimizer search",
+    "augmentation (H2) and class weights (H4) are studied in 09",
+    "validation is used for stopping and selection, so these are not final unbiased estimates",
+    "evaluation describes the selected garment types after quality controls, not the whole catalogue"
+  ]
+}

@@ -113,7 +113,15 @@
     "weight_decay": 0,
     "checkpoint": "best validation macro_F1 among epochs reached before stopping",
     "pretraining_contrast": "same fixed LR grid [0.001,0.0001] allowed for both initializations; report total search cost",
-    "changes": "amend protocol before fitting neural models if hardware cannot support budget"
+    "changes": "amend protocol before fitting neural models if hardware cannot support budget",
+    "cnn_amendment": {
+      "date": "2026-11-26",
+      "registered_before_training": true,
+      "budget": "3 hours per CNN phase (h1, then batchnorm), measured with one discarded pilot epoch",
+      "reason": "CPU micro-benchmark: the H1 CNN performs about 17 times more multiply-adds per image than the Dense",
+      "config": "config/cnn_baseline_v1.json",
+      "photos": "no automatic cap; stop for explicit review if the estimate exceeds the budget"
+    }
   },
   "teaching_requirements": {
     "source": "Teacher email supplied by student on 2026-11-20; sent date not provided",

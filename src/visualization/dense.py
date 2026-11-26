@@ -71,8 +71,8 @@ def run_with_progress(action, log_path):
     return result
 
 
-def save(fig, root, name, note, T):
-    folder = Path(root) / 'results/figures' / T.name / '04_dense'
+def save(fig, root, name, note, T, folder='04_dense'):
+    folder = Path(root) / 'results/figures' / T.name / folder
     folder.mkdir(parents=True, exist_ok=True)
     # Como add_title en ML: el ajuste automático reserva sitio para la nota.
     if fig.get_layout_engine() is None:
@@ -85,9 +85,9 @@ def save(fig, root, name, note, T):
     return fig
 
 
-def both(context, draw, name, note):
+def both(context, draw, name, note, folder='04_dense'):
     """Guardar la figura en los dos estilos y devolver la versión de ML."""
-    return render(draw, lambda fig, T: save(fig, context['root'], name, note, T))
+    return render(draw, lambda fig, T: save(fig, context['root'], name, note, T, folder))
 
 
 def input_figure(context, raw):

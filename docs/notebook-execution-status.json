@@ -35,7 +35,9 @@
     "reason": "Ejecutado completo sin errores con ENTRENAR_SI_FALTA=False: carga el experimento 143ad91452347fef de Iratxe (torch 2.7.1) sin entrenar. Figuras en inglés, estilos ML y ETSIT. Faltan las figuras de pesos y activaciones: los pesos no están en este equipo. Pendiente de revisión."
   },
   "05_cnn.ipynb": {
-    "status": "planned"
+    "status": "implemented_pending_training",
+    "updated_date": "2026-11-26",
+    "reason": "Código, configuración, tests y figuras listos (H1: CNN 16-32-64-128 + Dense 400, 927.065 parámetros, −6,0 % frente a la Dense). Probado de principio a fin con resultados falsos fuera del repositorio. Falta entrenar la fase h1 (ENTRENAR_CNN = True) y, después, la fase batchnorm."
   },
   "06_rnn_lstm.ipynb": {
     "status": "planned"
