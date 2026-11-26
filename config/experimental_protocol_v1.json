@@ -54,7 +54,7 @@
       "question": "Does spatial weight sharing help?",
       "contrast": "Dense vs CNN, both RGB64, same train IDs, no augmentation/weights, trainable params within 10%",
       "outcome": "paired macro-F1 difference, per-class F1, cost; at least 3 seeds",
-      "limitation": "parameter matching does not equate FLOPs; report both"
+      "limitation": "report parameters and FLOPs. Dense allows 30 epochs per seed and CNN allows 10, so the difference in epoch limits should be considered when interpreting H1"
     },
     {
       "id": "H2",
@@ -117,8 +117,8 @@
     "cnn_amendment": {
       "date": "2026-11-26",
       "registered_before_training": true,
-      "budget": "3 hours per CNN phase (h1, then batchnorm), measured with one discarded pilot epoch",
-      "reason": "CPU micro-benchmark: the H1 CNN performs about 17 times more multiply-adds per image than the Dense",
+      "budget": "110 minutes per CNN phase (h1, then batchnorm), with at most 10 epochs per seed and one discarded pilot epoch",
+      "reason": "The H1 CPU pilot measured 166.7 seconds per epoch. Ten epochs per seed give a conservative estimate of 104.2 minutes for three seeds.",
       "config": "config/cnn_baseline_v1.json",
       "photos": "no automatic cap; stop for explicit review if the estimate exceeds the budget"
     },

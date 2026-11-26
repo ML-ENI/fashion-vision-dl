@@ -1,7 +1,7 @@
 {
   "version": "1.0.0",
   "frozen_before_training": "2026-11-26",
-  "purpose": "H1: small CNN trained from scratch versus the Dense baseline of 04, same photos and training budget",
+  "purpose": "H1: small CNN trained from scratch versus the Dense baseline of 04, same photos and seeds, with a shorter epoch limit for CNN",
   "architecture": {
     "image_size": 64,
     "channels": 3,
@@ -31,7 +31,7 @@
       123,
       2026
     ],
-    "max_epochs": 30,
+    "max_epochs": 10,
     "patience": 5,
     "batch_size": 32,
     "optimizer": "Adam",
@@ -52,7 +52,7 @@
           "batchnorm": false
         }
       ],
-      "max_total_training_seconds": 10800
+      "max_total_training_seconds": 6600
     },
     "batchnorm": {
       "question": "Does BatchNorm help the same CNN? Only BatchNorm changes",
@@ -62,7 +62,7 @@
           "batchnorm": true
         }
       ],
-      "max_total_training_seconds": 10800,
+      "max_total_training_seconds": 6600,
       "requires": "h1"
     }
   },
@@ -82,7 +82,7 @@
     "pilot_seed": 901,
     "safety_factor": 1.25,
     "decision": "Measure one real epoch per phase. Train only if the conservative estimate for three seeds fits the phase budget; otherwise stop for an explicit amendment. Never cap photos automatically.",
-    "amendment": "On 2026-11-26 the 90-minute budget of 04 was raised to 3 hours per CNN phase, before any CNN training, because a CPU micro-benchmark estimated about 17 times more operations per image than the Dense."
+    "amendment": "Before CNN training, the H1 CPU pilot measured 166.7 seconds per epoch. Both CNN phases use at most 10 epochs per seed and a 110-minute pilot budget per phase. The Dense reference keeps its 30-epoch limit."
   },
   "scope_limits": [
     "no width, depth, kernel or optimizer search",

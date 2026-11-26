@@ -1,0 +1,135 @@
+{
+  "identity": {
+    "phase": "h1",
+    "manifest_sha256": "004ec4f4bd064deceee286d1699eea3c4a5131ef8fd4ef299bb2e2ca6014df84",
+    "sources": {
+      "config/cnn_baseline_v1.json": "e7b6b3ece61d207c2f69f914a8a83c965bbe2db60230fc82173d92a44e539e7c",
+      "config/experimental_protocol_v1.json": "d21b17cd9d27c398d188b087dc0039b2fd8df2221922da53ee4076a5a48a5e03",
+      "src/models/cnn.py": "1418850be171c93f988c0bb6633b45ca242ac8917e25327ee126772000e459a0",
+      "src/training/cnn_experiment.py": "889cd6a1ce496e13eefa1b1231e3aae26c96058e150cd136f711c2b67ff91a3c",
+      "src/training/phased_experiment.py": "f2a8845efaad71e2a81d134dd453ad75e01b2c62f4606323b6329df94d23d929",
+      "src/training/dense_experiment.py": "a8dd059fb11c373a4e1d9342ab7f1762e98a55355a6e108e8f81ca8fdcb5c102"
+    },
+    "versions": {
+      "torch": "2.15.0",
+      "numpy": "2.5.4",
+      "pandas": "2.3.3",
+      "Pillow": "12.3.0",
+      "scikit-learn": "1.9.1",
+      "psutil": "7.2.2"
+    },
+    "platform": "Windows-11-10.0.26300-SP0",
+    "processor": "Intel64 Family 6 Model 197 Stepping 2, GenuineIntel"
+  },
+  "config": {
+    "version": "1.0.0",
+    "frozen_before_training": "2026-11-26",
+    "purpose": "H1: small CNN trained from scratch versus the Dense baseline of 04, same photos and seeds, with a shorter epoch limit for CNN",
+    "architecture": {
+      "image_size": 64,
+      "channels": 3,
+      "conv_channels": [
+        16,
+        32,
+        64,
+        128
+      ],
+      "kernel_size": 3,
+      "padding": 1,
+      "pooling": "max 2x2 after every convolution",
+      "hidden_dims": [
+        400
+      ],
+      "activation": "ReLU",
+      "classes": 25
+    },
+    "parameter_matching": {
+      "reference": "Dense baseline of 04 (986537 trainable parameters with 25 classes)",
+      "tolerance": 0.1,
+      "note": "Parameters are matched, operations are not: the CNN performs many more multiply-adds per image. Both are reported."
+    },
+    "training": {
+      "seeds": [
+        42,
+        123,
+        2026
+      ],
+      "max_epochs": 10,
+      "patience": 5,
+      "batch_size": 32,
+      "optimizer": "Adam",
+      "learning_rate": 0.001,
+      "weight_decay": 0.0,
+      "class_weights": false,
+      "augmentation": false,
+      "threads": 4,
+      "device": "cpu",
+      "deterministic": true
+    },
+    "phases": {
+      "h1": {
+        "question": "Does spatial weight sharing help? CNN without BatchNorm versus Dense without dropout",
+        "variants": [
+          {
+            "name": "cnn",
+            "batchnorm": false
+          }
+        ],
+        "max_total_training_seconds": 6600
+      },
+      "batchnorm": {
+        "question": "Does BatchNorm help the same CNN? Only BatchNorm changes",
+        "variants": [
+          {
+            "name": "cnn_batchnorm",
+            "batchnorm": true
+          }
+        ],
+        "max_total_training_seconds": 6600,
+        "requires": "h1"
+      }
+    },
+    "phase_order": "h1 first; batchnorm only after h1 results are saved",
+    "normalization": "same RGB64 per-channel train moments as 04 (shared cache)",
+    "checkpoint": "maximum validation macro-F1; first epoch wins ties",
+    "early_stopping": "stop after 5 successive epochs without validation loss decreasing; different from checkpoint selection",
+    "primary_analysis": "all three seeds; paired by seed with the Dense baseline of 04; no selection of best seed",
+    "illustration_seed": 42,
+    "bootstrap": {
+      "unit": "group_id",
+      "draws": 300,
+      "seed": 42
+    },
+    "test_policy": "do not load or evaluate test images in this notebook",
+    "cost_feasibility": {
+      "pilot_seed": 901,
+      "safety_factor": 1.25,
+      "decision": "Measure one real epoch per phase. Train only if the conservative estimate for three seeds fits the phase budget; otherwise stop for an explicit amendment. Never cap photos automatically.",
+      "amendment": "Before CNN training, the H1 CPU pilot measured 166.7 seconds per epoch. Both CNN phases use at most 10 epochs per seed and a 110-minute pilot budget per phase. The Dense reference keeps its 30-epoch limit."
+    },
+    "scope_limits": [
+      "no width, depth, kernel or optimizer search",
+      "augmentation (H2) and class weights (H4) are studied in 09",
+      "validation is used for stopping and selection, so these are not final unbiased estimates",
+      "evaluation describes the selected garment types after quality controls, not the whole catalogue"
+    ]
+  },
+  "normalization": {
+    "mean": [
+      0.8252736487645056,
+      0.8099776406444388,
+      0.8068432059080346
+    ],
+    "std": [
+      0.26553521684979864,
+      0.2779671728494687,
+      0.2760147938782062
+    ],
+    "image_size": 64,
+    "partition": "train",
+    "pixels_per_channel": 137699328,
+    "method": "population pixel moments after RGB64 Lanczos resize"
+  },
+  "dataset_run": "20261125T152902-c912cdcc",
+  "test_images_opened": 0
+}

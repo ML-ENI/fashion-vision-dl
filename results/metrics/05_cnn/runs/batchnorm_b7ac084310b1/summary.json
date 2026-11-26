@@ -1,0 +1,274 @@
+{
+  "status": "completed",
+  "phase": "batchnorm",
+  "experiment_id": "batchnorm_b7ac084310b1",
+  "dataset_run": "20261125T152902-c912cdcc",
+  "config": {
+    "version": "1.0.0",
+    "frozen_before_training": "2026-11-26",
+    "purpose": "H1: small CNN trained from scratch versus the Dense baseline of 04, same photos and seeds, with a shorter epoch limit for CNN",
+    "architecture": {
+      "image_size": 64,
+      "channels": 3,
+      "conv_channels": [
+        16,
+        32,
+        64,
+        128
+      ],
+      "kernel_size": 3,
+      "padding": 1,
+      "pooling": "max 2x2 after every convolution",
+      "hidden_dims": [
+        400
+      ],
+      "activation": "ReLU",
+      "classes": 25
+    },
+    "parameter_matching": {
+      "reference": "Dense baseline of 04 (986537 trainable parameters with 25 classes)",
+      "tolerance": 0.1,
+      "note": "Parameters are matched, operations are not: the CNN performs many more multiply-adds per image. Both are reported."
+    },
+    "training": {
+      "seeds": [
+        42,
+        123,
+        2026
+      ],
+      "max_epochs": 10,
+      "patience": 5,
+      "batch_size": 32,
+      "optimizer": "Adam",
+      "learning_rate": 0.001,
+      "weight_decay": 0.0,
+      "class_weights": false,
+      "augmentation": false,
+      "threads": 4,
+      "device": "cpu",
+      "deterministic": true
+    },
+    "phases": {
+      "h1": {
+        "question": "Does spatial weight sharing help? CNN without BatchNorm versus Dense without dropout",
+        "variants": [
+          {
+            "name": "cnn",
+            "batchnorm": false
+          }
+        ],
+        "max_total_training_seconds": 6600
+      },
+      "batchnorm": {
+        "question": "Does BatchNorm help the same CNN? Only BatchNorm changes",
+        "variants": [
+          {
+            "name": "cnn_batchnorm",
+            "batchnorm": true
+          }
+        ],
+        "max_total_training_seconds": 6600,
+        "requires": "h1"
+      }
+    },
+    "phase_order": "h1 first; batchnorm only after h1 results are saved",
+    "normalization": "same RGB64 per-channel train moments as 04 (shared cache)",
+    "checkpoint": "maximum validation macro-F1; first epoch wins ties",
+    "early_stopping": "stop after 5 successive epochs without validation loss decreasing; different from checkpoint selection",
+    "primary_analysis": "all three seeds; paired by seed with the Dense baseline of 04; no selection of best seed",
+    "illustration_seed": 42,
+    "bootstrap": {
+      "unit": "group_id",
+      "draws": 300,
+      "seed": 42
+    },
+    "test_policy": "do not load or evaluate test images in this notebook",
+    "cost_feasibility": {
+      "pilot_seed": 901,
+      "safety_factor": 1.25,
+      "decision": "Measure one real epoch per phase. Train only if the conservative estimate for three seeds fits the phase budget; otherwise stop for an explicit amendment. Never cap photos automatically.",
+      "amendment": "Before CNN training, the H1 CPU pilot measured 166.7 seconds per epoch. Both CNN phases use at most 10 epochs per seed and a 110-minute pilot budget per phase. The Dense reference keeps its 30-epoch limit."
+    },
+    "scope_limits": [
+      "no width, depth, kernel or optimizer search",
+      "augmentation (H2) and class weights (H4) are studied in 09",
+      "validation is used for stopping and selection, so these are not final unbiased estimates",
+      "evaluation describes the selected garment types after quality controls, not the whole catalogue"
+    ]
+  },
+  "identity": {
+    "phase": "batchnorm",
+    "manifest_sha256": "004ec4f4bd064deceee286d1699eea3c4a5131ef8fd4ef299bb2e2ca6014df84",
+    "sources": {
+      "config/cnn_baseline_v1.json": "e7b6b3ece61d207c2f69f914a8a83c965bbe2db60230fc82173d92a44e539e7c",
+      "config/experimental_protocol_v1.json": "d21b17cd9d27c398d188b087dc0039b2fd8df2221922da53ee4076a5a48a5e03",
+      "src/models/cnn.py": "1418850be171c93f988c0bb6633b45ca242ac8917e25327ee126772000e459a0",
+      "src/training/cnn_experiment.py": "889cd6a1ce496e13eefa1b1231e3aae26c96058e150cd136f711c2b67ff91a3c",
+      "src/training/phased_experiment.py": "f2a8845efaad71e2a81d134dd453ad75e01b2c62f4606323b6329df94d23d929",
+      "src/training/dense_experiment.py": "a8dd059fb11c373a4e1d9342ab7f1762e98a55355a6e108e8f81ca8fdcb5c102"
+    },
+    "versions": {
+      "torch": "2.15.0",
+      "numpy": "2.5.4",
+      "pandas": "2.3.3",
+      "Pillow": "12.3.0",
+      "scikit-learn": "1.9.1",
+      "psutil": "7.2.2"
+    },
+    "platform": "Windows-11-10.0.26300-SP0",
+    "processor": "Intel64 Family 6 Model 197 Stepping 2, GenuineIntel"
+  },
+  "normalization": {
+    "mean": [
+      0.8252736487645056,
+      0.8099776406444388,
+      0.8068432059080346
+    ],
+    "std": [
+      0.26553521684979864,
+      0.2779671728494687,
+      0.2760147938782062
+    ],
+    "image_size": 64,
+    "partition": "train",
+    "pixels_per_channel": 137699328,
+    "method": "population pixel moments after RGB64 Lanczos resize"
+  },
+  "hardware": {
+    "device": "cpu",
+    "processor": "Intel64 Family 6 Model 197 Stepping 2, GenuineIntel",
+    "physical_cores": 16,
+    "threads_used": 4,
+    "ram_total_bytes": 16497897472
+  },
+  "test_images_opened": 0,
+  "test_predictions_generated": 0,
+  "cost_feasibility": {
+    "phase": "batchnorm",
+    "dataset_run": "20261125T152902-c912cdcc",
+    "train_images": 33618,
+    "validation_images": 7515,
+    "pilot_epoch_seconds": 159.5951553999912,
+    "pilot_epoch_seconds_by_variant": {
+      "cnn_batchnorm": 159.5951553999912
+    },
+    "peak_process_rss_bytes": 2205216768,
+    "fits": 3,
+    "conservative_upper_seconds": 5984.81832749967,
+    "budget_seconds": 6600,
+    "fits_budget": true,
+    "sampling_applied": false,
+    "decision": "keep_all_eligible_images",
+    "note": "Pilot weights discarded; no pilot metric used. Includes train and validation evaluation; preprocessing separate."
+  },
+  "cost_notes": {
+    "train_seconds": "all epochs, including train and validation evaluation; excludes resize",
+    "FLOPs": "2 per multiply-add in convolutions, recurrent cells and linear layers; excludes bias, activations, pooling, normalization and softmax"
+  },
+  "runs": [
+    {
+      "variant": "cnn_batchnorm",
+      "seed": 42,
+      "batchnorm": true,
+      "parameters": 927545,
+      "approx_flops_per_image": 33508896,
+      "epochs_run": 9,
+      "selected_epoch": 9,
+      "stopped_early": true,
+      "train_seconds": 961.3521002000198,
+      "inference_ms_per_image": 1.0681230073090808,
+      "peak_process_rss_bytes": 2255433728,
+      "checkpoint": "results/models/05_cnn/batchnorm_b7ac084310b1/cnn_batchnorm_seed42.pt",
+      "checkpoint_sha256": "b1799702057df9ddaba9d6d0ff8a48fef020c02ce7b4a470c85177191c799267",
+      "train_loss": 0.3032528171842702,
+      "train_accuracy": 0.893211969778095,
+      "train_macro_f1": 0.7931091657240352,
+      "validation_loss": 0.8023060376296738,
+      "validation_accuracy": 0.7671324018629407,
+      "validation_macro_f1": 0.6149501701384726,
+      "validation_group_bootstrap_ci95_accuracy": [
+        0.7504666623002358,
+        0.7832407727268922
+      ],
+      "validation_group_bootstrap_ci95_macro_f1": [
+        0.5633736763849021,
+        0.6410325646465359
+      ]
+    },
+    {
+      "variant": "cnn_batchnorm",
+      "seed": 123,
+      "batchnorm": true,
+      "parameters": 927545,
+      "approx_flops_per_image": 33508896,
+      "epochs_run": 10,
+      "selected_epoch": 9,
+      "stopped_early": false,
+      "train_seconds": 1591.7041770999786,
+      "inference_ms_per_image": 1.0592189886844552,
+      "peak_process_rss_bytes": 2203623424,
+      "checkpoint": "results/models/05_cnn/batchnorm_b7ac084310b1/cnn_batchnorm_seed123.pt",
+      "checkpoint_sha256": "3fa5810650fcaec8165bb36511ac3d62fe4a0456aed23ee318a54f9c99b1e34b",
+      "train_loss": 0.2940915285055213,
+      "train_accuracy": 0.8989826878457969,
+      "train_macro_f1": 0.7878967527102527,
+      "validation_loss": 0.7968894996725553,
+      "validation_accuracy": 0.7667332002661345,
+      "validation_macro_f1": 0.5960688976693972,
+      "validation_group_bootstrap_ci95_accuracy": [
+        0.7520773850176774,
+        0.7815517184403012
+      ],
+      "validation_group_bootstrap_ci95_macro_f1": [
+        0.5543613458858773,
+        0.6171926796152765
+      ]
+    },
+    {
+      "variant": "cnn_batchnorm",
+      "seed": 2026,
+      "batchnorm": true,
+      "parameters": 927545,
+      "approx_flops_per_image": 33508896,
+      "epochs_run": 10,
+      "selected_epoch": 10,
+      "stopped_early": false,
+      "train_seconds": 1369.0047869000118,
+      "inference_ms_per_image": 0.5847878775826432,
+      "peak_process_rss_bytes": 2204192768,
+      "checkpoint": "results/models/05_cnn/batchnorm_b7ac084310b1/cnn_batchnorm_seed2026.pt",
+      "checkpoint_sha256": "de1aa92b7acca9128b1c36501e57620d451b77cf3dea9e4809f76c472a97c31b",
+      "train_loss": 0.24998233403290918,
+      "train_accuracy": 0.9168005235290618,
+      "train_macro_f1": 0.8351902546136951,
+      "validation_loss": 0.8471692914258458,
+      "validation_accuracy": 0.757684630738523,
+      "validation_macro_f1": 0.5987284393092795,
+      "validation_group_bootstrap_ci95_accuracy": [
+        0.7424799083125839,
+        0.7729296540564573
+      ],
+      "validation_group_bootstrap_ci95_macro_f1": [
+        0.5548576823801405,
+        0.6214621198060487
+      ]
+    }
+  ],
+  "artifacts_sha256": {
+    "all_runs.csv": "d71cfae93f3520e2542f64b6930c8cb84eda268d68547eeaff6158ffbf98de4d",
+    "cnn_batchnorm_seed123_history.csv": "21b2b58a5f8a6806e73bb6956f1cb07f04dd74d252af5a5e961ebfad1613df97",
+    "cnn_batchnorm_seed123_metrics.json": "3fbd32f4c9dcc7dd1ce93104728922b42fb51b37c560f35a38fb74c5d49e7128",
+    "cnn_batchnorm_seed123_per_class.json": "3ac25f6f00b7d30b9039e29de8ace38f8c8457420496706b849809111b5eb09e",
+    "cnn_batchnorm_seed123_predictions.csv.gz": "b77aaf8341509139c7ad0d83e86db1e5652433852613ab08944ad7b212412a62",
+    "cnn_batchnorm_seed2026_history.csv": "e430b060ea59c4314b3d75fb25abf8cf6e50fc69ec62fdb02534a374a12de1aa",
+    "cnn_batchnorm_seed2026_metrics.json": "2d3dc08c08fad9a0fb59b54cc06b01074ff3e4846018dcb6a4826a84c1af98b0",
+    "cnn_batchnorm_seed2026_per_class.json": "db231eeb6e1ba26a75ac8b1ec02824f1296ef36570c24f591d188bb07c1b8409",
+    "cnn_batchnorm_seed2026_predictions.csv.gz": "c92e9726460f6dacd74dfe5c96c5f993b3775291892ce68b1ca1960236d86ffb",
+    "cnn_batchnorm_seed42_history.csv": "de724b683eb0c5f15d427352f2bec95894fbdcd503be67fb13bc19d539adb07b",
+    "cnn_batchnorm_seed42_metrics.json": "6f8929aace868e4e5a9c048d23f1d9765237731434cc151725ce25704b117a2e",
+    "cnn_batchnorm_seed42_per_class.json": "e22ce9fcbb132c2408cfd415257a6c29c04cd8b95a1751e6dcd1fbd679a87877",
+    "cnn_batchnorm_seed42_predictions.csv.gz": "e92cd020457ae36dcd71a447d206c49fe4396a581029bfdbb436feeb77a4d61a",
+    "cost_feasibility.json": "914cf15bf5294c61e6cb021734fd6c34ccf555ac97f446de75ec87f79d78bf33",
+    "design.json": "583b76875aec2d2e206b42e466ccaac40121f5df873be9dcf6e1c4b744080823"
+  }
+}

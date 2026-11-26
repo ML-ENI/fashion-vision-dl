@@ -1,0 +1,29 @@
+{
+  "variant": "cnn_batchnorm",
+  "seed": 123,
+  "batchnorm": true,
+  "parameters": 927545,
+  "approx_flops_per_image": 33508896,
+  "epochs_run": 10,
+  "selected_epoch": 9,
+  "stopped_early": false,
+  "train_seconds": 1591.7041770999786,
+  "inference_ms_per_image": 1.0592189886844552,
+  "peak_process_rss_bytes": 2203623424,
+  "checkpoint": "results/models/05_cnn/batchnorm_b7ac084310b1/cnn_batchnorm_seed123.pt",
+  "checkpoint_sha256": "3fa5810650fcaec8165bb36511ac3d62fe4a0456aed23ee318a54f9c99b1e34b",
+  "train_loss": 0.2940915285055213,
+  "train_accuracy": 0.8989826878457969,
+  "train_macro_f1": 0.7878967527102527,
+  "validation_loss": 0.7968894996725553,
+  "validation_accuracy": 0.7667332002661345,
+  "validation_macro_f1": 0.5960688976693972,
+  "validation_group_bootstrap_ci95_accuracy": [
+    0.7520773850176774,
+    0.7815517184403012
+  ],
+  "validation_group_bootstrap_ci95_macro_f1": [
+    0.5543613458858773,
+    0.6171926796152765
+  ]
+}
