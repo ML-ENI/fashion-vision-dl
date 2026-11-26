@@ -61,8 +61,8 @@ class CNNExperimentTests(unittest.TestCase):
             config['bootstrap']['draws'] = 10
             context = {'root': root, 'rows': rows, 'names': names, 'config': config,
                        'manifest_sha256': 'x' * 64, 'run': types.SimpleNamespace(name='fake')}
-            sources = cnn_experiment.SOURCES
-            cnn_experiment.SOURCES = []  # el proyecto real no está en la carpeta temporal
+            sources = cnn_experiment.EXPERIMENT.sources
+            cnn_experiment.EXPERIMENT.sources = []  # el proyecto real no está en la carpeta temporal
             try:
                 summary, folder = cnn_experiment.run_phase(context, tensors, {'mean': [0] * 3}, 'h1')
                 self.assertEqual(summary['test_images_opened'], 0)
@@ -74,7 +74,7 @@ class CNNExperimentTests(unittest.TestCase):
                 context['config']['training']['learning_rate'] = .01
                 self.assertIsNone(cnn_experiment.load_saved_phase(context, 'h1'))
             finally:
-                cnn_experiment.SOURCES = sources
+                cnn_experiment.EXPERIMENT.sources = sources
 
     def test_batchnorm_requires_saved_h1(self):
         with tempfile.TemporaryDirectory() as directory:

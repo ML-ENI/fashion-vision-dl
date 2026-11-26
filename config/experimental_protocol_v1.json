@@ -121,6 +121,14 @@
       "reason": "CPU micro-benchmark: the H1 CNN performs about 17 times more multiply-adds per image than the Dense",
       "config": "config/cnn_baseline_v1.json",
       "photos": "no automatic cap; stop for explicit review if the estimate exceeds the budget"
+    },
+    "sequence_amendment": {
+      "date": "2026-11-26",
+      "registered_before_training": true,
+      "budget": "5 h for phase cells (RNN, LSTM, GRU; 9 fits), 2 h for attention and 2 h for rows (3 fits each); one discarded pilot epoch per variant",
+      "size": "same hidden state 128 for every cell; not parameter-matched with Dense/CNN (reported as references)",
+      "config": "config/sequence_v1.json",
+      "photos": "no automatic cap; stop for explicit review if the estimate exceeds the budget"
     }
   },
   "teaching_requirements": {

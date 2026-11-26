@@ -5,21 +5,32 @@
   "architecture": {
     "image_size": 64,
     "channels": 3,
-    "conv_channels": [16, 32, 64, 128],
+    "conv_channels": [
+      16,
+      32,
+      64,
+      128
+    ],
     "kernel_size": 3,
     "padding": 1,
     "pooling": "max 2x2 after every convolution",
-    "hidden_dims": [400],
+    "hidden_dims": [
+      400
+    ],
     "activation": "ReLU",
     "classes": "number of classes in the current publication (set when loading)"
   },
   "parameter_matching": {
     "reference": "Dense baseline of 04 (986537 trainable parameters with 25 classes)",
-    "tolerance": 0.10,
+    "tolerance": 0.1,
     "note": "Parameters are matched, operations are not: the CNN performs many more multiply-adds per image. Both are reported."
   },
   "training": {
-    "seeds": [42, 123, 2026],
+    "seeds": [
+      42,
+      123,
+      2026
+    ],
     "max_epochs": 30,
     "patience": 5,
     "batch_size": 32,
@@ -35,13 +46,24 @@
   "phases": {
     "h1": {
       "question": "Does spatial weight sharing help? CNN without BatchNorm versus Dense without dropout",
-      "variants": [{"name": "cnn", "batchnorm": false}],
+      "variants": [
+        {
+          "name": "cnn",
+          "batchnorm": false
+        }
+      ],
       "max_total_training_seconds": 10800
     },
     "batchnorm": {
       "question": "Does BatchNorm help the same CNN? Only BatchNorm changes",
-      "variants": [{"name": "cnn_batchnorm", "batchnorm": true}],
-      "max_total_training_seconds": 10800
+      "variants": [
+        {
+          "name": "cnn_batchnorm",
+          "batchnorm": true
+        }
+      ],
+      "max_total_training_seconds": 10800,
+      "requires": "h1"
     }
   },
   "phase_order": "h1 first; batchnorm only after h1 results are saved",
@@ -50,7 +72,11 @@
   "early_stopping": "stop after 5 successive epochs without validation loss decreasing; different from checkpoint selection",
   "primary_analysis": "all three seeds; paired by seed with the Dense baseline of 04; no selection of best seed",
   "illustration_seed": 42,
-  "bootstrap": {"unit": "group_id", "draws": 300, "seed": 42},
+  "bootstrap": {
+    "unit": "group_id",
+    "draws": 300,
+    "seed": 42
+  },
   "test_policy": "do not load or evaluate test images in this notebook",
   "cost_feasibility": {
     "pilot_seed": 901,

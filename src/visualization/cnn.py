@@ -17,8 +17,8 @@ FOLDER = '05_cnn'
 LINE_STYLES = {42: '-', 123: '--', 2026: ':'}
 
 
-def both(context, draw, name, note):
-    return _both(context, draw, name, note, folder=FOLDER)
+def both(context, draw, name, note, folder=FOLDER):
+    return _both(context, draw, name, note, folder=folder)
 
 
 def convolution_figure(context, raw):
@@ -54,7 +54,7 @@ def convolution_figure(context, raw):
                 'filter for illustration; the CNN learns its own filters.')
 
 
-def curves_figure(context, directory, variant='cnn', title='How the CNN learns'):
+def curves_figure(context, directory, variant='cnn', title='How the CNN learns', folder=FOLDER):
     seeds = context['config']['training']['seeds']
     histories = {seed: pd.read_csv(directory / f'{variant}_seed{seed}_history.csv') for seed in seeds}
 
@@ -74,10 +74,10 @@ def curves_figure(context, directory, variant='cnn', title='How the CNN learns')
         return fig
     return both(context, draw, f'02_learning_curves_{variant}',
                 'Source: local training. One line per seed: 42 solid, 123 dashed, 2026 dotted. '
-                'Curves measured in evaluation mode.')
+                'Curves measured in evaluation mode.', folder)
 
 
-def paired_figure(context, left, right, labels, name, title, note):
+def paired_figure(context, left, right, labels, name, title, note, folder=FOLDER):
     """Una línea por semilla entre dos modelos: macro-F1 de validation emparejado."""
     seeds = context['config']['training']['seeds']
     pairs = {seed: [left[seed], right[seed]] for seed in seeds}
@@ -92,10 +92,10 @@ def paired_figure(context, left, right, labels, name, title, note):
         ax.legend(loc='best')
         fig.suptitle(title)
         return fig
-    return both(context, draw, name, note)
+    return both(context, draw, name, note, folder)
 
 
-def confusion_figure(context, cm, model_name='CNN', prefix='04_confusion'):
+def confusion_figure(context, cm, model_name='CNN', prefix='04_confusion', folder=FOLDER):
     names = context['names']
     totals = cm.sum(1, keepdims=True)
     proportions = np.divide(cm, totals, out=np.zeros_like(cm, dtype=float), where=totals > 0)
@@ -115,11 +115,13 @@ def confusion_figure(context, cm, model_name='CNN', prefix='04_confusion'):
             fig.suptitle(f'{model_name} confusion · {title}', color=T.title_accent)
             return fig
         figures.append(both(context, draw, f'{prefix}_{suffix}',
-                            f'Source: validation, {model_name}, seed 42. Diagonal = correct predictions. Test held out.'))
+                            f'Source: validation, {model_name}, seed 42. Diagonal = correct predictions. Test held out.',
+                            folder))
     return figures
 
 
-def per_class_figure(context, dense_report, cnn_report):
+def per_class_figure(context, dense_report, cnn_report, labels=('Dense (04, seed 42)', 'CNN (seed 42)'),
+                     title='Where the CNN gains or loses against the Dense network', folder=FOLDER):
     names = context['names']
     dense = np.array([dense_report[name]['f1-score'] for name in names])
     cnn = np.array([cnn_report[name]['f1-score'] for name in names])
@@ -127,20 +129,20 @@ def per_class_figure(context, dense_report, cnn_report):
     def draw(T):
         fig, ax = plt.subplots(figsize=T.pick((13, max(7, .3 * len(names) + 1.5)), (19, max(10, .43 * len(names) + 2))))
         y = np.arange(len(names))
-        ax.barh(y - .18, dense, height=.34, color=T.reference, label='Dense (04, seed 42)')
-        ax.barh(y + .18, cnn, height=.34, color=T.primary, label='CNN (seed 42)')
+        ax.barh(y - .18, dense, height=.34, color=T.reference, label=labels[0])
+        ax.barh(y + .18, cnn, height=.34, color=T.primary, label=labels[1])
         ax.set_yticks(y, names)
         ax.invert_yaxis()
         ax.set(xlabel='Per-class validation F1', xlim=(0, 1))
         ax.legend(loc='upper left', bbox_to_anchor=(1.01, 1))
-        fig.suptitle('Where the CNN gains or loses against the Dense network')
+        fig.suptitle(title)
         return fig
     return both(context, draw, '05_per_class',
                 'Source: same validation images and labels; seed 42 of each model. Classes without validation photos '
-                'show F1 = 0.')
+                'show F1 = 0.', folder)
 
 
-def errors_figure(context, predictions, count=8):
+def errors_figure(context, predictions, count=8, model_name='CNN', folder=FOLDER):
     rows = context['rows']['validation'].copy()
     rows['prediction'] = predictions.predicted_label_id.to_numpy()
     rows['confidence'] = predictions.confidence.to_numpy()
@@ -162,11 +164,11 @@ def errors_figure(context, predictions, count=8):
             ax.axis('off')
         for ax in axes.flat[len(errors):]:
             ax.axis('off')
-        fig.suptitle('Most confident CNN errors')
+        fig.suptitle(f'Most confident {model_name} errors')
         return fig
     return both(context, draw, '06_confident_errors',
-                'Source: validation, CNN seed 42. Automatic selection: the eight errors with the highest softmax. '
-                'Not a representative sample nor a confirmed label review.')
+                f'Source: validation, {model_name} seed 42. Automatic selection: the eight errors with the highest '
+                'softmax. Not a representative sample nor a confirmed label review.', folder)
 
 
 def filters_figure(context, model):

@@ -1,0 +1,76 @@
+{
+  "version": "1.0.0",
+  "frozen_before_training": "2026-11-26",
+  "purpose": "06: images read as sequences; RNN, LSTM and GRU, attention readout and reading order, same photos and training budget as 04-05",
+  "architecture": {
+    "image_size": 64,
+    "steps": 64,
+    "features_per_step": 192,
+    "hidden_size": 128,
+    "layers": 1,
+    "classes": "number of classes in the current publication (set when loading)"
+  },
+  "size_policy": "Same hidden state (128) for every cell, so cells are compared with the same memory. Parameters differ by cell and are far below the Dense of 04; Dense and CNN are reported as references, not as a parameter-matched contrast. Matching about 1 M parameters would make each epoch 5-10 times slower on CPU.",
+  "training": {
+    "seeds": [42, 123, 2026],
+    "max_epochs": 30,
+    "patience": 5,
+    "batch_size": 32,
+    "optimizer": "Adam",
+    "learning_rate": 0.001,
+    "weight_decay": 0.0,
+    "class_weights": false,
+    "augmentation": false,
+    "threads": 4,
+    "device": "cpu",
+    "deterministic": true
+  },
+  "phases": {
+    "cells": {
+      "question": "Which recurrent cell reads the columns best? Simple RNN, LSTM and GRU with the last state",
+      "variants": [
+        {"name": "rnn", "cell": "rnn", "readout": "last", "orientation": "columns"},
+        {"name": "lstm", "cell": "lstm", "readout": "last", "orientation": "columns"},
+        {"name": "gru", "cell": "gru", "readout": "last", "orientation": "columns"}
+      ],
+      "max_total_training_seconds": 18000
+    },
+    "attention": {
+      "question": "Does attention over all states help the same LSTM? Only the readout changes",
+      "variants": [
+        {"name": "lstm_attention", "cell": "lstm", "readout": "attention", "orientation": "columns"}
+      ],
+      "max_total_training_seconds": 7200,
+      "requires": "cells"
+    },
+    "rows": {
+      "question": "H6: does the reading order matter? The same LSTM reading rows instead of columns",
+      "variants": [
+        {"name": "lstm_rows", "cell": "lstm", "readout": "last", "orientation": "rows"}
+      ],
+      "max_total_training_seconds": 7200,
+      "requires": "cells"
+    }
+  },
+  "phase_order": "cells first; attention and rows only after cells results are saved",
+  "normalization": "same RGB64 per-channel train moments as 04 (shared cache), applied before building the sequence",
+  "checkpoint": "maximum validation macro-F1; first epoch wins ties",
+  "early_stopping": "stop after 5 successive epochs without validation loss decreasing; different from checkpoint selection",
+  "primary_analysis": "all three seeds; paired by seed; no selection of best seed or best cell for illustration",
+  "illustration": {"seed": 42, "variant": "lstm"},
+  "bootstrap": {"unit": "group_id", "draws": 300, "seed": 42},
+  "test_policy": "do not load or evaluate test images in this notebook",
+  "cost_feasibility": {
+    "pilot_seed": 901,
+    "safety_factor": 1.25,
+    "decision": "Measure one real epoch per variant of the phase. Train only if the conservative estimate for three seeds fits the phase budget; otherwise stop for an explicit amendment. Never cap photos automatically.",
+    "amendment": "On 2026-11-26, before any recurrent training, budgets of 5 h (cells, 9 fits), 2 h (attention, 3 fits) and 2 h (rows, 3 fits) were registered after a CPU micro-benchmark of 0.4-1.2 min per training epoch."
+  },
+  "scope_limits": [
+    "one recurrent layer, unidirectional; bidirectional, stacked and CNN+RNN variants are optional extensions",
+    "8x8 patches are not run: they change the neighbourhood represented",
+    "validation is used for stopping and selection, so these are not final unbiased estimates",
+    "attention weights show where the readout looks, not why the class is predicted",
+    "evaluation describes the selected garment types after quality controls, not the whole catalogue"
+  ]
+}

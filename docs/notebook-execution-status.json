@@ -37,10 +37,12 @@
   "05_cnn.ipynb": {
     "status": "implemented_pending_training",
     "updated_date": "2026-11-26",
-    "reason": "Código, configuración, tests y figuras listos (H1: CNN 16-32-64-128 + Dense 400, 927.065 parámetros, −6,0 % frente a la Dense). Probado de principio a fin con resultados falsos fuera del repositorio. Falta entrenar la fase h1 (ENTRENAR_CNN = True) y, después, la fase batchnorm."
+    "reason": "Código, configuración, tests y figuras listos (H1: CNN 16-32-64-128 + Dense 400, 927.065 parámetros, −6,0 % frente a la Dense). Probado de principio a fin con resultados falsos fuera del repositorio. Falta entrenar la fase h1 (ENTRENAR_CNN = True) y, después, la fase batchnorm. El experimento usa ahora el módulo común src/training/phased_experiment.py (también para 06); sin cambios de diseño."
   },
   "06_rnn_lstm.ipynb": {
-    "status": "planned"
+    "status": "implemented_pending_training",
+    "updated_date": "2026-11-26",
+    "reason": "Código, configuración, tests y figuras listos: columnas RGB64 (64 × 192), RNN/LSTM/GRU con estado 128, atención sobre la LSTM y lectura por filas, en tres fases. Probado de principio a fin con resultados falsos fuera del repositorio. Falta entrenar la fase cells (ENTRENAR_CELDAS = True) y después attention y rows."
   },
   "07_transfer_learning.ipynb": {
     "status": "planned"
