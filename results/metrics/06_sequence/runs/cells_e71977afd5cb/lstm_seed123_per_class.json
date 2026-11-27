@@ -1,0 +1,165 @@
+{
+  "Blazer": {
+    "precision": 0.7684210526315789,
+    "recall": 0.5140845070422535,
+    "f1-score": 0.6160337552742616,
+    "support": 142.0
+  },
+  "Blouse": {
+    "precision": 0.324459234608985,
+    "recall": 0.3693181818181818,
+    "f1-score": 0.3454384410983171,
+    "support": 528.0
+  },
+  "Bodysuit": {
+    "precision": 0.5172413793103449,
+    "recall": 0.4166666666666667,
+    "f1-score": 0.46153846153846156,
+    "support": 36.0
+  },
+  "Cardigan": {
+    "precision": 0.37735849056603776,
+    "recall": 0.15037593984962405,
+    "f1-score": 0.21505376344086022,
+    "support": 133.0
+  },
+  "Coat": {
+    "precision": 0.5,
+    "recall": 0.1724137931034483,
+    "f1-score": 0.2564102564102564,
+    "support": 58.0
+  },
+  "Costumes": {
+    "precision": 0.0,
+    "recall": 0.0,
+    "f1-score": 0.0,
+    "support": 0.0
+  },
+  "Dress": {
+    "precision": 0.7790868924889544,
+    "recall": 0.9152249134948097,
+    "f1-score": 0.841686555290374,
+    "support": 1156.0
+  },
+  "Dungarees": {
+    "precision": 0.875,
+    "recall": 0.3684210526315789,
+    "f1-score": 0.5185185185185185,
+    "support": 19.0
+  },
+  "Garment Set": {
+    "precision": 0.0,
+    "recall": 0.0,
+    "f1-score": 0.0,
+    "support": 7.0
+  },
+  "Hoodie": {
+    "precision": 0.5714285714285714,
+    "recall": 0.47368421052631576,
+    "f1-score": 0.5179856115107914,
+    "support": 228.0
+  },
+  "Jacket": {
+    "precision": 0.4619164619164619,
+    "recall": 0.6394557823129252,
+    "f1-score": 0.536376604850214,
+    "support": 294.0
+  },
+  "Jumpsuit/Playsuit": {
+    "precision": 0.53125,
+    "recall": 0.2328767123287671,
+    "f1-score": 0.3238095238095238,
+    "support": 73.0
+  },
+  "Leggings/Tights": {
+    "precision": 0.5151515151515151,
+    "recall": 0.5368421052631579,
+    "f1-score": 0.5257731958762887,
+    "support": 95.0
+  },
+  "Outdoor Waistcoat": {
+    "precision": 0.0,
+    "recall": 0.0,
+    "f1-score": 0.0,
+    "support": 10.0
+  },
+  "Outdoor trousers": {
+    "precision": 0.0,
+    "recall": 0.0,
+    "f1-score": 0.0,
+    "support": 4.0
+  },
+  "Polo shirt": {
+    "precision": 0.45454545454545453,
+    "recall": 0.375,
+    "f1-score": 0.410958904109589,
+    "support": 40.0
+  },
+  "Shirt": {
+    "precision": 0.6803519061583577,
+    "recall": 0.5728395061728395,
+    "f1-score": 0.6219839142091153,
+    "support": 405.0
+  },
+  "Shorts": {
+    "precision": 0.7022900763358778,
+    "recall": 0.8070175438596491,
+    "f1-score": 0.7510204081632653,
+    "support": 228.0
+  },
+  "Skirt": {
+    "precision": 0.7176470588235294,
+    "recall": 0.6951566951566952,
+    "f1-score": 0.7062228654124457,
+    "support": 351.0
+  },
+  "Sweater": {
+    "precision": 0.6442405708460754,
+    "recall": 0.6515463917525773,
+    "f1-score": 0.6478728856996412,
+    "support": 970.0
+  },
+  "T-shirt": {
+    "precision": 0.6941176470588235,
+    "recall": 0.8194444444444444,
+    "f1-score": 0.7515923566878981,
+    "support": 720.0
+  },
+  "Tailored Waistcoat": {
+    "precision": 1.0,
+    "recall": 0.3333333333333333,
+    "f1-score": 0.5,
+    "support": 9.0
+  },
+  "Top": {
+    "precision": 0.3202416918429003,
+    "recall": 0.19099099099099098,
+    "f1-score": 0.23927765237020315,
+    "support": 555.0
+  },
+  "Trousers": {
+    "precision": 0.9302973977695167,
+    "recall": 0.8905693950177936,
+    "f1-score": 0.91,
+    "support": 1124.0
+  },
+  "Vest top": {
+    "precision": 0.6222222222222222,
+    "recall": 0.7636363636363637,
+    "f1-score": 0.6857142857142857,
+    "support": 330.0
+  },
+  "accuracy": 0.6654690618762475,
+  "macro avg": {
+    "precision": 0.5194907049482083,
+    "recall": 0.43555594117609664,
+    "f1-score": 0.45533071839937245,
+    "support": 7515.0
+  },
+  "weighted avg": {
+    "precision": 0.6543498712206495,
+    "recall": 0.6654690618762475,
+    "f1-score": 0.6527808180403386,
+    "support": 7515.0
+  }
+}

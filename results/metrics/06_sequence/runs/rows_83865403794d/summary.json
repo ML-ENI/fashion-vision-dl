@@ -1,0 +1,299 @@
+{
+  "status": "completed",
+  "phase": "rows",
+  "experiment_id": "rows_83865403794d",
+  "dataset_run": "20261125T152902-c912cdcc",
+  "config": {
+    "version": "1.0.0",
+    "frozen_before_training": "2026-11-26",
+    "purpose": "06: images read as sequences; RNN, LSTM and GRU, attention readout and reading order, same photos and training budget as 04-05",
+    "architecture": {
+      "image_size": 64,
+      "steps": 64,
+      "features_per_step": 192,
+      "hidden_size": 128,
+      "layers": 1,
+      "classes": 25
+    },
+    "size_policy": "Same hidden state (128) for every cell, so cells are compared with the same memory. Parameters differ by cell and are far below the Dense of 04; Dense and CNN are reported as references, not as a parameter-matched contrast. Matching about 1 M parameters would make each epoch 5-10 times slower on CPU.",
+    "training": {
+      "seeds": [
+        42,
+        123,
+        2026
+      ],
+      "max_epochs": 30,
+      "patience": 5,
+      "batch_size": 32,
+      "optimizer": "Adam",
+      "learning_rate": 0.001,
+      "weight_decay": 0.0,
+      "class_weights": false,
+      "augmentation": false,
+      "threads": 4,
+      "device": "cpu",
+      "deterministic": true
+    },
+    "phases": {
+      "cells": {
+        "question": "Which recurrent cell reads the columns best? Simple RNN, LSTM and GRU with the last state",
+        "variants": [
+          {
+            "name": "rnn",
+            "cell": "rnn",
+            "readout": "last",
+            "orientation": "columns"
+          },
+          {
+            "name": "lstm",
+            "cell": "lstm",
+            "readout": "last",
+            "orientation": "columns"
+          },
+          {
+            "name": "gru",
+            "cell": "gru",
+            "readout": "last",
+            "orientation": "columns"
+          }
+        ],
+        "max_total_training_seconds": 18000
+      },
+      "attention": {
+        "question": "Does attention over all states help the same LSTM? Only the readout changes",
+        "variants": [
+          {
+            "name": "lstm_attention",
+            "cell": "lstm",
+            "readout": "attention",
+            "orientation": "columns"
+          }
+        ],
+        "max_total_training_seconds": 7200,
+        "requires": "cells"
+      },
+      "rows": {
+        "question": "H6: does the reading order matter? The same LSTM reading rows instead of columns",
+        "variants": [
+          {
+            "name": "lstm_rows",
+            "cell": "lstm",
+            "readout": "last",
+            "orientation": "rows"
+          }
+        ],
+        "max_total_training_seconds": 7200,
+        "requires": "cells"
+      }
+    },
+    "phase_order": "cells first; attention and rows only after cells results are saved",
+    "normalization": "same RGB64 per-channel train moments as 04 (shared cache), applied before building the sequence",
+    "checkpoint": "maximum validation macro-F1; first epoch wins ties",
+    "early_stopping": "stop after 5 successive epochs without validation loss decreasing; different from checkpoint selection",
+    "primary_analysis": "all three seeds; paired by seed; no selection of best seed or best cell for illustration",
+    "illustration": {
+      "seed": 42,
+      "variant": "lstm"
+    },
+    "bootstrap": {
+      "unit": "group_id",
+      "draws": 300,
+      "seed": 42
+    },
+    "test_policy": "do not load or evaluate test images in this notebook",
+    "cost_feasibility": {
+      "pilot_seed": 901,
+      "safety_factor": 1.25,
+      "decision": "Measure one real epoch per variant of the phase. Train only if the conservative estimate for three seeds fits the phase budget; otherwise stop for an explicit amendment. Never cap photos automatically.",
+      "amendment": "On 2026-11-26, before any recurrent training, budgets of 5 h (cells, 9 fits), 2 h (attention, 3 fits) and 2 h (rows, 3 fits) were registered after a CPU micro-benchmark of 0.4-1.2 min per training epoch."
+    },
+    "scope_limits": [
+      "one recurrent layer, unidirectional; bidirectional, stacked and CNN+RNN variants are optional extensions",
+      "8x8 patches are not run: they change the neighbourhood represented",
+      "validation is used for stopping and selection, so these are not final unbiased estimates",
+      "attention weights show where the readout looks, not why the class is predicted",
+      "evaluation describes the selected garment types after quality controls, not the whole catalogue"
+    ]
+  },
+  "identity": {
+    "phase": "rows",
+    "manifest_sha256": "004ec4f4bd064deceee286d1699eea3c4a5131ef8fd4ef299bb2e2ca6014df84",
+    "sources": {
+      "config/sequence_v1.json": "d919a2b3930f067ae2432ca431961af4f77f296b6188ce826b4f015aabe5059f",
+      "config/experimental_protocol_v1.json": "d21b17cd9d27c398d188b087dc0039b2fd8df2221922da53ee4076a5a48a5e03",
+      "src/models/sequence.py": "ce4f640ff72f41412b8ca41ef547061f0a133b665d1bbf8e7a93e476925323bc",
+      "src/training/sequence_experiment.py": "4adfbb71e2b7c9e01bbf8e22ea25884aa416020f9f933d5881480594934b872c",
+      "src/training/phased_experiment.py": "f2a8845efaad71e2a81d134dd453ad75e01b2c62f4606323b6329df94d23d929",
+      "src/training/dense_experiment.py": "a8dd059fb11c373a4e1d9342ab7f1762e98a55355a6e108e8f81ca8fdcb5c102"
+    },
+    "versions": {
+      "torch": "2.15.0",
+      "numpy": "2.5.4",
+      "pandas": "2.3.3",
+      "Pillow": "12.3.0",
+      "scikit-learn": "1.9.1",
+      "psutil": "7.2.2"
+    },
+    "platform": "Windows-11-10.0.26300-SP0",
+    "processor": "Intel64 Family 6 Model 197 Stepping 2, GenuineIntel"
+  },
+  "normalization": {
+    "mean": [
+      0.8252736487645056,
+      0.8099776406444388,
+      0.8068432059080346
+    ],
+    "std": [
+      0.26553521684979864,
+      0.2779671728494687,
+      0.2760147938782062
+    ],
+    "image_size": 64,
+    "partition": "train",
+    "pixels_per_channel": 137699328,
+    "method": "population pixel moments after RGB64 Lanczos resize"
+  },
+  "hardware": {
+    "device": "cpu",
+    "processor": "Intel64 Family 6 Model 197 Stepping 2, GenuineIntel",
+    "physical_cores": 16,
+    "threads_used": 4,
+    "ram_total_bytes": 16497897472
+  },
+  "test_images_opened": 0,
+  "test_predictions_generated": 0,
+  "cost_feasibility": {
+    "phase": "rows",
+    "dataset_run": "20261125T152902-c912cdcc",
+    "train_images": 33618,
+    "validation_images": 7515,
+    "pilot_epoch_seconds": 16.52136839996092,
+    "pilot_epoch_seconds_by_variant": {
+      "lstm_rows": 16.52136839996092
+    },
+    "peak_process_rss_bytes": 2871664640,
+    "fits": 3,
+    "conservative_upper_seconds": 1858.6539449956035,
+    "budget_seconds": 7200,
+    "fits_budget": true,
+    "sampling_applied": false,
+    "decision": "keep_all_eligible_images",
+    "note": "Pilot weights discarded; no pilot metric used. Includes train and validation evaluation; preprocessing separate."
+  },
+  "cost_notes": {
+    "train_seconds": "all epochs, including train and validation evaluation; excludes resize",
+    "FLOPs": "2 per multiply-add in convolutions, recurrent cells and linear layers; excludes bias, activations, pooling, normalization and softmax"
+  },
+  "runs": [
+    {
+      "variant": "lstm_rows",
+      "seed": 42,
+      "cell": "lstm",
+      "readout": "last",
+      "orientation": "rows",
+      "parameters": 168089,
+      "approx_flops_per_image": 20977920,
+      "epochs_run": 27,
+      "selected_epoch": 21,
+      "stopped_early": true,
+      "train_seconds": 523.0618948999327,
+      "inference_ms_per_image": 0.09858159680496988,
+      "peak_process_rss_bytes": 2844774400,
+      "checkpoint": "results/models/06_sequence/rows_83865403794d/lstm_rows_seed42.pt",
+      "checkpoint_sha256": "2bc6aaad2204b3b723e10e257e1bb46125e32056a7514709b5084fc804665600",
+      "train_loss": 0.6516838169401438,
+      "train_accuracy": 0.7838062942471296,
+      "train_macro_f1": 0.6233875780717117,
+      "validation_loss": 0.9206150494332481,
+      "validation_accuracy": 0.7067198935462409,
+      "validation_macro_f1": 0.5341363690596992,
+      "validation_group_bootstrap_ci95_accuracy": [
+        0.6904978255249851,
+        0.7246320035220873
+      ],
+      "validation_group_bootstrap_ci95_macro_f1": [
+        0.4851708460422644,
+        0.5568737971840603
+      ]
+    },
+    {
+      "variant": "lstm_rows",
+      "seed": 123,
+      "cell": "lstm",
+      "readout": "last",
+      "orientation": "rows",
+      "parameters": 168089,
+      "approx_flops_per_image": 20977920,
+      "epochs_run": 27,
+      "selected_epoch": 25,
+      "stopped_early": true,
+      "train_seconds": 27411.856601400068,
+      "inference_ms_per_image": 0.09519147040063412,
+      "peak_process_rss_bytes": 2571673600,
+      "checkpoint": "results/models/06_sequence/rows_83865403794d/lstm_rows_seed123.pt",
+      "checkpoint_sha256": "fce8de4443052677732de9323e40964e5942a5acd452997d6474621e6aae475f",
+      "train_loss": 0.6533710846222095,
+      "train_accuracy": 0.7824974715925992,
+      "train_macro_f1": 0.6371382727872836,
+      "validation_loss": 0.9377066940921827,
+      "validation_accuracy": 0.7103127079174983,
+      "validation_macro_f1": 0.5536876787446161,
+      "validation_group_bootstrap_ci95_accuracy": [
+        0.6942690093856575,
+        0.7259836394560393
+      ],
+      "validation_group_bootstrap_ci95_macro_f1": [
+        0.49393290313142874,
+        0.5773831373631446
+      ]
+    },
+    {
+      "variant": "lstm_rows",
+      "seed": 2026,
+      "cell": "lstm",
+      "readout": "last",
+      "orientation": "rows",
+      "parameters": 168089,
+      "approx_flops_per_image": 20977920,
+      "epochs_run": 25,
+      "selected_epoch": 19,
+      "stopped_early": true,
+      "train_seconds": 623.6441708999919,
+      "inference_ms_per_image": 0.16918195608609213,
+      "peak_process_rss_bytes": 2304065536,
+      "checkpoint": "results/models/06_sequence/rows_83865403794d/lstm_rows_seed2026.pt",
+      "checkpoint_sha256": "68a7807c13e17a3ab29ffefcb1093f293346ca08397b9b7bd2f489f48eed1df4",
+      "train_loss": 0.6988678203987773,
+      "train_accuracy": 0.7697067047415075,
+      "train_macro_f1": 0.6010365482601727,
+      "validation_loss": 0.9213166500993831,
+      "validation_accuracy": 0.711643379906853,
+      "validation_macro_f1": 0.5469461539289854,
+      "validation_group_bootstrap_ci95_accuracy": [
+        0.6940072504599172,
+        0.7285699478056836
+      ],
+      "validation_group_bootstrap_ci95_macro_f1": [
+        0.5010795414783296,
+        0.5667683124319608
+      ]
+    }
+  ],
+  "artifacts_sha256": {
+    "all_runs.csv": "cd2e56f1eedee5cadc49ff2bf788dafe8cc9645c66a4033af760120cdec0f9da",
+    "cost_feasibility.json": "85f7cb5e3c82a972e8b6ea82249cc2b818e73a11466b0ebce463b619579d3fd7",
+    "design.json": "1ed4edb6d9cd959a56d962c4f19a18ac2c847c6e2ef18cb53cfdea16638ee70c",
+    "lstm_rows_seed123_history.csv": "eb8f88c42dc85608285b425fbc798c5631aa49ad0d6beff2b7ab60559790c139",
+    "lstm_rows_seed123_metrics.json": "45a3d21b16e2ff0df794fff8fb503973562f8d13f3d9122970a4fc7376f05d07",
+    "lstm_rows_seed123_per_class.json": "cb72a6caffb148b6c866ceb68a453f5733f0095c47019ce36add7d5a5a29ae75",
+    "lstm_rows_seed123_predictions.csv.gz": "3845c5b4c47f9a0710f6bef7099fd5cad947c8c0233262aca86984ec39a3e491",
+    "lstm_rows_seed2026_history.csv": "b02058e96358a2c1b346ce994c04f1c3b6ad8245803133017479896b4c2bf44a",
+    "lstm_rows_seed2026_metrics.json": "86ab73985add05ca148804567dabaa01efe112af73447414579828f0f52d37d9",
+    "lstm_rows_seed2026_per_class.json": "2057de3c74008bc78813c37724814eab184bbb7551be755959eb23312ca2f2cb",
+    "lstm_rows_seed2026_predictions.csv.gz": "c9f2ccd067db7a22f7c50d590ec0861a689ffcb4ac3fcc564a3a5cadf99bc1b2",
+    "lstm_rows_seed42_history.csv": "4c1a4f53929dcedcf71e93ec2e91a49d1194a8a94794f589d34cc43cdecf89e6",
+    "lstm_rows_seed42_metrics.json": "fb79dbc9f38cc0956415636dcadfaa1a635902874961ebc9ac1df058d8142fa5",
+    "lstm_rows_seed42_per_class.json": "c8c260b822606fc410f21613209bb396f303716d5a13cda6bded35196548a010",
+    "lstm_rows_seed42_predictions.csv.gz": "6c9dbe73af4d31651fb04509206f5cef631a5eebf53c66f3b19dd59166680d79"
+  }
+}

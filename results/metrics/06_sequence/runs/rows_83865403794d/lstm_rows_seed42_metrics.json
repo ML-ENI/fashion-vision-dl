@@ -1,0 +1,31 @@
+{
+  "variant": "lstm_rows",
+  "seed": 42,
+  "cell": "lstm",
+  "readout": "last",
+  "orientation": "rows",
+  "parameters": 168089,
+  "approx_flops_per_image": 20977920,
+  "epochs_run": 27,
+  "selected_epoch": 21,
+  "stopped_early": true,
+  "train_seconds": 523.0618948999327,
+  "inference_ms_per_image": 0.09858159680496988,
+  "peak_process_rss_bytes": 2844774400,
+  "checkpoint": "results/models/06_sequence/rows_83865403794d/lstm_rows_seed42.pt",
+  "checkpoint_sha256": "2bc6aaad2204b3b723e10e257e1bb46125e32056a7514709b5084fc804665600",
+  "train_loss": 0.6516838169401438,
+  "train_accuracy": 0.7838062942471296,
+  "train_macro_f1": 0.6233875780717117,
+  "validation_loss": 0.9206150494332481,
+  "validation_accuracy": 0.7067198935462409,
+  "validation_macro_f1": 0.5341363690596992,
+  "validation_group_bootstrap_ci95_accuracy": [
+    0.6904978255249851,
+    0.7246320035220873
+  ],
+  "validation_group_bootstrap_ci95_macro_f1": [
+    0.4851708460422644,
+    0.5568737971840603
+  ]
+}

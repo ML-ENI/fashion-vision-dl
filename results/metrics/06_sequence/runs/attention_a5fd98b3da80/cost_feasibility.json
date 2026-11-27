@@ -1,0 +1,18 @@
+{
+  "phase": "attention",
+  "dataset_run": "20261125T152902-c912cdcc",
+  "train_images": 33618,
+  "validation_images": 7515,
+  "pilot_epoch_seconds": 18.000787800061516,
+  "pilot_epoch_seconds_by_variant": {
+    "lstm_attention": 18.000787800061516
+  },
+  "peak_process_rss_bytes": 3553935360,
+  "fits": 3,
+  "conservative_upper_seconds": 2025.0886275069206,
+  "budget_seconds": 7200,
+  "fits_budget": true,
+  "sampling_applied": false,
+  "decision": "keep_all_eligible_images",
+  "note": "Pilot weights discarded; no pilot metric used. Includes train and validation evaluation; preprocessing separate."
+}

@@ -1,0 +1,511 @@
+{
+  "status": "completed",
+  "phase": "cells",
+  "experiment_id": "cells_e71977afd5cb",
+  "dataset_run": "20261125T152902-c912cdcc",
+  "config": {
+    "version": "1.0.0",
+    "frozen_before_training": "2026-11-26",
+    "purpose": "06: images read as sequences; RNN, LSTM and GRU, attention readout and reading order, same photos and training budget as 04-05",
+    "architecture": {
+      "image_size": 64,
+      "steps": 64,
+      "features_per_step": 192,
+      "hidden_size": 128,
+      "layers": 1,
+      "classes": 25
+    },
+    "size_policy": "Same hidden state (128) for every cell, so cells are compared with the same memory. Parameters differ by cell and are far below the Dense of 04; Dense and CNN are reported as references, not as a parameter-matched contrast. Matching about 1 M parameters would make each epoch 5-10 times slower on CPU.",
+    "training": {
+      "seeds": [
+        42,
+        123,
+        2026
+      ],
+      "max_epochs": 30,
+      "patience": 5,
+      "batch_size": 32,
+      "optimizer": "Adam",
+      "learning_rate": 0.001,
+      "weight_decay": 0.0,
+      "class_weights": false,
+      "augmentation": false,
+      "threads": 4,
+      "device": "cpu",
+      "deterministic": true
+    },
+    "phases": {
+      "cells": {
+        "question": "Which recurrent cell reads the columns best? Simple RNN, LSTM and GRU with the last state",
+        "variants": [
+          {
+            "name": "rnn",
+            "cell": "rnn",
+            "readout": "last",
+            "orientation": "columns"
+          },
+          {
+            "name": "lstm",
+            "cell": "lstm",
+            "readout": "last",
+            "orientation": "columns"
+          },
+          {
+            "name": "gru",
+            "cell": "gru",
+            "readout": "last",
+            "orientation": "columns"
+          }
+        ],
+        "max_total_training_seconds": 18000
+      },
+      "attention": {
+        "question": "Does attention over all states help the same LSTM? Only the readout changes",
+        "variants": [
+          {
+            "name": "lstm_attention",
+            "cell": "lstm",
+            "readout": "attention",
+            "orientation": "columns"
+          }
+        ],
+        "max_total_training_seconds": 7200,
+        "requires": "cells"
+      },
+      "rows": {
+        "question": "H6: does the reading order matter? The same LSTM reading rows instead of columns",
+        "variants": [
+          {
+            "name": "lstm_rows",
+            "cell": "lstm",
+            "readout": "last",
+            "orientation": "rows"
+          }
+        ],
+        "max_total_training_seconds": 7200,
+        "requires": "cells"
+      }
+    },
+    "phase_order": "cells first; attention and rows only after cells results are saved",
+    "normalization": "same RGB64 per-channel train moments as 04 (shared cache), applied before building the sequence",
+    "checkpoint": "maximum validation macro-F1; first epoch wins ties",
+    "early_stopping": "stop after 5 successive epochs without validation loss decreasing; different from checkpoint selection",
+    "primary_analysis": "all three seeds; paired by seed; no selection of best seed or best cell for illustration",
+    "illustration": {
+      "seed": 42,
+      "variant": "lstm"
+    },
+    "bootstrap": {
+      "unit": "group_id",
+      "draws": 300,
+      "seed": 42
+    },
+    "test_policy": "do not load or evaluate test images in this notebook",
+    "cost_feasibility": {
+      "pilot_seed": 901,
+      "safety_factor": 1.25,
+      "decision": "Measure one real epoch per variant of the phase. Train only if the conservative estimate for three seeds fits the phase budget; otherwise stop for an explicit amendment. Never cap photos automatically.",
+      "amendment": "On 2026-11-26, before any recurrent training, budgets of 5 h (cells, 9 fits), 2 h (attention, 3 fits) and 2 h (rows, 3 fits) were registered after a CPU micro-benchmark of 0.4-1.2 min per training epoch."
+    },
+    "scope_limits": [
+      "one recurrent layer, unidirectional; bidirectional, stacked and CNN+RNN variants are optional extensions",
+      "8x8 patches are not run: they change the neighbourhood represented",
+      "validation is used for stopping and selection, so these are not final unbiased estimates",
+      "attention weights show where the readout looks, not why the class is predicted",
+      "evaluation describes the selected garment types after quality controls, not the whole catalogue"
+    ]
+  },
+  "identity": {
+    "phase": "cells",
+    "manifest_sha256": "004ec4f4bd064deceee286d1699eea3c4a5131ef8fd4ef299bb2e2ca6014df84",
+    "sources": {
+      "config/sequence_v1.json": "d919a2b3930f067ae2432ca431961af4f77f296b6188ce826b4f015aabe5059f",
+      "config/experimental_protocol_v1.json": "d21b17cd9d27c398d188b087dc0039b2fd8df2221922da53ee4076a5a48a5e03",
+      "src/models/sequence.py": "ce4f640ff72f41412b8ca41ef547061f0a133b665d1bbf8e7a93e476925323bc",
+      "src/training/sequence_experiment.py": "4adfbb71e2b7c9e01bbf8e22ea25884aa416020f9f933d5881480594934b872c",
+      "src/training/phased_experiment.py": "f2a8845efaad71e2a81d134dd453ad75e01b2c62f4606323b6329df94d23d929",
+      "src/training/dense_experiment.py": "a8dd059fb11c373a4e1d9342ab7f1762e98a55355a6e108e8f81ca8fdcb5c102"
+    },
+    "versions": {
+      "torch": "2.15.0",
+      "numpy": "2.5.4",
+      "pandas": "2.3.3",
+      "Pillow": "12.3.0",
+      "scikit-learn": "1.9.1",
+      "psutil": "7.2.2"
+    },
+    "platform": "Windows-11-10.0.26300-SP0",
+    "processor": "Intel64 Family 6 Model 197 Stepping 2, GenuineIntel"
+  },
+  "normalization": {
+    "mean": [
+      0.8252736487645056,
+      0.8099776406444388,
+      0.8068432059080346
+    ],
+    "std": [
+      0.26553521684979864,
+      0.2779671728494687,
+      0.2760147938782062
+    ],
+    "image_size": 64,
+    "partition": "train",
+    "pixels_per_channel": 137699328,
+    "method": "population pixel moments after RGB64 Lanczos resize"
+  },
+  "hardware": {
+    "device": "cpu",
+    "processor": "Intel64 Family 6 Model 197 Stepping 2, GenuineIntel",
+    "physical_cores": 16,
+    "threads_used": 4,
+    "ram_total_bytes": 16497897472
+  },
+  "test_images_opened": 0,
+  "test_predictions_generated": 0,
+  "cost_feasibility": {
+    "phase": "cells",
+    "dataset_run": "20261125T152902-c912cdcc",
+    "train_images": 33618,
+    "validation_images": 7515,
+    "pilot_epoch_seconds": 53.1059530666486,
+    "pilot_epoch_seconds_by_variant": {
+      "rnn": 38.95723529998213,
+      "lstm": 57.04532139992807,
+      "gru": 63.315302500035614
+    },
+    "peak_process_rss_bytes": 2922409984,
+    "fits": 9,
+    "conservative_upper_seconds": 17923.259159993904,
+    "budget_seconds": 18000,
+    "fits_budget": true,
+    "sampling_applied": false,
+    "decision": "keep_all_eligible_images",
+    "note": "Pilot weights discarded; no pilot metric used. Includes train and validation evaluation; preprocessing separate."
+  },
+  "cost_notes": {
+    "train_seconds": "all epochs, including train and validation evaluation; excludes resize",
+    "FLOPs": "2 per multiply-add in convolutions, recurrent cells and linear layers; excludes bias, activations, pooling, normalization and softmax"
+  },
+  "runs": [
+    {
+      "variant": "rnn",
+      "seed": 42,
+      "cell": "rnn",
+      "readout": "last",
+      "orientation": "columns",
+      "parameters": 44441,
+      "approx_flops_per_image": 5249280,
+      "epochs_run": 9,
+      "selected_epoch": 8,
+      "stopped_early": true,
+      "train_seconds": 339.4782834999496,
+      "inference_ms_per_image": 0.08840963406474667,
+      "peak_process_rss_bytes": 2605432832,
+      "checkpoint": "results/models/06_sequence/cells_e71977afd5cb/rnn_seed42.pt",
+      "checkpoint_sha256": "715546f699b6a83da8472b30d7e95c8aac54f0a697682697bd6294ae72d238bd",
+      "train_loss": 2.637579699984992,
+      "train_accuracy": 0.12766970075554762,
+      "train_macro_f1": 0.011934409768811605,
+      "validation_loss": 2.6230593845674535,
+      "validation_accuracy": 0.12947438456420493,
+      "validation_macro_f1": 0.01091459049425151,
+      "validation_group_bootstrap_ci95_accuracy": [
+        0.1159862012987013,
+        0.14594708775517726
+      ],
+      "validation_group_bootstrap_ci95_macro_f1": [
+        0.009371031030963971,
+        0.012814966147257726
+      ]
+    },
+    {
+      "variant": "rnn",
+      "seed": 123,
+      "cell": "rnn",
+      "readout": "last",
+      "orientation": "columns",
+      "parameters": 44441,
+      "approx_flops_per_image": 5249280,
+      "epochs_run": 7,
+      "selected_epoch": 1,
+      "stopped_early": true,
+      "train_seconds": 224.02767779992428,
+      "inference_ms_per_image": 0.19139491682481802,
+      "peak_process_rss_bytes": 2602315776,
+      "checkpoint": "results/models/06_sequence/cells_e71977afd5cb/rnn_seed123.pt",
+      "checkpoint_sha256": "61b9c2b78b8a7b8c7df85de00cf55e7260349d82352bd7464d85af1ad0f68a82",
+      "train_loss": 2.6433481423743768,
+      "train_accuracy": 0.15798084359569278,
+      "train_macro_f1": 0.010914228467209535,
+      "validation_loss": 2.6239159325798274,
+      "validation_accuracy": 0.15382568196939456,
+      "validation_macro_f1": 0.010665436512512973,
+      "validation_group_bootstrap_ci95_accuracy": [
+        0.13933684428995025,
+        0.16742513500153539
+      ],
+      "validation_group_bootstrap_ci95_macro_f1": [
+        0.00978371498326925,
+        0.011473121167382597
+      ]
+    },
+    {
+      "variant": "rnn",
+      "seed": 2026,
+      "cell": "rnn",
+      "readout": "last",
+      "orientation": "columns",
+      "parameters": 44441,
+      "approx_flops_per_image": 5249280,
+      "epochs_run": 14,
+      "selected_epoch": 9,
+      "stopped_early": true,
+      "train_seconds": 408.6159861999331,
+      "inference_ms_per_image": 0.17892488356523528,
+      "peak_process_rss_bytes": 2596704256,
+      "checkpoint": "results/models/06_sequence/cells_e71977afd5cb/rnn_seed2026.pt",
+      "checkpoint_sha256": "e6a1b985293fcaa4fd3755d5b9a2118ce66a31d9c61e15d50efcbcda9229579b",
+      "train_loss": 2.4539180804181195,
+      "train_accuracy": 0.23163186388244392,
+      "train_macro_f1": 0.04631516017288258,
+      "validation_loss": 2.4322161701783607,
+      "validation_accuracy": 0.24231536926147704,
+      "validation_macro_f1": 0.04627340406997181,
+      "validation_group_bootstrap_ci95_accuracy": [
+        0.22290397658183264,
+        0.2606590880517848
+      ],
+      "validation_group_bootstrap_ci95_macro_f1": [
+        0.0429122235759187,
+        0.049378948426954
+      ]
+    },
+    {
+      "variant": "lstm",
+      "seed": 42,
+      "cell": "lstm",
+      "readout": "last",
+      "orientation": "columns",
+      "parameters": 168089,
+      "approx_flops_per_image": 20977920,
+      "epochs_run": 21,
+      "selected_epoch": 18,
+      "stopped_early": true,
+      "train_seconds": 1128.5892922999337,
+      "inference_ms_per_image": 0.3293607052457745,
+      "peak_process_rss_bytes": 2491203584,
+      "checkpoint": "results/models/06_sequence/cells_e71977afd5cb/lstm_seed42.pt",
+      "checkpoint_sha256": "59b28e5fd6d8302d012f31860766c318165a1061483a0e45982a5b18fb93e8bd",
+      "train_loss": 0.8402432547041687,
+      "train_accuracy": 0.7263073353560593,
+      "train_macro_f1": 0.5473253013942778,
+      "validation_loss": 1.0849694734244686,
+      "validation_accuracy": 0.6666666666666666,
+      "validation_macro_f1": 0.46331496659099713,
+      "validation_group_bootstrap_ci95_accuracy": [
+        0.6489411559241433,
+        0.6841899284698342
+      ],
+      "validation_group_bootstrap_ci95_macro_f1": [
+        0.4208034710347565,
+        0.4849111804865149
+      ]
+    },
+    {
+      "variant": "lstm",
+      "seed": 123,
+      "cell": "lstm",
+      "readout": "last",
+      "orientation": "columns",
+      "parameters": 168089,
+      "approx_flops_per_image": 20977920,
+      "epochs_run": 25,
+      "selected_epoch": 25,
+      "stopped_early": true,
+      "train_seconds": 1260.2022221999941,
+      "inference_ms_per_image": 0.15526632068855956,
+      "peak_process_rss_bytes": 2141081600,
+      "checkpoint": "results/models/06_sequence/cells_e71977afd5cb/lstm_seed123.pt",
+      "checkpoint_sha256": "aace93b32e9e4fcfed48759f29290fb00a37186f4f59316a942990cae4fe3dad",
+      "train_loss": 0.7885311323398284,
+      "train_accuracy": 0.7420726991492653,
+      "train_macro_f1": 0.5484541462694348,
+      "validation_loss": 1.0818506418191347,
+      "validation_accuracy": 0.6654690618762475,
+      "validation_macro_f1": 0.45533071839937245,
+      "validation_group_bootstrap_ci95_accuracy": [
+        0.6470458634169493,
+        0.6836563072074191
+      ],
+      "validation_group_bootstrap_ci95_macro_f1": [
+        0.41723275130337983,
+        0.4803486517694375
+      ]
+    },
+    {
+      "variant": "lstm",
+      "seed": 2026,
+      "cell": "lstm",
+      "readout": "last",
+      "orientation": "columns",
+      "parameters": 168089,
+      "approx_flops_per_image": 20977920,
+      "epochs_run": 29,
+      "selected_epoch": 29,
+      "stopped_early": true,
+      "train_seconds": 521.8472624999704,
+      "inference_ms_per_image": 0.10154689288823925,
+      "peak_process_rss_bytes": 3201298432,
+      "checkpoint": "results/models/06_sequence/cells_e71977afd5cb/lstm_seed2026.pt",
+      "checkpoint_sha256": "98eddde33e4007e5cf6cc748be5f7859a7c5ba6328aceb6b77d5fb5c8e0851e4",
+      "train_loss": 0.7230391217424142,
+      "train_accuracy": 0.7637277648878577,
+      "train_macro_f1": 0.6041596506981803,
+      "validation_loss": 1.0760409592154496,
+      "validation_accuracy": 0.6661343978709248,
+      "validation_macro_f1": 0.4843035297194734,
+      "validation_group_bootstrap_ci95_accuracy": [
+        0.6484035850934127,
+        0.6836917819408197
+      ],
+      "validation_group_bootstrap_ci95_macro_f1": [
+        0.4323831482326258,
+        0.5069510012609587
+      ]
+    },
+    {
+      "variant": "gru",
+      "seed": 42,
+      "cell": "gru",
+      "readout": "last",
+      "orientation": "columns",
+      "parameters": 126873,
+      "approx_flops_per_image": 15735040,
+      "epochs_run": 20,
+      "selected_epoch": 19,
+      "stopped_early": true,
+      "train_seconds": 675.7454933000263,
+      "inference_ms_per_image": 0.20326078509699977,
+      "peak_process_rss_bytes": 2641141760,
+      "checkpoint": "results/models/06_sequence/cells_e71977afd5cb/gru_seed42.pt",
+      "checkpoint_sha256": "86ebf3c1a6a9daa5e34647d5510ad2c281ca8491614b1f4a2f1ddbcf6a531c12",
+      "train_loss": 0.6797189992658089,
+      "train_accuracy": 0.7753286929621036,
+      "train_macro_f1": 0.6232359339244051,
+      "validation_loss": 1.067736385254089,
+      "validation_accuracy": 0.6751829673985362,
+      "validation_macro_f1": 0.4874296481678616,
+      "validation_group_bootstrap_ci95_accuracy": [
+        0.6583991178696353,
+        0.6916778700003356
+      ],
+      "validation_group_bootstrap_ci95_macro_f1": [
+        0.44413283255240105,
+        0.5196795260397155
+      ]
+    },
+    {
+      "variant": "gru",
+      "seed": 123,
+      "cell": "gru",
+      "readout": "last",
+      "orientation": "columns",
+      "parameters": 126873,
+      "approx_flops_per_image": 15735040,
+      "epochs_run": 17,
+      "selected_epoch": 12,
+      "stopped_early": true,
+      "train_seconds": 614.1848098998889,
+      "inference_ms_per_image": 0.16809366600053832,
+      "peak_process_rss_bytes": 2634620928,
+      "checkpoint": "results/models/06_sequence/cells_e71977afd5cb/gru_seed123.pt",
+      "checkpoint_sha256": "5cbd5642af36ade7b2635c623e1d40eefeb985b38b49ff7179278b2204118f79",
+      "train_loss": 0.8224847952893605,
+      "train_accuracy": 0.7259206377535844,
+      "train_macro_f1": 0.5465886574107361,
+      "validation_loss": 1.0609160115222334,
+      "validation_accuracy": 0.6742514970059881,
+      "validation_macro_f1": 0.4514073367800757,
+      "validation_group_bootstrap_ci95_accuracy": [
+        0.6553948817974606,
+        0.6921423722806122
+      ],
+      "validation_group_bootstrap_ci95_macro_f1": [
+        0.40653192394202703,
+        0.47775947581817524
+      ]
+    },
+    {
+      "variant": "gru",
+      "seed": 2026,
+      "cell": "gru",
+      "readout": "last",
+      "orientation": "columns",
+      "parameters": 126873,
+      "approx_flops_per_image": 15735040,
+      "epochs_run": 18,
+      "selected_epoch": 15,
+      "stopped_early": true,
+      "train_seconds": 494.42165989999194,
+      "inference_ms_per_image": 0.1901364337971418,
+      "peak_process_rss_bytes": 2626707456,
+      "checkpoint": "results/models/06_sequence/cells_e71977afd5cb/gru_seed2026.pt",
+      "checkpoint_sha256": "f0bd67e554d6818902d14f15e670d4964a8832e2227a1d6209ca028fb25ab6b6",
+      "train_loss": 0.712671103040044,
+      "train_accuracy": 0.764411922184544,
+      "train_macro_f1": 0.6019457829077279,
+      "validation_loss": 1.0467090264686487,
+      "validation_accuracy": 0.6767797737857618,
+      "validation_macro_f1": 0.4686710761416428,
+      "validation_group_bootstrap_ci95_accuracy": [
+        0.6575284673809149,
+        0.6960296353040181
+      ],
+      "validation_group_bootstrap_ci95_macro_f1": [
+        0.42620177066079,
+        0.4992047414752507
+      ]
+    }
+  ],
+  "artifacts_sha256": {
+    "all_runs.csv": "e8a1b2f5638cdc791a4eafd8b8111cb38a839cb1a51d1e6d7127dc748460cb7b",
+    "cost_feasibility.json": "ab3a3c5e223c6be8f61725ffcb86d0107f9fd61c541fb2c6ece29968870c7803",
+    "design.json": "4d4f9354e38599658f64c040fbdf4ad7e4f7136610d5e05236c3073b5c0080a3",
+    "gru_seed123_history.csv": "e8d68d4b92ca7692e5723e1271883d4df93bfd6ae3382da6aca9748df5c79230",
+    "gru_seed123_metrics.json": "3f23e5b81b0e77e1134c5c6a5fc8ddae41afd662ac52c822d321974058fce42f",
+    "gru_seed123_per_class.json": "6b57b1e8a92b8cff51b71b2bee61448c8df182b775d4d5e7f21b2a7cb9d4ea44",
+    "gru_seed123_predictions.csv.gz": "70511de9cb6c35cf8a72fd77fc67c575e65075904b362c74f14d53b7264414db",
+    "gru_seed2026_history.csv": "f32f1c73006b1f09562f4d32e3a3bfdd58158e28f7a676dedefc8e971d2938b0",
+    "gru_seed2026_metrics.json": "3ca3ab75a3c88faa9dfe73176c188815283a5e74a58ac1b999ab41812542896a",
+    "gru_seed2026_per_class.json": "6d14b006b37a404bf36c4eea760a0bc625abbab4a61c8b61bd2e08250cb260cb",
+    "gru_seed2026_predictions.csv.gz": "e9af2d7374068dc932180ecd31a5258c4aeaa69c57f6fae00c65adf653bec29a",
+    "gru_seed42_history.csv": "76046cb85f9abd6d6c84d6e70305b48ffaad3cfd00350afcbb89747c43b1df11",
+    "gru_seed42_metrics.json": "cc57fb6384fada5052647672452ab99bcdc10460fbdcb5403a0ee5c9c71e8150",
+    "gru_seed42_per_class.json": "d4117aba221cd3de92dad58d624f032739f72675690a9de46ec59d50ad038a9f",
+    "gru_seed42_predictions.csv.gz": "5eb308611fa95f615e2e68d82aa2cbe5df77787c283d774f8ead792045c9d97b",
+    "lstm_seed123_history.csv": "ae586240b01b56fb8ac1e83ef495f95794312bf61254962b4136ae5aeedef705",
+    "lstm_seed123_metrics.json": "88a5c92ab7ec3d30a07a13f2038b6adca5ce6e4cfe0a61446a2ee42b29f19ab9",
+    "lstm_seed123_per_class.json": "c171b15403fef81d68fcf87316aa4db166f414f5a6d69bb8100b14c56a5f8d22",
+    "lstm_seed123_predictions.csv.gz": "fb8b9b7312f9269f2b8763279c1024965e22030e0d8026543185a811f2f93e44",
+    "lstm_seed2026_history.csv": "3e020f7f5de347d016712f011cb4c55ec0861aeaf68ed1d0bdfeacd464154f67",
+    "lstm_seed2026_metrics.json": "c6e8458c5d96422557aeedc620bbdaa06953a8eb2a498e590227d1051f0c16dd",
+    "lstm_seed2026_per_class.json": "a9055e4750f710ad648e225b691c4e9bf32db686f3e443c3fd83b4bc64f2ae45",
+    "lstm_seed2026_predictions.csv.gz": "27c92cca25697517a59db129d0c1a7fc203ce4d0544a8938d1873a1857173e52",
+    "lstm_seed42_history.csv": "3a8d65b000277f1945e28a6529a169cfefc1b48c1eebfd8135e84fad6f314243",
+    "lstm_seed42_metrics.json": "c506f11e843d1602c479d4d7e6c5391c7928d48378f0c77c404538af3f1ed2d6",
+    "lstm_seed42_per_class.json": "712c85f5772d105a92bcfc1a13cf4059c242185e6cd051ab6c490b7a93416c01",
+    "lstm_seed42_predictions.csv.gz": "258512841c1957e9261ba9f770f8dd9dcd69296e00b4fa7bf35f99832f61baa5",
+    "rnn_seed123_history.csv": "6bef123788c2c09246f6bf7ac2d0eb96e3c7a63bcc9af9cdf9220c2294a9e69d",
+    "rnn_seed123_metrics.json": "40a605f6be8f13559d8e21076165f51655dc1ee41088fabcafef232bf517186f",
+    "rnn_seed123_per_class.json": "07d2efaeb6dc0248bfeadaa73ee8476e6701eaaadf4f0c444c64dc231d8c5656",
+    "rnn_seed123_predictions.csv.gz": "4ee8dea70bfb76ad207f05f3e62c7a3c51a176ba767dd9d91622b9babc8390b9",
+    "rnn_seed2026_history.csv": "b413e0041189c2104d7e572042fe22edc5dbf2022593486e7b4f9f3c4ebac0da",
+    "rnn_seed2026_metrics.json": "a948cd71f44d1f063188c89c4e239126f61e00a83c9ee4334844dfc071fc94ec",
+    "rnn_seed2026_per_class.json": "3d95963e392095074469834caeccbded183fff231b130683cd9a6eeef9763129",
+    "rnn_seed2026_predictions.csv.gz": "dbcc871d173b5427959a675bbbd34898162a340edcf2a8f4a3813cc0528386b0",
+    "rnn_seed42_history.csv": "554d5257df13755e09902ea50eb7303433a9332898401d8b91e2b387ad3850ad",
+    "rnn_seed42_metrics.json": "37e025c02952714e64286215a9338fa232f0cc95f23225630286c86522dad1fa",
+    "rnn_seed42_per_class.json": "3746d3692e71b031d756ed3a2d44a87417f7fa05498b948080b160d55cb89d3c",
+    "rnn_seed42_predictions.csv.gz": "545aef0fb23e0c19fcc97eadee8686b51b9e7fe2a7863ae51bf17b703166ebeb"
+  }
+}

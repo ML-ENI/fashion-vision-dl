@@ -1,0 +1,31 @@
+{
+  "variant": "lstm_attention",
+  "seed": 123,
+  "cell": "lstm",
+  "readout": "attention",
+  "orientation": "columns",
+  "parameters": 184730,
+  "approx_flops_per_image": 23091456,
+  "epochs_run": 21,
+  "selected_epoch": 20,
+  "stopped_early": true,
+  "train_seconds": 639.1656785000814,
+  "inference_ms_per_image": 0.20222324684029291,
+  "peak_process_rss_bytes": 2857697280,
+  "checkpoint": "results/models/06_sequence/attention_a5fd98b3da80/lstm_attention_seed123.pt",
+  "checkpoint_sha256": "79d3eb36ec134d8eb70849011b0b2442b9adad9dbdbf57c6af19812c38509bbb",
+  "train_loss": 0.7299739323838773,
+  "train_accuracy": 0.7628056398358023,
+  "train_macro_f1": 0.6306252389131534,
+  "validation_loss": 1.0735136541619115,
+  "validation_accuracy": 0.669061876247505,
+  "validation_macro_f1": 0.491483657530775,
+  "validation_group_bootstrap_ci95_accuracy": [
+    0.6509217093328523,
+    0.686183881410634
+  ],
+  "validation_group_bootstrap_ci95_macro_f1": [
+    0.4462206698466238,
+    0.5163491090530619
+  ]
+}

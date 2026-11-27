@@ -1,0 +1,154 @@
+{
+  "identity": {
+    "phase": "rows",
+    "manifest_sha256": "004ec4f4bd064deceee286d1699eea3c4a5131ef8fd4ef299bb2e2ca6014df84",
+    "sources": {
+      "config/sequence_v1.json": "d919a2b3930f067ae2432ca431961af4f77f296b6188ce826b4f015aabe5059f",
+      "config/experimental_protocol_v1.json": "d21b17cd9d27c398d188b087dc0039b2fd8df2221922da53ee4076a5a48a5e03",
+      "src/models/sequence.py": "ce4f640ff72f41412b8ca41ef547061f0a133b665d1bbf8e7a93e476925323bc",
+      "src/training/sequence_experiment.py": "4adfbb71e2b7c9e01bbf8e22ea25884aa416020f9f933d5881480594934b872c",
+      "src/training/phased_experiment.py": "f2a8845efaad71e2a81d134dd453ad75e01b2c62f4606323b6329df94d23d929",
+      "src/training/dense_experiment.py": "a8dd059fb11c373a4e1d9342ab7f1762e98a55355a6e108e8f81ca8fdcb5c102"
+    },
+    "versions": {
+      "torch": "2.15.0",
+      "numpy": "2.5.4",
+      "pandas": "2.3.3",
+      "Pillow": "12.3.0",
+      "scikit-learn": "1.9.1",
+      "psutil": "7.2.2"
+    },
+    "platform": "Windows-11-10.0.26300-SP0",
+    "processor": "Intel64 Family 6 Model 197 Stepping 2, GenuineIntel"
+  },
+  "config": {
+    "version": "1.0.0",
+    "frozen_before_training": "2026-11-26",
+    "purpose": "06: images read as sequences; RNN, LSTM and GRU, attention readout and reading order, same photos and training budget as 04-05",
+    "architecture": {
+      "image_size": 64,
+      "steps": 64,
+      "features_per_step": 192,
+      "hidden_size": 128,
+      "layers": 1,
+      "classes": 25
+    },
+    "size_policy": "Same hidden state (128) for every cell, so cells are compared with the same memory. Parameters differ by cell and are far below the Dense of 04; Dense and CNN are reported as references, not as a parameter-matched contrast. Matching about 1 M parameters would make each epoch 5-10 times slower on CPU.",
+    "training": {
+      "seeds": [
+        42,
+        123,
+        2026
+      ],
+      "max_epochs": 30,
+      "patience": 5,
+      "batch_size": 32,
+      "optimizer": "Adam",
+      "learning_rate": 0.001,
+      "weight_decay": 0.0,
+      "class_weights": false,
+      "augmentation": false,
+      "threads": 4,
+      "device": "cpu",
+      "deterministic": true
+    },
+    "phases": {
+      "cells": {
+        "question": "Which recurrent cell reads the columns best? Simple RNN, LSTM and GRU with the last state",
+        "variants": [
+          {
+            "name": "rnn",
+            "cell": "rnn",
+            "readout": "last",
+            "orientation": "columns"
+          },
+          {
+            "name": "lstm",
+            "cell": "lstm",
+            "readout": "last",
+            "orientation": "columns"
+          },
+          {
+            "name": "gru",
+            "cell": "gru",
+            "readout": "last",
+            "orientation": "columns"
+          }
+        ],
+        "max_total_training_seconds": 18000
+      },
+      "attention": {
+        "question": "Does attention over all states help the same LSTM? Only the readout changes",
+        "variants": [
+          {
+            "name": "lstm_attention",
+            "cell": "lstm",
+            "readout": "attention",
+            "orientation": "columns"
+          }
+        ],
+        "max_total_training_seconds": 7200,
+        "requires": "cells"
+      },
+      "rows": {
+        "question": "H6: does the reading order matter? The same LSTM reading rows instead of columns",
+        "variants": [
+          {
+            "name": "lstm_rows",
+            "cell": "lstm",
+            "readout": "last",
+            "orientation": "rows"
+          }
+        ],
+        "max_total_training_seconds": 7200,
+        "requires": "cells"
+      }
+    },
+    "phase_order": "cells first; attention and rows only after cells results are saved",
+    "normalization": "same RGB64 per-channel train moments as 04 (shared cache), applied before building the sequence",
+    "checkpoint": "maximum validation macro-F1; first epoch wins ties",
+    "early_stopping": "stop after 5 successive epochs without validation loss decreasing; different from checkpoint selection",
+    "primary_analysis": "all three seeds; paired by seed; no selection of best seed or best cell for illustration",
+    "illustration": {
+      "seed": 42,
+      "variant": "lstm"
+    },
+    "bootstrap": {
+      "unit": "group_id",
+      "draws": 300,
+      "seed": 42
+    },
+    "test_policy": "do not load or evaluate test images in this notebook",
+    "cost_feasibility": {
+      "pilot_seed": 901,
+      "safety_factor": 1.25,
+      "decision": "Measure one real epoch per variant of the phase. Train only if the conservative estimate for three seeds fits the phase budget; otherwise stop for an explicit amendment. Never cap photos automatically.",
+      "amendment": "On 2026-11-26, before any recurrent training, budgets of 5 h (cells, 9 fits), 2 h (attention, 3 fits) and 2 h (rows, 3 fits) were registered after a CPU micro-benchmark of 0.4-1.2 min per training epoch."
+    },
+    "scope_limits": [
+      "one recurrent layer, unidirectional; bidirectional, stacked and CNN+RNN variants are optional extensions",
+      "8x8 patches are not run: they change the neighbourhood represented",
+      "validation is used for stopping and selection, so these are not final unbiased estimates",
+      "attention weights show where the readout looks, not why the class is predicted",
+      "evaluation describes the selected garment types after quality controls, not the whole catalogue"
+    ]
+  },
+  "normalization": {
+    "mean": [
+      0.8252736487645056,
+      0.8099776406444388,
+      0.8068432059080346
+    ],
+    "std": [
+      0.26553521684979864,
+      0.2779671728494687,
+      0.2760147938782062
+    ],
+    "image_size": 64,
+    "partition": "train",
+    "pixels_per_channel": 137699328,
+    "method": "population pixel moments after RGB64 Lanczos resize"
+  },
+  "dataset_run": "20261125T152902-c912cdcc",
+  "test_images_opened": 0
+}

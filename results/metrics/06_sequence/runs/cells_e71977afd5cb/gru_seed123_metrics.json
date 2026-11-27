@@ -1,0 +1,31 @@
+{
+  "variant": "gru",
+  "seed": 123,
+  "cell": "gru",
+  "readout": "last",
+  "orientation": "columns",
+  "parameters": 126873,
+  "approx_flops_per_image": 15735040,
+  "epochs_run": 17,
+  "selected_epoch": 12,
+  "stopped_early": true,
+  "train_seconds": 614.1848098998889,
+  "inference_ms_per_image": 0.16809366600053832,
+  "peak_process_rss_bytes": 2634620928,
+  "checkpoint": "results/models/06_sequence/cells_e71977afd5cb/gru_seed123.pt",
+  "checkpoint_sha256": "5cbd5642af36ade7b2635c623e1d40eefeb985b38b49ff7179278b2204118f79",
+  "train_loss": 0.8224847952893605,
+  "train_accuracy": 0.7259206377535844,
+  "train_macro_f1": 0.5465886574107361,
+  "validation_loss": 1.0609160115222334,
+  "validation_accuracy": 0.6742514970059881,
+  "validation_macro_f1": 0.4514073367800757,
+  "validation_group_bootstrap_ci95_accuracy": [
+    0.6553948817974606,
+    0.6921423722806122
+  ],
+  "validation_group_bootstrap_ci95_macro_f1": [
+    0.40653192394202703,
+    0.47775947581817524
+  ]
+}

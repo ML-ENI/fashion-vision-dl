@@ -1,0 +1,18 @@
+{
+  "phase": "rows",
+  "dataset_run": "20261125T152902-c912cdcc",
+  "train_images": 33618,
+  "validation_images": 7515,
+  "pilot_epoch_seconds": 16.52136839996092,
+  "pilot_epoch_seconds_by_variant": {
+    "lstm_rows": 16.52136839996092
+  },
+  "peak_process_rss_bytes": 2871664640,
+  "fits": 3,
+  "conservative_upper_seconds": 1858.6539449956035,
+  "budget_seconds": 7200,
+  "fits_budget": true,
+  "sampling_applied": false,
+  "decision": "keep_all_eligible_images",
+  "note": "Pilot weights discarded; no pilot metric used. Includes train and validation evaluation; preprocessing separate."
+}

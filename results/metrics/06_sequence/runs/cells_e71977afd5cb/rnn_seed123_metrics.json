@@ -1,0 +1,31 @@
+{
+  "variant": "rnn",
+  "seed": 123,
+  "cell": "rnn",
+  "readout": "last",
+  "orientation": "columns",
+  "parameters": 44441,
+  "approx_flops_per_image": 5249280,
+  "epochs_run": 7,
+  "selected_epoch": 1,
+  "stopped_early": true,
+  "train_seconds": 224.02767779992428,
+  "inference_ms_per_image": 0.19139491682481802,
+  "peak_process_rss_bytes": 2602315776,
+  "checkpoint": "results/models/06_sequence/cells_e71977afd5cb/rnn_seed123.pt",
+  "checkpoint_sha256": "61b9c2b78b8a7b8c7df85de00cf55e7260349d82352bd7464d85af1ad0f68a82",
+  "train_loss": 2.6433481423743768,
+  "train_accuracy": 0.15798084359569278,
+  "train_macro_f1": 0.010914228467209535,
+  "validation_loss": 2.6239159325798274,
+  "validation_accuracy": 0.15382568196939456,
+  "validation_macro_f1": 0.010665436512512973,
+  "validation_group_bootstrap_ci95_accuracy": [
+    0.13933684428995025,
+    0.16742513500153539
+  ],
+  "validation_group_bootstrap_ci95_macro_f1": [
+    0.00978371498326925,
+    0.011473121167382597
+  ]
+}
