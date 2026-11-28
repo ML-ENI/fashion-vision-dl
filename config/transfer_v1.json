@@ -1,0 +1,37 @@
+{
+  "version": "07-frozen-linear-v1",
+  "model": {
+    "architecture": "resnet50",
+    "pretraining": "DINO self-supervised on ImageNet-1k, without class labels",
+    "url": "https://dl.fbaipublicfiles.com/dino/dino_resnet50_pretrain/dino_resnet50_pretrain.pth",
+    "dimension": 2048
+  },
+  "preprocessing": {
+    "recipe": "prepared-rgb-full-image-lanczos-imagenet-v1",
+    "image_size": 64,
+    "crop": false,
+    "augmentation": false,
+    "mean": [0.485, 0.456, 0.406],
+    "std": [0.229, 0.224, 0.225]
+  },
+  "training": {
+    "seeds": [42, 123, 2026],
+    "max_epochs": 30,
+    "patience": 5,
+    "batch_size": 32,
+    "learning_rate": 0.001,
+    "weight_decay": 0.0,
+    "optimizer": "Adam",
+    "class_weights": false,
+    "threads": 4,
+    "device": "cpu"
+  },
+  "extraction_batch_size": 32,
+  "pilot_batches": 3,
+  "selection": "best validation macro-F1; first epoch wins ties",
+  "early_stopping": "5 epochs without a strict improvement in validation loss",
+  "bootstrap": {"draws": 300, "seed": 42},
+  "test_policy": "No test images or predictions in 07",
+  "fine_tuning": "not implemented or enabled: requires a separate decision after measuring cost",
+  "sampling": "all eligible train/validation; no automatic cap or class balancing"
+}
